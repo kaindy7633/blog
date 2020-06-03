@@ -31,3 +31,7 @@ npm install concurrently -D
 ```bash
 "start:mock": "concurrently \"cross-env REACT_APP_ENV=dev UMI_UI=none umi dev\" \"node ./server/index.js\" ",
 ```
+
+### 更多参考
+
+[前端工程化并行解决方案-concurrently](https://zhuanlan.zhihu.com/p/65564606)
