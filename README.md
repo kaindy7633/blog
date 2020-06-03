@@ -4,7 +4,60 @@
 
 ## 目录
 
-2016年
+### 2017年
+
+- [40条常见的移动端Web页面问题解决方案](https://github.com/kaindy7633/blog/blob/master/2017/40%E6%9D%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E9%A1%B5%E9%9D%A2%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.md)
+- [7个重要的Git使用技巧](https://github.com/kaindy7633/blog/blob/master/2017/7%E4%B8%AA%E9%87%8D%E8%A6%81%E7%9A%84Git%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7.md)
+- [AngularJS实战笔记](https://github.com/kaindy7633/blog/blob/master/2017/AngularJS%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0.md)
+- [Angular中的ngRepeat使用心得](https://github.com/kaindy7633/blog/blob/master/2017/Angular%E4%B8%AD%E7%9A%84ngRepeat%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97.md)
+- [BULMA中文文档](https://github.com/kaindy7633/blog/blob/master/2017/BULMA%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3.md)
+- [CSSHACK](https://github.com/kaindy7633/blog/blob/master/2017/CSSHACK.md)
+- [ES6简明教程](https://github.com/kaindy7633/blog/blob/master/2017/ES6%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.md)
+- [Git的其他应用](https://github.com/kaindy7633/blog/blob/master/2017/Git%E7%9A%84%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8.md)
+- [JavaScript中的AJAX](https://github.com/kaindy7633/blog/blob/master/2017/JavaScript%E4%B8%AD%E7%9A%84AJAX.md)
+- [JavaScript装x指南](https://github.com/kaindy7633/blog/blob/master/2017/JavaScript%E8%A3%85x%E6%8C%87%E5%8D%97.md)
+- [Nodejs精简笔记教程](https://github.com/kaindy7633/blog/blob/master/2017/Nodejs%E7%B2%BE%E7%AE%80%E7%AC%94%E8%AE%B0%E6%95%99%E7%A8%8B.md)
+- [PWA-来了解一下](https://github.com/kaindy7633/blog/blob/master/2017/PWA-%E6%9D%A5%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B.md)
+- [Python之旅：第十四章-网络编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B.md)
+- [Python之旅：第十三章-数据库支持](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%AF%E6%8C%81.md)
+- [Python之旅：第十二章-图形用户界面](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2.md)
+- [Python之旅：第十一章-文件](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%96%87%E4%BB%B6.md)
+- [Python之旅：第十章-开箱即用-标准库模块](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E7%AB%A0-%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8-%E6%A0%87%E5%87%86%E5%BA%93%E6%A8%A1%E5%9D%97.md)
+- [Python之旅：第九章-魔法方法、特性和迭代器](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8.md)
+- [Python之旅：第八章-异常](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%BC%82%E5%B8%B8.md)
+- [Python之旅：第七章-再谈抽象-面向对象编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%86%8D%E8%B0%88%E6%8A%BD%E8%B1%A1-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.md)
+- [Python之旅：第六章-抽象](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%8A%BD%E8%B1%A1.md)
+- [Python之旅：第五章-条件、循环及其他语句](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%9D%A1%E4%BB%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E5%8F%8A%E5%85%B6%E4%BB%96%E8%AF%AD%E5%8F%A5.md)
+- [Python之旅：第四章-当索引行不通时：使用字典](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%BD%93%E7%B4%A2%E5%BC%95%E8%A1%8C%E4%B8%8D%E9%80%9A%E6%97%B6%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%AD%97%E5%85%B8.md)
+- [Python之旅：第三章-使用字符串](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2.md)
+- [Python之旅：第二章-列表和元组](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84.md)
+- [Python之旅：第一章-快速上手](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B.md)
+- [Python从入门到入坑 - Python简介](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%20-%20Python%E7%AE%80%E4%BB%8B.md)
+- [Python从入门到入坑之：IO编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9AIO%E7%BC%96%E7%A8%8B.md)
+- [Python从入门到入坑之：函数](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E5%87%BD%E6%95%B0.md)
+- [Python从入门到入坑之：函数式编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B.md)
+- [Python从入门到入坑之：模块](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E6%A8%A1%E5%9D%97.md)
+- [Python从入门到入坑之：正则表达式](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.md)
+- [Python从入门到入坑之：进程和线程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B.md)
+- [Python从入门到入坑之：错误、调试和测试](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%94%99%E8%AF%AF%E3%80%81%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95.md)
+- [Python从入门到入坑之：面向对象编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.md)
+- [Python从入门到入坑之：面向对象高级编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B.md)
+- [Python从入门到入坑之：高级特性](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7.md)
+- [TypeScript简明指南](https://github.com/kaindy7633/blog/blob/master/2017/TypeScript%E7%AE%80%E6%98%8E%E6%8C%87%E5%8D%97.md)
+- [Web性能优化-关键渲染路径及其优化策略](https://github.com/kaindy7633/blog/blob/master/2017/Web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84%E5%8F%8A%E5%85%B6%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5.md)
+- [atom使用全局配置ESLint](https://github.com/kaindy7633/blog/blob/master/2017/atom%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AEESLint.md)
+- [一个AngularJS的小栗子-todoList](https://github.com/kaindy7633/blog/blob/master/2017/%E4%B8%80%E4%B8%AAAngularJS%E7%9A%84%E5%B0%8F%E6%A0%97%E5%AD%90-todoList.md)
+- [使用CSS3伪类选择器美化按钮](https://github.com/kaindy7633/blog/blob/master/2017/%E4%BD%BF%E7%94%A8CSS3%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8%E7%BE%8E%E5%8C%96%E6%8C%89%E9%92%AE.md)
+- [关于前端优化中的@import](https://github.com/kaindy7633/blog/blob/master/2017/%E5%85%B3%E4%BA%8E%E5%89%8D%E7%AB%AF%E4%BC%98%E5%8C%96%E4%B8%AD%E7%9A%84%40import.md)
+- [前端开发规范](https://github.com/kaindy7633/blog/blob/master/2017/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83.md)
+- [团队开发中ESLint的使用及其相关规范介绍](https://github.com/kaindy7633/blog/blob/master/2017/%E5%9B%A2%E9%98%9F%E5%BC%80%E5%8F%91%E4%B8%ADESLint%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E8%A7%84%E8%8C%83%E4%BB%8B%E7%BB%8D.md)
+- [如何为自己的个人站点添加https访问](https://github.com/kaindy7633/blog/blob/master/2017/%E5%A6%82%E4%BD%95%E4%B8%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%AB%99%E7%82%B9%E6%B7%BB%E5%8A%A0https%E8%AE%BF%E9%97%AE.md)
+- [常用的Git命令清单](https://github.com/kaindy7633/blog/blob/master/2017/%E5%B8%B8%E7%94%A8%E7%9A%84Git%E5%91%BD%E4%BB%A4%E6%B8%85%E5%8D%95.md)
+- [常见中高级前端工程师面试题汇总](https://github.com/kaindy7633/blog/blob/master/2017/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB.md)
+- [来聊聊尾调用优化和尾递归](https://github.com/kaindy7633/blog/blob/master/2017/%E6%9D%A5%E8%81%8A%E8%81%8A%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96%E5%92%8C%E5%B0%BE%E9%80%92%E5%BD%92.md)
+- [深入理解Angular中的apply以及digest](https://github.com/kaindy7633/blog/blob/master/2017/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Angular%E4%B8%AD%E7%9A%84apply%E4%BB%A5%E5%8F%8Adigest.md)
+
+### 2016年
 
 - [9张思维导图学习Javascript](https://github.com/kaindy7633/blog/blob/master/2016/9%E5%BC%A0%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E5%AD%A6%E4%B9%A0Javascript.md)
 - [AngularJS入门](https://github.com/kaindy7633/blog/blob/master/2016/AngularJS%E5%85%A5%E9%97%A8.md)
@@ -32,7 +85,7 @@
 - [闲聊JavaScript中的apply](https://github.com/kaindy7633/blog/blob/master/2016/%E9%97%B2%E8%81%8AJavaScript%E4%B8%AD%E7%9A%84apply.md)
 - [雅虎34条军规](https://github.com/kaindy7633/blog/blob/master/2016/%E9%9B%85%E8%99%8E34%E6%9D%A1%E5%86%9B%E8%A7%84.md)
 
-2015年
+### 2015年
 
 - [Java基础之反射](https://github.com/kaindy7633/blog/blob/master/2015/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%8F%8D%E5%B0%84.md)
 - [Java基础之常用工具_API](https://github.com/kaindy7633/blog/blob/master/2015/Java%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7_API.md)
