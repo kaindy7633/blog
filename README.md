@@ -25,7 +25,7 @@
 - [在JavaScript中常用的数组操作](https://github.com/kaindy7633/blog/blob/master/2018/%E5%9C%A8JavaScript%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E6%95%B0%E7%BB%84%E6%93%8D%E4%BD%9C.md)
 - [在JavaScript中应用设计模式](https://github.com/kaindy7633/blog/blob/master/2018/%E5%9C%A8JavaScript%E4%B8%AD%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)
 - [在React+TypeScript项目中使用Eslint和Prettier](https://github.com/kaindy7633/blog/blob/master/2018/%E5%9C%A8React%2BTypeScript%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8Eslint%E5%92%8CPrettier.md)
-- [精读ECMAScript 6.0](https://github.com/kaindy7633/blog/blob/master/2018/%E7%B2%BE%E8%AF%BBECMAScript%206.0.md)
+- [精读ECMAScript6.0](https://github.com/kaindy7633/blog/blob/master/2018/%E7%B2%BE%E8%AF%BBECMAScript6.0.md)
 - [精读React官方教程](https://github.com/kaindy7633/blog/blob/master/2018/%E7%B2%BE%E8%AF%BBReact%E5%AE%98%E6%96%B9%E6%95%99%E7%A8%8B.md)
 - [补充几个中高级前端的面试题](https://github.com/kaindy7633/blog/blob/master/2018/%E8%A1%A5%E5%85%85%E5%87%A0%E4%B8%AA%E4%B8%AD%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98.md)
 - [软件版本各名称的含义](https://github.com/kaindy7633/blog/blob/master/2018/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%90%84%E5%90%8D%E7%A7%B0%E7%9A%84%E5%90%AB%E4%B9%89.md)
