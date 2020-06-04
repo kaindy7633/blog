@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [精读ECMAScript 6.0](#%E7%B2%BE%E8%AF%BBecmascript-60)
+  - [简介](#%E7%AE%80%E4%BB%8B)
+  - [let和const](#let%E5%92%8Cconst)
+    - [let 命令](#let-%E5%91%BD%E4%BB%A4)
+    - [块级作用域](#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F)
+    - [const 命令](#const-%E5%91%BD%E4%BB%A4)
+    - [顶层对象的属性](#%E9%A1%B6%E5%B1%82%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7)
+    - [globalThis 对象](#globalthis-%E5%AF%B9%E8%B1%A1)
+  - [解构赋值](#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [数组的解构赋值](#%E6%95%B0%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 精读ECMAScript 6.0
 
 ## 简介
