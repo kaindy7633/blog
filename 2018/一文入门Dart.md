@@ -35,8 +35,8 @@ void main() {
 	
 	// 使用三个单引号或双引号来定义多行字符串
 	var str3 = """
-		Dart Lang
-		Hello World!"""；
+	Dart Lang
+	Hello World!"""；
 		
 	// assert 是 Dart 中内置的断言函数
 	// 断言失败程序则立刻终止

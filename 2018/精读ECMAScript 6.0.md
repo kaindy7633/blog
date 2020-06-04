@@ -6,7 +6,7 @@ ECMAScript 6.0（以下简称 ES6）是 JavaScript 语言的下一代标准，�
 
 ECMAScript 和 JavaScript 的关系是，前者是后者的规格，后者是前者的一种实现
 
-## let和const命令
+## let和const
 
 ### let 命令
 
@@ -60,4 +60,22 @@ ES6 规定暂时性死区和 `let` 、`const` 语句不出现变量提升，主�
 
 `ES2020` 在语言标准的层面，引入`globalThis`作为顶层对象。也就是说，任何环境下，`globalThis`都是存在的，都可以从它拿到顶层对象，指向全局环境下的`this`
 
-> 未完 待续
+## 解构赋值
+
+### 数组的解构赋值
+
+`ES6` 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）
+
+```javascript
+let [a, b, c] = [1, 2, 3];
+```
+
+如果解构不成功，变量的值就等于`undefined`
+
+对于 `Set` 结构，也可以使用数组的解构赋值。
+
+```javascript
+let [x, y, z] = new Set(['a', 'b', 'c']);
+x // "a"
+```
+
