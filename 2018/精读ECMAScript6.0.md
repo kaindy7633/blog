@@ -12,6 +12,11 @@
     - [globalThis 对象](#globalthis-%E5%AF%B9%E8%B1%A1)
   - [解构赋值](#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
     - [数组的解构赋值](#%E6%95%B0%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [对象的解构赋值](#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [字符串的解构赋值](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [数值和布尔值的解构赋值](#%E6%95%B0%E5%80%BC%E5%92%8C%E5%B8%83%E5%B0%94%E5%80%BC%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [函数参数的解构赋值](#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
+    - [用途](#%E7%94%A8%E9%80%94)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -95,4 +100,216 @@ let [a, b, c] = [1, 2, 3];
 let [x, y, z] = new Set(['a', 'b', 'c']);
 x // "a"
 ```
+
+事实上，只要某种数据结构具有 `Iterator` 接口，都可以采用数组形式的解构赋值
+
+```javascript
+function* fibs() {
+  let a = 0;
+  let b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+let [first, second, third, fourth, fifth, sixth] = fibs();
+sixth // 5
+```
+
+解构赋值允许指定默认值
+
+```javascript
+let [foo = true] = [];
+foo // true
+
+let [x, y = 'b'] = ['a']; // x='a', y='b'
+let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
+```
+
+### 对象的解构赋值
+
+解构不仅可以用于数组，还可以用于对象
+
+```javascript
+let { foo, bar } = { foo: 'aaa', bar: 'bbb' };
+foo // "aaa"
+bar // "bbb"
+```
+
+对象的解构与数组有一个重要的不同。数组的元素是按次序排列的，变量的取值由它的位置决定；而对象的属性没有次序，变量必须与属性同名，才能取到正确的值
+
+```javascript
+let { bar, foo } = { foo: 'aaa', bar: 'bbb' };
+foo // "aaa"
+bar // "bbb"
+
+let { baz } = { foo: 'aaa', bar: 'bbb' };
+baz // undefined
+```
+
+对象的解构赋值，可以很方便地将现有对象的方法，赋值到某个变量
+
+```javascript
+// 例一
+let { log, sin, cos } = Math;
+
+// 例二
+const { log } = console;
+log('hello') // hello
+```
+
+对象的解构也可以指定默认值。
+
+```javascript
+var {x = 3} = {};
+x // 3
+
+var {x, y = 5} = {x: 1};
+x // 1
+y // 5
+
+var {x: y = 3} = {};
+y // 3
+
+var {x: y = 3} = {x: 5};
+y // 5
+
+var { message: msg = 'Something went wrong' } = {};
+msg // "Something went wrong"
+```
+
+### 字符串的解构赋值
+
+字符串也可以解构赋值。这是因为此时，字符串被转换成了一个类似数组的对象
+
+```javascript
+const [a, b, c, d, e] = 'hello';
+a // "h"
+b // "e"
+c // "l"
+d // "l"
+e // "o"
+```
+
+### 数值和布尔值的解构赋值
+
+解构赋值时，如果等号右边是数值和布尔值，则会先转为对象
+
+```javascript
+let {toString: s} = 123;
+s === Number.prototype.toString // true
+
+let {toString: s} = true;
+s === Boolean.prototype.toString // true
+```
+
+### 函数参数的解构赋值
+
+函数的参数也可以使用解构赋值
+
+```javascript
+function add([x, y]){
+  return x + y;
+}
+
+add([1, 2]); // 3
+```
+
+### 用途
+
+- 交换变量的值
+
+  ```javascript
+  let x = 1;
+  let y = 2;
+
+  [x, y] = [y, x];
+  ```
+
+- 从函数返回多个值
+
+  ```javascript
+  // 返回一个数组
+
+  function example() {
+    return [1, 2, 3];
+  }
+  let [a, b, c] = example();
+
+  // 返回一个对象
+
+  function example() {
+    return {
+      foo: 1,
+      bar: 2
+    };
+  }
+  let { foo, bar } = example();
+  ```
+
+- 函数参数的定义
+
+  ```javascript
+  // 参数是一组有次序的值
+  function f([x, y, z]) { ... }
+  f([1, 2, 3]);
+
+  // 参数是一组无次序的值
+  function f({x, y, z}) { ... }
+  f({z: 3, y: 2, x: 1});
+  ```
+
+- 提取 `JSON` 数据
+
+  ```javascript
+  let jsonData = {
+    id: 42,
+    status: "OK",
+    data: [867, 5309]
+  };
+
+  let { id, status, data: number } = jsonData;
+
+  console.log(id, status, number);
+  // 42, "OK", [867, 5309]
+  ```
+
+- 函数参数的默认值
+
+  ```javascript
+  jQuery.ajax = function (url, {
+    async = true,
+    beforeSend = function () {},
+    cache = true,
+    complete = function () {},
+    crossDomain = false,
+    global = true,
+    // ... more config
+  } = {}) {
+    // ... do stuff
+  };
+  ```
+
+- 遍历 `Map` 结构
+
+  任何部署了 Iterator 接口的对象，都可以用for...of循环遍历。Map 结构原生支持 Iterator 接口，配合变量的解构赋值，获取键名和键值就非常方便
+
+  ```javascript
+  const map = new Map();
+  map.set('first', 'hello');
+  map.set('second', 'world');
+
+  for (let [key, value] of map) {
+    console.log(key + " is " + value);
+  }
+  // first is hello
+  // second is world
+  ```
+
+- 输入模块的指定方法
+
+  ```javascript
+  const { SourceMapConsumer, SourceNode } = require("source-map");
+  ```
 
