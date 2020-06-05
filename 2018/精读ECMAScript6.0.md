@@ -313,3 +313,223 @@ add([1, 2]); // 3
   const { SourceMapConsumer, SourceNode } = require("source-map");
   ```
 
+## 字符串的扩展
+
+### Unicode表示法
+
+`ES6` 加强了对 `Unicode` 的支持，允许采用`\uxxxx`形式表示一个字符，其中`xxxx`表示字符的 `Unicode` 码点
+
+```javascript
+"\u0061"
+// "a"
+```
+
+但是，这种表示法只限于码点在`\u0000~\uFFFF`之间的字符,`ES6` 对这一点做出了改进，只要将码点放入大括号，就能正确解读该字符
+
+```javascript
+"\u{20BB7}"
+// "𠮷"
+
+"\u{41}\u{42}\u{43}"
+// "ABC"
+
+let hello = 123;
+hell\u{6F} // 123
+
+'\u{1F680}' === '\uD83D\uDE80'
+// true
+```
+
+### 遍历器接口
+
+`ES6` 为字符串添加了遍历器接口，使得字符串可以被`for...of`循环遍历。
+
+```javascript
+for (let codePoint of 'foo') {
+  console.log(codePoint)
+}
+// "f"
+// "o"
+// "o"
+```
+
+### JSON.stringify() 的改造
+
+根据标准，`JSON` 数据必须是 `UTF-8` 编码。但是，现在的`JSON.stringify()`方法有可能返回不符合 `UTF-8` 标准的字符串
+
+为了确保返回的是合法的 `UTF-8` 字符，`ES2019` 改变了`JSON.stringify()`的行为。如果遇到`0xD800`到`0xDFFF`之间的单个码点，或者不存在的配对形式，它会返回转义字符串，留给应用自己决定下一步的处理
+
+### 模板字符串
+
+`ES6` 引入了模板字符
+
+```javascript
+$('#result').append(`
+  There are <b>${basket.count}</b> items
+   in your basket, <em>${basket.onSale}</em>
+  are on sale!
+`);
+```
+
+模板字符串（template string）是增强版的字符串，用反引号（`）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量
+
+```javascript
+// 普通字符串
+`In JavaScript '\n' is a line-feed.`
+
+// 多行字符串
+`In JavaScript this is
+ not legal.`
+
+console.log(`string text line 1
+string text line 2`);
+
+// 字符串中嵌入变量
+let name = "Bob", time = "today";
+`Hello ${name}, how are you ${time}?`
+```
+
+模板字符串中嵌入变量，需要将变量名写在`${}`之中,大括号内部可以放入任意的 `JavaScript` 表达式，可以进行运算，以及引用对象属性
+
+```javascript
+let x = 1;
+let y = 2;
+
+`${x} + ${y} = ${x + y}`
+// "1 + 2 = 3"
+
+`${x} + ${y * 2} = ${x + y * 2}`
+// "1 + 4 = 5"
+
+let obj = {x: 1, y: 2};
+`${obj.x + obj.y}`
+// "3"
+```
+
+## 字符串新增方法
+
+### String.fromCodePoint()
+
+`ES5` 提供 `String.fromCharCode()` 方法，用于从 `Unicode` 码点返回对应字符，但是这个方法不能识别码点大于 `0xFFFF` 的字符
+
+`ES6` 提供了`String.fromCodePoint()`方法，可以识别大于`0xFFFF`的字符，弥补了`String.fromCharCode()`方法的不足
+
+```javascript
+String.fromCodePoint(0x20BB7)
+// "𠮷"
+String.fromCodePoint(0x78, 0x1f680, 0x79) === 'x\uD83D\uDE80y'
+// true
+```
+
+### String.raw()
+
+`ES6` 还为原生的 `String` 对象，提供了一个`raw()`方法。该方法返回一个斜杠都被转义（即斜杠前面再加一个斜杠）的字符串，往往用于模板字符串的处理方法
+
+```javascript
+String.raw`Hi\n${2+3}!`
+// 实际返回 "Hi\\n5!"，显示的是转义后的结果 "Hi\n5!"
+
+String.raw`Hi\u000A!`;
+// 实际返回 "Hi\\u000A!"，显示的是转义后的结果 "Hi\u000A!"
+```
+
+### 实例方法：codePointAt()
+
+`JavaScript` 内部，字符以 `UTF-16` 的格式储存，每个字符固定为2个字节。对于那些需要4个字节储存的字符（`Unicode` 码点大于`0xFFFF`的字符），`JavaScript` 会认为它们是两个字符
+
+`ES6` 提供了`codePointAt()`方法，能够正确处理 4 个字节储存的字符，返回一个字符的码点
+
+```javascript
+let s = '𠮷a';
+
+s.codePointAt(0) // 134071
+s.codePointAt(1) // 57271
+
+s.codePointAt(2) // 97
+```
+
+`codePointAt()`方法可以用来测试一个字符由两个字节还是由四个字节组成的
+
+```javascript
+function is32Bit(c) {
+  return c.codePointAt(0) > 0xFFFF;
+}
+
+is32Bit("𠮷") // true
+is32Bit("a") // false
+```
+
+### 实例方法：normalize()
+
+`ES6` 提供字符串实例的`normalize()`方法，用来将字符的不同表示方法统一为同样的形式，这称为 `Unicode` 正规化
+
+```javascript
+'\u01D1'.normalize() === '\u004F\u030C'.normalize()
+// true
+```
+
+### 实例方法：includes(), startsWith(), endsWith()
+
+传统上，`JavaScript` 只有`indexOf`方法，可以用来确定一个字符串是否包含在另一个字符串中。`ES6` 又提供了三种新方法:
+
+- `includes()`：返回布尔值，表示是否找到了参数字符串。
+- `startsWith()`：返回布尔值，表示参数字符串是否在原字符串的头部。
+- `endsWith()`：返回布尔值，表示参数字符串是否在原字符串的尾部。
+
+```javascript
+let s = 'Hello world!';
+
+s.startsWith('Hello') // true
+s.endsWith('!') // true
+s.includes('o') // true
+```
+
+这三个方法都支持第二个参数，表示开始搜索的位置
+
+```javascript
+let s = 'Hello world!';
+
+s.startsWith('world', 6) // true
+s.endsWith('Hello', 5) // true
+s.includes('Hello', 6) // false
+```
+
+### 实例方法：repeat()
+
+`repeat`方法返回一个新字符串，表示将原字符串重复n次
+
+```javascript
+'x'.repeat(3) // "xxx"
+'hello'.repeat(2) // "hellohello"
+'na'.repeat(0) // ""
+```
+
+### 实例方法：padStart()，padEnd()
+
+`ES2017` 引入了字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。`padStart()`用于头部补全，`padEnd()`用于尾部补全
+
+```javascript
+'x'.padStart(5, 'ab') // 'ababx'
+'x'.padStart(4, 'ab') // 'abax'
+
+'x'.padEnd(5, 'ab') // 'xabab'
+'x'.padEnd(4, 'ab') // 'xaba'
+```
+
+`padStart()`和`padEnd()`一共接受两个参数，第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串
+
+### 实例方法：trimStart()，trimEnd()
+
+`ES2019` 对字符串实例新增了`trimStart()`和`trimEnd()`这两个方法。它们的行为与`trim()`一致，`trimStart()`消除字符串头部的空格，`trimEnd()`消除尾部的空格。它们返回的都是新字符串，不会修改原始字符串
+
+```javascript
+const s = '  abc  ';
+
+s.trim() // "abc"
+s.trimStart() // "abc  "
+s.trimEnd() // "  abc"
+```
+
+### 实例方法：matchAll()
+
+`matchAll()`方法返回一个正则表达式在当前字符串的所有匹配
