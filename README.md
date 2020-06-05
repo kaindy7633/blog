@@ -6,6 +6,7 @@
 
 ### 2019年
 
+- [使用CSS实现火焰效果](https://github.com/kaindy7633/blog/blob/master/2019/使用CSS实现火焰效果.md)
 - [concurrently](https://github.com/kaindy7633/blog/blob/master/2019/concurrently.md)
 
 ### 2018年
