@@ -17,6 +17,21 @@
     - [数值和布尔值的解构赋值](#%E6%95%B0%E5%80%BC%E5%92%8C%E5%B8%83%E5%B0%94%E5%80%BC%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
     - [函数参数的解构赋值](#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC)
     - [用途](#%E7%94%A8%E9%80%94)
+  - [字符串的扩展](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [Unicode表示法](#unicode%E8%A1%A8%E7%A4%BA%E6%B3%95)
+    - [遍历器接口](#%E9%81%8D%E5%8E%86%E5%99%A8%E6%8E%A5%E5%8F%A3)
+    - [JSON.stringify() 的改造](#jsonstringify-%E7%9A%84%E6%94%B9%E9%80%A0)
+    - [模板字符串](#%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2)
+  - [字符串新增方法](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B0%E5%A2%9E%E6%96%B9%E6%B3%95)
+    - [String.fromCodePoint()](#stringfromcodepoint)
+    - [String.raw()](#stringraw)
+    - [实例方法：codePointAt()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95codepointat)
+    - [实例方法：normalize()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95normalize)
+    - [实例方法：includes(), startsWith(), endsWith()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95includes-startswith-endswith)
+    - [实例方法：repeat()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95repeat)
+    - [实例方法：padStart()，padEnd()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95padstartpadend)
+    - [实例方法：trimStart()，trimEnd()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95trimstarttrimend)
+    - [实例方法：matchAll()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95matchall)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
