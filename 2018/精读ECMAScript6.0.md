@@ -32,6 +32,17 @@
     - [实例方法：padStart()，padEnd()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95padstartpadend)
     - [实例方法：trimStart()，trimEnd()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95trimstarttrimend)
     - [实例方法：matchAll()](#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95matchall)
+  - [正则的扩展](#%E6%AD%A3%E5%88%99%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [RegExp 构造函数](#regexp-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+    - [字符串的正则方法](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%AD%A3%E5%88%99%E6%96%B9%E6%B3%95)
+    - [u 修饰符](#u-%E4%BF%AE%E9%A5%B0%E7%AC%A6)
+    - [RegExp.prototype.unicode 属性](#regexpprototypeunicode-%E5%B1%9E%E6%80%A7)
+    - [y 修饰符](#y-%E4%BF%AE%E9%A5%B0%E7%AC%A6)
+    - [RegExp.prototype.sticky 属性](#regexpprototypesticky-%E5%B1%9E%E6%80%A7)
+    - [RegExp.prototype.flags 属性](#regexpprototypeflags-%E5%B1%9E%E6%80%A7)
+    - [s 修饰符：dotAll 模式](#s-%E4%BF%AE%E9%A5%B0%E7%AC%A6dotall-%E6%A8%A1%E5%BC%8F)
+    - [具名组匹配](#%E5%85%B7%E5%90%8D%E7%BB%84%E5%8C%B9%E9%85%8D)
+    - [String.prototype.matchAll()](#stringprototypematchall)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -548,3 +559,176 @@ s.trimEnd() // "  abc"
 ### 实例方法：matchAll()
 
 `matchAll()`方法返回一个正则表达式在当前字符串的所有匹配
+
+## 正则的扩展
+
+### RegExp 构造函数
+
+在 `ES` 中的 `RegExp` 构造函数的参数有两种情况:
+
+- 参数是字符串，这时第二个参数表示正则表达式的修饰符（`flag`）
+
+  ```javascript
+  var regex = new RegExp('xyz', 'i');
+  // 等价于
+  var regex = /xyz/i;
+  ```
+
+- 参数是一个正则表示式，这时会返回一个原有正则表达式的拷贝
+
+  ```javascript
+  var regex = new RegExp(/xyz/i);
+  // 等价于
+  var regex = /xyz/i;
+  ```
+
+在 `ES6` 中，如果`RegExp`构造函数第一个参数是一个正则对象，那么可以使用第二个参数指定修饰符。而且，返回的正则表达式会忽略原有的正则表达式的修饰符，只使用新指定的修饰符
+
+```javascript
+new RegExp(/abc/ig, 'i').flags
+// "i"
+```
+
+### 字符串的正则方法
+
+字符串对象共有 4 个方法，可以使用正则表达式：
+
+- `match()` `String.prototype.match` 调用 `RegExp.prototype[Symbol.match]`
+- `replace()` `String.prototype.replace` 调用 `RegExp.prototype[Symbol.replace]`
+- `search()` `String.prototype.search` 调用 `RegExp.prototype[Symbol.search]`
+- `split()` `String.prototype.split` 调用 `RegExp.prototype[Symbol.split]`
+
+### u 修饰符
+
+`ES6` 对正则表达式添加了`u`修饰符，含义为“Unicode 模式”，用来正确处理大于`\uFFFF`的 `Unicode` 字符
+
+```javascript
+/^\uD83D/u.test('\uD83D\uDC2A') // false
+/^\uD83D/.test('\uD83D\uDC2A') // true
+```
+
+### RegExp.prototype.unicode 属性
+
+正则实例对象新增`unicode`属性，表示是否设置了`u`修饰符
+
+```javascript
+const r1 = /hello/;
+const r2 = /hello/u;
+
+r1.unicode // false
+r2.unicode // true
+```
+
+### y 修饰符
+
+`ES6` 为正则表达式添加了`y`修饰符，叫做“粘连”（sticky）修饰符
+
+`y`修饰符的作用与`g`修饰符类似，也是全局匹配，后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于，`g`修饰符只要剩余位置中存在匹配即可，而`y`修饰符确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义
+
+```javascript
+var s = 'aaa_aa_a';
+var r1 = /a+/g;
+var r2 = /a+/y;
+
+r1.exec(s) // ["aaa"]
+r2.exec(s) // ["aaa"]
+
+r1.exec(s) // ["aa"]
+r2.exec(s) // null
+```
+
+### RegExp.prototype.sticky 属性
+
+与`y`修饰符相匹配，`ES6` 的正则实例对象多了`sticky`属性，表示是否设置了`y`修饰符。
+
+```javascript
+var r = /hello\d/y;
+r.sticky // true
+```
+
+### RegExp.prototype.flags 属性
+
+`ES6` 为正则表达式新增了`flags`属性，会返回正则表达式的修饰符
+
+```javascript
+// ES5 的 source 属性
+// 返回正则表达式的正文
+/abc/ig.source
+// "abc"
+
+// ES6 的 flags 属性
+// 返回正则表达式的修饰符
+/abc/ig.flags
+// 'gi'
+```
+
+### s 修饰符：dotAll 模式
+
+正则表达式中，点（.）是一个特殊字符，代表任意的单个字符，但是有两个例外。一个是四个字节的 `UTF-16` 字符，这个可以用`u`修饰符解决；另一个是行终止符（line terminator character）
+
+`ES2018` 引入`s`修饰符，使得`.`可以匹配任意单个字符。
+
+这被称为`dotAll`模式，即点（`dot`）代表一切字符。所以，正则表达式还引入了一个`dotAll`属性，返回一个布尔值，表示该正则表达式是否处在`dotAll`模式
+
+```javascript
+const re = /foo.bar/s;
+// 另一种写法
+// const re = new RegExp('foo.bar', 's');
+
+re.test('foo\nbar') // true
+re.dotAll // true
+re.flags // 's'
+```
+
+### 具名组匹配
+
+`ES2018` 引入了具名组匹配（Named Capture Groups），允许为每一个组匹配指定一个名字，既便于阅读代码，又便于引用
+
+```javascript
+const RE_DATE = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+
+const matchObj = RE_DATE.exec('1999-12-31');
+const year = matchObj.groups.year; // 1999
+const month = matchObj.groups.month; // 12
+const day = matchObj.groups.day; // 31
+```
+
+如果具名组没有匹配，那么对应的`groups`对象属性会是`undefined`
+
+有了具名组匹配以后，可以使用解构赋值直接从匹配结果上为变量赋值
+
+```javascript
+let {groups: {one, two}} = /^(?<one>.*):(?<two>.*)$/u.exec('foo:bar');
+one  // foo
+two  // bar
+```
+
+### String.prototype.matchAll()
+
+`ES2020` 增加了`String.prototype.matchAll()`方法，可以一次性取出所有匹配。不过，它返回的是一个遍历器（Iterator），而不是数组
+
+```javascript
+const string = 'test1test2test3';
+
+// g 修饰符加不加都可以
+const regex = /t(e)(st(\d?))/g;
+
+for (const match of string.matchAll(regex)) {
+  console.log(match);
+}
+// ["test1", "e", "st1", "1", index: 0, input: "test1test2test3"]
+// ["test2", "e", "st2", "2", index: 5, input: "test1test2test3"]
+// ["test3", "e", "st3", "3", index: 10, input: "test1test2test3"]
+```
+
+遍历器转为数组是非常简单的，使用`...`运算符和`Array.from()`方法就可以了
+
+```javascript
+// 转为数组方法一
+[...string.matchAll(regex)]
+
+// 转为数组方法二
+Array.from(string.matchAll(regex))
+```
+
+
