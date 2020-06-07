@@ -43,6 +43,21 @@
     - [s 修饰符：dotAll 模式](#s-%E4%BF%AE%E9%A5%B0%E7%AC%A6dotall-%E6%A8%A1%E5%BC%8F)
     - [具名组匹配](#%E5%85%B7%E5%90%8D%E7%BB%84%E5%8C%B9%E9%85%8D)
     - [String.prototype.matchAll()](#stringprototypematchall)
+  - [数值的扩展](#%E6%95%B0%E5%80%BC%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [二进制和八进制表示法](#%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8C%E5%85%AB%E8%BF%9B%E5%88%B6%E8%A1%A8%E7%A4%BA%E6%B3%95)
+    - [Number.isFinite(), Number.isNaN()](#numberisfinite-numberisnan)
+    - [Number.parseInt(), Number.parseFloat()](#numberparseint-numberparsefloat)
+    - [Number.isInteger()](#numberisinteger)
+    - [Number.EPSILON](#numberepsilon)
+    - [安全整数和 Number.isSafeInteger()](#%E5%AE%89%E5%85%A8%E6%95%B4%E6%95%B0%E5%92%8C-numberissafeinteger)
+    - [Math 对象的扩展](#math-%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [对数方法](#%E5%AF%B9%E6%95%B0%E6%96%B9%E6%B3%95)
+    - [双曲函数方法](#%E5%8F%8C%E6%9B%B2%E5%87%BD%E6%95%B0%E6%96%B9%E6%B3%95)
+    - [指数运算符](#%E6%8C%87%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [BigInt 数据类型](#bigint-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B)
+    - [BigInt 对象](#bigint-%E5%AF%B9%E8%B1%A1)
+    - [BigInt的转换规则](#bigint%E7%9A%84%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99)
+    - [数学运算](#%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -730,5 +745,411 @@ for (const match of string.matchAll(regex)) {
 // 转为数组方法二
 Array.from(string.matchAll(regex))
 ```
+
+## 数值的扩展
+
+### 二进制和八进制表示法
+
+`ES6` 提供了二进制和八进制数值的新的写法，分别用前缀`0b`（或`0B`）和`0o`（或`0O`）表示
+
+```javascript
+0b111110111 === 503 // true
+0o767 === 503 // true
+```
+
+从 `ES5` 开始，在严格模式之中，八进制就不再允许使用前缀`0`表示，`ES6` 进一步明确，要使用前缀`0o`表示
+
+```javascript
+// 非严格模式
+(function(){
+  console.log(0o11 === 011);
+})() // true
+
+// 严格模式
+(function(){
+  'use strict';
+  console.log(0o11 === 011);
+})() // Uncaught SyntaxError: Octal literals are not allowed in strict mode
+```
+
+### Number.isFinite(), Number.isNaN()
+
+`ES6` 在`Number`对象上，新提供了`Number.isFinite()`和`Number.isNaN()`两个方法
+
+`Number.isFinite()`用来检查一个数值是否为有限的（`finite`），即不是`Infinity`
+
+```javascript
+Number.isFinite(15); // true
+Number.isFinite(0.8); // true
+Number.isFinite(NaN); // false
+Number.isFinite(Infinity); // false
+Number.isFinite(-Infinity); // false
+Number.isFinite('foo'); // false
+Number.isFinite('15'); // false
+Number.isFinite(true); // false
+```
+
+如果参数类型不是数值，`Number.isFinite`一律返回`false`
+
+`Number.isNaN()`用来检查一个值是否为`NaN`
+
+```javascript
+Number.isNaN(NaN) // true
+Number.isNaN(15) // false
+Number.isNaN('15') // false
+Number.isNaN(true) // false
+Number.isNaN(9/NaN) // true
+Number.isNaN('true' / 0) // true
+Number.isNaN('true' / 'true') // true
+```
+
+### Number.parseInt(), Number.parseFloat()
+
+`ES6` 将全局方法`parseInt()`和`parseFloat()`，移植到`Number`对象上面，行为完全保持不变。
+
+```javascript
+// ES5的写法
+parseInt('12.34') // 12
+parseFloat('123.45#') // 123.45
+
+// ES6的写法
+Number.parseInt('12.34') // 12
+Number.parseFloat('123.45#') // 123.45
+```
+
+### Number.isInteger()
+
+`Number.isInteger()`用来判断一个数值是否为整数
+
+```javascript
+Number.isInteger(25) // true
+Number.isInteger(25.1) // false
+```
+
+`JavaScript` 内部，整数和浮点数采用的是同样的储存方法，所以 `25` 和 `25.0` 被视为同一个值。
+
+```javascript
+Number.isInteger(25) // true
+Number.isInteger(25.0) // true
+```
+
+如果参数不是数值，`Number.isInteger`返回`false`
+
+如果对数据精度的要求较高，不建议使用`Number.isInteger()`判断一个数值是否为整数
+
+### Number.EPSILON
+
+`ES6` 在`Number`对象上面，新增一个极小的常量`Number.EPSILON`。根据规格，它表示 1 与大于 1 的最小浮点数之间的差
+
+```javascript
+Number.EPSILON === Math.pow(2, -52)
+// true
+Number.EPSILON
+// 2.220446049250313e-16
+Number.EPSILON.toFixed(20)
+// "0.00000000000000022204"
+```
+
+·Number.EPSILON`可以用来设置“能够接受的误差范围”。比如，误差范围设为 2 的-50 次方（即Number.EPSILON * Math.pow(2, 2)），即如果两个浮点数的差小于这个值，我们就认为这两个浮点数相等。因此，`Number.EPSILON`的实质是一个可以接受的最小误差范围
+
+```javascript
+function withinErrorMargin (left, right) {
+  return Math.abs(left - right) < Number.EPSILON * Math.pow(2, 2);
+}
+
+0.1 + 0.2 === 0.3 // false
+withinErrorMargin(0.1 + 0.2, 0.3) // true
+
+1.1 + 1.3 === 2.4 // false
+withinErrorMargin(1.1 + 1.3, 2.4) // true
+```
+
+### 安全整数和 Number.isSafeInteger()
+
+`JavaScript` 能够准确表示的整数范围在`-2^53`到`2^53`之间（不含两个端点），超过这个范围，无法精确表示这个值
+
+```javascript
+Math.pow(2, 53) // 9007199254740992
+
+9007199254740992  // 9007199254740992
+9007199254740993  // 9007199254740992
+
+Math.pow(2, 53) === Math.pow(2, 53) + 1
+// true
+```
+
+`ES6` 引入了`Number.MAX_SAFE_INTEGER`和`Number.MIN_SAFE_INTEGER`这两个常量，用来表示这个范围的上下限
+
+```javascript
+Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
+// true
+Number.MAX_SAFE_INTEGER === 9007199254740991
+// true
+
+Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
+// true
+Number.MIN_SAFE_INTEGER === -9007199254740991
+// true
+```
+
+`Number.isSafeInteger()`则是用来判断一个整数是否落在这个范围之内
+
+```javascript
+Number.isSafeInteger('a') // false
+Number.isSafeInteger(null) // false
+Number.isSafeInteger(NaN) // false
+Number.isSafeInteger(Infinity) // false
+Number.isSafeInteger(-Infinity) // false
+
+Number.isSafeInteger(3) // true
+Number.isSafeInteger(1.2) // false
+Number.isSafeInteger(9007199254740990) // true
+Number.isSafeInteger(9007199254740992) // false
+
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1) // false
+Number.isSafeInteger(Number.MIN_SAFE_INTEGER) // true
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // true
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // false
+```
+
+### Math 对象的扩展
+
+`ES6` 在 `Math` 对象上新增了 17 个与数学相关的方法。所有这些方法都是静态方法，只能在 `Math` 对象上调用
+
+- `Math.trunc()`方法用于去除一个数的小数部分，返回整数部分
+
+  ```javascript
+  Math.trunc(4.1) // 4
+  Math.trunc(4.9) // 4
+  Math.trunc(-4.1) // -4
+  Math.trunc(-4.9) // -4
+  Math.trunc(-0.1234) // -0
+  ```
+
+- Math.sign()方法用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值
+
+  它会返回五种值:
+
+  - 参数为正数，返回+1；
+  - 参数为负数，返回-1；
+  - 参数为 0，返回0；
+  - 参数为-0，返回-0;
+  - 其他值，返回NaN
+
+  ```javascript
+  Math.sign(-5) // -1
+  Math.sign(5) // +1
+  Math.sign(0) // +0
+  Math.sign(-0) // -0
+  Math.sign(NaN) // NaN
+  ```
+
+- Math.cbrt()方法用于计算一个数的立方根
+
+  ```javascript
+  Math.cbrt(-1) // -1
+  Math.cbrt(0)  // 0
+  Math.cbrt(1)  // 1
+  Math.cbrt(2)  // 1.2599210498948732
+  ```
+
+- Math.clz32()方法将参数转为 32 位无符号整数的形式，然后返回这个 32 位值里面有多少个前导 0
+
+  ```javascript
+  Math.clz32(0) // 32
+  Math.clz32(1) // 31
+  Math.clz32(1000) // 22
+  Math.clz32(0b01000000000000000000000000000000) // 1
+  Math.clz32(0b00100000000000000000000000000000) // 2
+  ```
+
+- Math.imul()方法返回两个数以 32 位带符号整数形式相乘的结果，返回的也是一个 32 位的带符号整数
+
+  ```javascript
+  Math.imul(2, 4)   // 8
+  Math.imul(-1, 8)  // -8
+  Math.imul(-2, -2) // 4
+  ```
+
+- Math.fround()方法返回一个数的32位单精度浮点数形式
+
+  ```javascript
+  Math.fround(0)   // 0
+  Math.fround(1)   // 1
+  Math.fround(2 ** 24 - 1)   // 16777215
+  ```
+
+- Math.hypot()方法返回所有参数的平方和的平方根
+
+  ```javascript
+  Math.hypot(3, 4);        // 5
+  Math.hypot(3, 4, 5);     // 7.0710678118654755
+  Math.hypot();            // 0
+  Math.hypot(NaN);         // NaN
+  Math.hypot(3, 4, 'foo'); // NaN
+  Math.hypot(3, 4, '5');   // 7.0710678118654755
+  Math.hypot(-3);          // 3
+  ```
+
+### 对数方法
+
+`ES6` 新增了 4 个对数相关方法
+
+- `Math.expm1(x)`返回 `ex - 1`，即`Math.exp(x) - 1`
+
+  ```javascript
+  Math.expm1(-1) // -0.6321205588285577
+  Math.expm1(0)  // 0
+  Math.expm1(1)  // 1.718281828459045
+  ```
+
+- `Math.log1p(x)`方法返回`1 + x`的自然对数，即`Math.log(1 + x)`。如果`x`小于`-1`，返回`NaN`
+
+  ```javascript
+  Math.log1p(1)  // 0.6931471805599453
+  Math.log1p(0)  // 0
+  Math.log1p(-1) // -Infinity
+  Math.log1p(-2) // NaN
+  ```
+
+- Math.log10()返回以 10 为底的`x`的对数。如果`x`小于 0，则返回 `NaN`
+
+  ```javascript
+  Math.log10(2)      // 0.3010299956639812
+  Math.log10(1)      // 0
+  Math.log10(0)      // -Infinity
+  Math.log10(-2)     // NaN
+  Math.log10(100000) // 5
+  ```
+
+- Math.log2()返回以 2 为底的`x`的对数。如果`x`小于 0，则返回 `NaN`
+
+  ```javascript
+  Math.log2(3)       // 1.584962500721156
+  Math.log2(2)       // 1
+  Math.log2(1)       // 0
+  Math.log2(0)       // -Infinity
+  Math.log2(-2)      // NaN
+  Math.log2(1024)    // 10
+  Math.log2(1 << 29) // 29
+  ```
+
+### 双曲函数方法
+
+`ES6` 新增了 6 个双曲函数方法。
+
+- `Math.sinh(x)` 返回x的双曲正弦（hyperbolic sine）
+- `Math.cosh(x)` 返回x的双曲余弦（hyperbolic cosine）
+- `Math.tanh(x)` 返回x的双曲正切（hyperbolic tangent）
+- `Math.asinh(x)` 返回x的反双曲正弦（inverse hyperbolic sine）
+- `Math.acosh(x)` 返回x的反双曲余弦（inverse hyperbolic cosine）
+- `Math.atanh(x)` 返回x的反双曲正切（inverse hyperbolic tangent）
+
+### 指数运算符
+
+`ES2016` 新增了一个指数运算符（`**`）
+
+```javascript
+2 ** 2 // 4
+2 ** 3 // 8
+```
+
+### BigInt 数据类型
+
+`JavaScript` 所有数字都保存成 `64` 位浮点数，这给数值的表示带来了两大限制。
+
+一是数值的精度只能到 `53` 个二进制位（相当于 `16` 个十进制位），大于这个范围的整数，`JavaScript` 是无法精确表示的，这使得 `JavaScript` 不适合进行科学和金融方面的精确计算。二是大于或等于2的1024次方的数值，`JavaScript` 无法表示，会返回`Infinity`。
+
+`ES2020` 引入了一种新的数据类型 `BigInt`（大整数），来解决这个问题。`BigInt` 只用来表示整数，没有位数的限制，任何位数的整数都可以精确表示。
+
+```javascript
+const a = 2172141653n;
+const b = 15346349309n;
+
+// BigInt 可以保持精度
+a * b // 33334444555566667777n
+
+// 普通整数无法保持精度
+Number(a) * Number(b) // 33334444555566670000
+```
+
+为了与 `Number` 类型区别，`BigInt` 类型的数据必须添加后缀`n`
+
+`BigInt` 与普通整数是两种值，它们之间并不相等。
+
+```javascript
+42n === 42 // false
+```
+
+`typeof`运算符对于 `BigInt` 类型的数据返回`bigint`。
+
+```javascript
+typeof 123n // 'bigint'
+```
+
+`BigInt` 可以使用负号（-），但是不能使用正号（+），因为会与 `asm.js` 冲突。
+
+```javascript
+-42n // 正确
++42n // 报错
+```
+
+### BigInt 对象
+
+`JavaScript` 原生提供`BigInt`对象，可以用作构造函数生成 `BigInt` 类型的数值
+
+```javascript
+BigInt(123) // 123n
+BigInt('123') // 123n
+BigInt(false) // 0n
+BigInt(true) // 1n
+```
+
+`BigInt` 对象继承了 `Object` 对象的两个实例方法:
+
+- `BigInt.prototype.toString()`
+- `BigInt.prototype.valueOf()`
+
+继承了 `Number` 对象的一个实例方法:
+
+- `BigInt.prototype.toLocaleString()`
+
+此外，还提供了三个静态方法。
+
+- `BigInt.asUintN(width, BigInt)`： 给定的 BigInt 转为 0 到 2width - 1 之间对应的值。
+- `BigInt.asIntN(width, BigInt)`：给定的 BigInt 转为 -2width - 1 到 2width - 1 - 1 之间对应的值。
+- `BigInt.parseInt(string[, radix])`：近似于Number.parseInt()，将一个字符串转换成指定进制的 BigInt。
+
+```javascript
+const max = 2n ** (64n - 1n) - 1n;
+
+BigInt.asIntN(64, max)
+// 9223372036854775807n
+BigInt.asIntN(64, max + 1n)
+// -9223372036854775808n
+BigInt.asUintN(64, max + 1n)
+// 9223372036854775808n
+```
+
+### BigInt的转换规则
+
+可以使用`Boolean()`、`Number()`和`String()`这三个方法，将 `BigInt` 可以转为布尔值、数值和字符串类型
+
+```javascript
+Boolean(0n) // false
+Boolean(1n) // true
+Number(1n)  // 1
+String(1n)  // "1"
+```
+
+### 数学运算
+
+`BigInt` 类型的`+`、`-`、`*`和`**`这四个二元运算符，与 `Number` 类型的行为一致。除法运算`/`会舍去小数部分，返回一个整数
+
+```javascript
+9n / 5n
+// 1n
+```
+
 
 
