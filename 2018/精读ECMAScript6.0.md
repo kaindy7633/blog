@@ -58,6 +58,13 @@
     - [BigInt 对象](#bigint-%E5%AF%B9%E8%B1%A1)
     - [BigInt的转换规则](#bigint%E7%9A%84%E8%BD%AC%E6%8D%A2%E8%A7%84%E5%88%99)
     - [数学运算](#%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97)
+  - [函数的扩展](#%E5%87%BD%E6%95%B0%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [函数参数的默认值](#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E9%BB%98%E8%AE%A4%E5%80%BC)
+    - [rest 参数](#rest-%E5%8F%82%E6%95%B0)
+    - [严格模式](#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F)
+    - [name 属性](#name-%E5%B1%9E%E6%80%A7)
+    - [箭头函数](#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0)
+    - [尾调用优化](#%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1151,5 +1158,352 @@ String(1n)  // "1"
 // 1n
 ```
 
+## 函数的扩展
 
+### 函数参数的默认值
 
+`ES6` 允许为函数的参数设置默认值，即直接写在参数定义的后面
+
+```javascript
+function log(x, y = 'World') {
+  console.log(x, y);
+}
+
+log('Hello') // Hello World
+log('Hello', 'China') // Hello China
+log('Hello', '') // Hello
+```
+
+参数变量是默认声明的，所以不能用`let`或`const`再次声明
+
+```javascript
+function foo(x = 5) {
+  let x = 1; // error
+  const x = 2; // error
+}
+```
+
+使用参数默认值时，函数不能有同名参数
+
+参数默认值可以与解构赋值的默认值，结合起来使用
+
+```javascript
+function foo({x, y = 5}) {
+  console.log(x, y);
+}
+
+foo({}) // undefined 5
+foo({x: 1}) // 1 5
+foo({x: 1, y: 2}) // 1 2
+foo() // TypeError: Cannot read property 'x' of undefined
+```
+
+通常情况下，定义了默认值的参数，应该是函数的尾参数
+
+```javascript
+// 例一
+function f(x = 1, y) {
+  return [x, y];
+}
+
+f() // [1, undefined]
+f(2) // [2, undefined]
+f(, 1) // 报错
+f(undefined, 1) // [1, 1]
+
+// 例二
+function f(x, y = 5, z) {
+  return [x, y, z];
+}
+
+f() // [undefined, 5, undefined]
+f(1) // [1, 5, undefined]
+f(1, ,2) // 报错
+f(1, undefined, 2) // [1, 5, 2]
+```
+
+指定了默认值以后，函数的`length`属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，`length`属性将失真
+
+```javascript
+(function (a) {}).length // 1
+(function (a = 5) {}).length // 0
+(function (a, b, c = 5) {}).length // 2
+```
+
+### rest 参数
+
+`ES6` 引入 `rest` 参数（形式为`...变量名`），用于获取函数的多余参数，这样就不需要使用`arguments`对象了。`rest` 参数搭配的变量是一个数组，该变量将多余的参数放入数组中
+
+```javascript
+function add(...values) {
+  let sum = 0;
+
+  for (var val of values) {
+    sum += val;
+  }
+
+  return sum;
+}
+
+add(2, 5, 3) // 10
+```
+
+注意，`rest` 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错
+
+```javascript
+// 报错
+function f(a, ...b, c) {
+  // ...
+}
+```
+
+### 严格模式
+
+从 `ES5` 开始，函数内部可以设定为严格模式, `ES2016` 做了一点修改，规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错
+
+```javascript
+// 报错
+function doSomething(a, b = a) {
+  'use strict';
+  // code
+}
+
+// 报错
+const doSomething = function ({a, b}) {
+  'use strict';
+  // code
+};
+
+// 报错
+const doSomething = (...a) => {
+  'use strict';
+  // code
+};
+
+const obj = {
+  // 报错
+  doSomething({a, b}) {
+    'use strict';
+    // code
+  }
+};
+```
+
+### name 属性
+
+`ES6` 对函数的 `name` 的行为做出了一些修改。如果将一个匿名函数赋值给一个变量，`ES5` 的`name`属性，会返回空字符串，而 `ES6` 的`name`属性会返回实际的函数名
+
+```javascript
+var f = function () {};
+
+// ES5
+f.name // ""
+
+// ES6
+f.name // "f"
+```
+
+### 箭头函数
+
+`ES6` 允许使用“箭头”（`=>`）定义函数
+
+```javascript
+var f = v => v;
+
+// 等同于
+var f = function (v) {
+  return v;
+};
+```
+
+如果箭头函数不需要参数或需要多个参数，就使用一个圆括号代表参数部分
+
+```javascript
+var f = () => 5;
+// 等同于
+var f = function () { return 5 };
+
+var sum = (num1, num2) => num1 + num2;
+// 等同于
+var sum = function(num1, num2) {
+  return num1 + num2;
+};
+```
+
+箭头函数可以与变量解构结合使用
+
+```javascript
+const full = ({ first, last }) => first + ' ' + last;
+
+// 等同于
+function full(person) {
+  return person.first + ' ' + person.last;
+}
+```
+
+箭头函数的一个用处是简化回调函数
+
+```javascript
+// 正常函数写法
+[1,2,3].map(function (x) {
+  return x * x;
+});
+
+// 箭头函数写法
+[1,2,3].map(x => x * x);
+```
+
+```javascript
+// 正常函数写法
+var result = values.sort(function (a, b) {
+  return a - b;
+});
+
+// 箭头函数写法
+var result = values.sort((a, b) => a - b);
+```
+
+箭头函数有几个使用注意点。
+
+- 函数体内的`this`对象，就是定义时所在的对象，而不是使用时所在的对象。
+
+- 不可以当作构造函数，也就是说，不可以使用`new`命令，否则会抛出一个错误。
+
+- 不可以使用`arguments`对象，该对象在函数体内不存在。如果要用，可以用 `rest` 参数代替。
+
+- 不可以使用`yield`命令，因此箭头函数不能用作 `Generator` 函数
+
+### 尾调用优化
+
+尾调用（Tail Call）是函数式编程的一个重要概念，就是指某个函数的最后一步是调用另一个函数
+
+```javascript
+function f(x){
+  return g(x);
+}
+```
+
+尾调用之所以与其他调用不同，就在于它的特殊的调用位置。
+
+我们知道，函数调用会在内存形成一个“调用记录”，又称“调用帧”（call frame），保存调用位置和内部变量等信息。如果在函数`A`的内部调用函数`B`，那么在`A`的调用帧上方，还会形成一个`B`的调用帧。等到`B`运行结束，将结果返回到`A`，`B`的调用帧才会消失。如果函数`B`内部还调用函数`C`，那就还有一个`C`的调用帧，以此类推。所有的调用帧，就形成一个“调用栈”（call stack）
+
+尾调用由于是函数的最后一步操作，所以不需要保留外层函数的调用帧，因为调用位置、内部变量等信息都不会再用到了，只要直接用内层函数的调用帧，取代外层函数的调用帧就可以了
+
+```javascript
+function f() {
+  let m = 1;
+  let n = 2;
+  return g(m + n);
+}
+f();
+
+// 等同于
+function f() {
+  return g(3);
+}
+f();
+
+// 等同于
+g(3);
+```
+
+这就叫做“尾调用优化”（Tail call optimization），即只保留内层函数的调用帧。如果所有函数都是尾调用，那么完全可以做到每次执行时，调用帧只有一项，这将大大节省内存。这就是“尾调用优化”的意义
+
+函数调用自身，称为递归。如果尾调用自身，就称为尾递归
+
+```javascript
+function factorial(n) {
+  if (n === 1) return 1;
+  return n * factorial(n - 1);
+}
+
+factorial(5) // 120
+```
+
+我们将上面的阶乘函数优化成尾递归
+
+```javascript
+function factorial(n, total) {
+  if (n === 1) return total;
+  return factorial(n - 1, n * total);
+}
+
+factorial(5, 1) // 120
+```
+
+来看看斐波拉契数列的例子：
+
+```javascript
+function Fibonacci (n) {
+  if ( n <= 1 ) {return 1};
+
+  return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+
+Fibonacci(10) // 89
+Fibonacci(100) // 超时
+Fibonacci(500) // 超时
+```
+
+尾递归优化过的 `Fibonacci` 数列实现如下
+
+```javascript
+function Fibonacci2 (n , ac1 = 1 , ac2 = 1) {
+  if( n <= 1 ) {return ac2};
+
+  return Fibonacci2 (n - 1, ac2, ac1 + ac2);
+}
+
+Fibonacci2(100) // 573147844013817200000
+Fibonacci2(1000) // 7.0330367711422765e+208
+Fibonacci2(10000) // Infinity
+```
+
+`ES6` 明确规定，所有 `ECMAScript` 的实现，都必须部署“尾调用优化”。这就是说，`ES6` 中只要使用尾递归，就不会发生栈溢出
+
+尾递归的实现，往往需要改写递归函数，确保最后一步只调用自身, 这很不直观，解决这个问题有两个方法：
+
+- 在尾递归函数之外，再提供一个正常形式的函数
+
+  ```javascript
+  function tailFactorial(n, total) {
+    if (n === 1) return total;
+    return tailFactorial(n - 1, n * total);
+  }
+
+  function factorial(n) {
+    return tailFactorial(n, 1);
+  }
+
+  factorial(5) // 120
+  ```
+
+  或者通过柯里化的方式，柯里化（currying），是将多参数的函数转换成单参数的形式
+
+  ```javascript
+  function currying(fn, n) {
+    return function (m) {
+      return fn.call(this, m, n);
+    };
+  }
+
+  function tailFactorial(n, total) {
+    if (n === 1) return total;
+    return tailFactorial(n - 1, n * total);
+  }
+
+  const factorial = currying(tailFactorial, 1);
+
+  factorial(5) // 120
+  ```
+
+- 采用 `ES6` 的函数默认值
+
+  ```javascript
+  function factorial(n, total = 1) {
+    if (n === 1) return total;
+    return factorial(n - 1, n * total);
+  }
+
+  factorial(5) // 120
+  ```
