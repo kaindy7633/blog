@@ -65,6 +65,12 @@
     - [name 属性](#name-%E5%B1%9E%E6%80%A7)
     - [箭头函数](#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0)
     - [尾调用优化](#%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96)
+    - [函数参数的尾逗号](#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E5%B0%BE%E9%80%97%E5%8F%B7)
+    - [Function.prototype.toString()](#functionprototypetostring)
+    - [catch 命令的参数省略](#catch-%E5%91%BD%E4%BB%A4%E7%9A%84%E5%8F%82%E6%95%B0%E7%9C%81%E7%95%A5)
+  - [数组的扩展](#%E6%95%B0%E7%BB%84%E7%9A%84%E6%89%A9%E5%B1%95)
+    - [扩展运算符](#%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [Array.from()](#arrayfrom)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1507,3 +1513,317 @@ Fibonacci2(10000) // Infinity
 
   factorial(5) // 120
   ```
+
+`ES6` 的尾调用优化只在严格模式下开启，正常模式是无效的
+
+尾递归优化只在严格模式下生效，那么正常模式下,就自己实现尾递归优化。它的原理非常简单，尾递归之所以需要优化，原因是调用栈太多，造成溢出，那么只要减少调用栈，就不会溢出。怎么做可以减少调用栈呢？就是采用“循环”换掉“递归”。
+
+```javascript
+// 递归函数
+function sum(x, y) {
+  if (y > 0) {
+    return sum(x + 1, y - 1);
+  } else {
+    return x;
+  }
+}
+
+sum(1, 100000)
+// Uncaught RangeError: Maximum call stack size exceeded(…)
+
+// 使用蹦床函数（trampoline）可以将递归执行转为循环执行
+function trampoline(f) {
+  while (f && f instanceof Function) {
+    f = f();
+  }
+  return f;
+}
+
+// 改写上面的 sum 递归
+function sum(x, y) {
+  if (y > 0) {
+    return sum.bind(null, x + 1, y - 1);
+  } else {
+    return x;
+  }
+}
+
+// 现在使用蹦床函数执行
+trampoline(sum(1, 100000))
+// 100001
+```
+
+然后，蹦床函数并不是真正的尾递归优化，下面的代码实现才是
+
+```javascript
+function tco(f) {
+  var value;
+  var active = false;
+  var accumulated = [];
+
+  return function accumulator() {
+    accumulated.push(arguments);
+    if (!active) {
+      active = true;
+      while (accumulated.length) {
+        value = f.apply(this, accumulated.shift());
+      }
+      active = false;
+      return value;
+    }
+  };
+}
+
+var sum = tco(function(x, y) {
+  if (y > 0) {
+    return sum(x + 1, y - 1)
+  }
+  else {
+    return x
+  }
+});
+
+sum(1, 100000)
+// 100001
+```
+
+### 函数参数的尾逗号
+
+`ES2017` 允许函数的最后一个参数有尾逗号（trailing comma）
+
+```javascript
+function clownsEverywhere(
+  param1,
+  param2,
+) { /* ... */ }
+
+clownsEverywhere(
+  'foo',
+  'bar',
+);
+```
+
+### Function.prototype.toString()
+
+`ES2019` 对函数实例的`toString()`方法做出了修改。`toString()`方法返回函数代码本身，以前会省略注释和空格, 修改后的`toString()`方法，明确要求返回一模一样的原始代码
+
+```javascript
+function /* foo comment */ foo () {}
+
+foo.toString()
+// "function /* foo comment */ foo () {}"
+```
+
+### catch 命令的参数省略
+
+`JavaScript` 语言的`try...catch`结构，以前明确要求`catch`命令后面必须跟参数，接受`try`代码块抛出的错误对象, `ES2019` 做出了改变，允许`catch`语句省略参数
+
+```javascript
+try {
+  // ...
+} catch {
+  // ...
+}
+```
+
+## 数组的扩展
+
+### 扩展运算符
+
+扩展运算符（spread）是三个点（`...`）。它好比 `rest` 参数的逆运算，将一个数组转为用逗号分隔的参数序列
+
+```javascript
+console.log(...[1, 2, 3])
+// 1 2 3
+
+console.log(1, ...[2, 3, 4], 5)
+// 1 2 3 4 5
+
+[...document.querySelectorAll('div')]
+// [<div>, <div>, <div>]
+```
+
+该运算符主要用于函数调用
+
+```javascript
+function push(array, ...items) {
+  array.push(...items);
+}
+
+function add(x, y) {
+  return x + y;
+}
+
+const numbers = [4, 38];
+add(...numbers) // 42
+```
+
+扩展运算符后面还可以放置表达式
+
+```javascript
+const arr = [
+  ...(x > 0 ? ['a'] : []),
+  'b',
+];
+```
+
+由于扩展运算符可以展开数组，所以不再需要`apply`方法，将数组转为函数的参数了。
+
+```javascript
+// ES5 的写法
+function f(x, y, z) {
+  // ...
+}
+var args = [0, 1, 2];
+f.apply(null, args);
+
+// ES6的写法
+function f(x, y, z) {
+  // ...
+}
+let args = [0, 1, 2];
+f(...args);
+```
+
+求数组中的最大值
+
+```javascript
+Math.max(...[14, 3, 77])
+```
+
+通过`push`函数，将一个数组添加到另一个数组的尾部
+
+```javascript
+let arr1 = [0, 1, 2];
+let arr2 = [3, 4, 5];
+arr1.push(...arr2);
+```
+
+扩展运算符有以下应用：
+
+- 复制数组，用扩展运算符复制数组，得到的是副本，而非地址值的拷贝
+
+  ```javascript
+  const a1 = [1, 2];
+  // 写法一
+  const a2 = [...a1];
+  // 写法二
+  const [...a2] = a1;
+  ```
+
+- 合并数组
+
+  ```javascript
+  [...arr1, ...arr2, ...arr3]
+  ```
+
+- 与解构赋值结合, 扩展运算符可以与解构赋值结合起来，用于生成数组
+
+  ```javascript
+  // ES5
+  a = list[0], rest = list.slice(1)
+  // ES6
+  [a, ...rest] = list
+  ```
+
+  ```javascript
+  const [first, ...rest] = [1, 2, 3, 4, 5];
+  first // 1
+  rest  // [2, 3, 4, 5]
+
+  const [first, ...rest] = [];
+  first // undefined
+  rest  // []
+
+  const [first, ...rest] = ["foo"];
+  first  // "foo"
+  rest   // []
+  ```
+
+- 扩展运算符还可以将字符串转为真正的数组
+
+  ```javascript
+  [...'hello']
+  // [ "h", "e", "l", "l", "o" ]
+  ```
+
+- 实现了 `Iterator` 接口的对象
+
+  任何定义了遍历器（`Iterator`）接口的对象，都可以用扩展运算符转为真正的数组
+
+  ```javascript
+  let nodeList = document.querySelectorAll('div');
+  let array = [...nodeList];
+  ```
+
+- `Map` 和 `Set` 结构，`Generator` 函数
+
+  ```javascript
+  let map = new Map([
+    [1, 'one'],
+    [2, 'two'],
+    [3, 'three'],
+  ]);
+
+  let arr = [...map.keys()]; // [1, 2, 3]
+  ```
+
+  `Generator` 函数运行后，返回一个遍历器对象，因此也可以使用扩展运算符
+
+  ```javascript
+  const go = function*(){
+    yield 1;
+    yield 2;
+    yield 3;
+  };
+
+  [...go()] // [1, 2, 3]
+  ```
+
+### Array.from()
+
+`Array.from`方法用于将两类对象转为真正的数组：类似数组的对象（`array-like object`）和可遍历（`iterable`）的对象（包括 `ES6` 新增的数据结构 `Set` 和 `Map`）
+
+```javascript
+let arrayLike = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    length: 3
+};
+
+// ES5的写法
+var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c']
+
+// ES6的写法
+let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']
+```
+
+实际应用中，常见的类似数组的对象是 `DOM` 操作返回的 `NodeList` 集合，以及函数内部的`arguments`对象。`Array.from`都可以将它们转为真正的数组
+
+```javascript
+// NodeList对象
+let ps = document.querySelectorAll('p');
+Array.from(ps).filter(p => {
+  return p.textContent.length > 100;
+});
+
+// arguments对象
+function foo() {
+  var args = Array.from(arguments);
+  // ...
+}
+```
+
+`Array.from`还可以接受第二个参数，作用类似于数组的`map`方法，用来对每个元素进行处理，将处理后的值放入返回的数组
+
+```javascript
+Array.from(arrayLike, x => x * x);
+// 等同于
+Array.from(arrayLike).map(x => x * x);
+
+Array.from([1, 2, 3], (x) => x * x)
+// [1, 4, 9]
+```
+
+
