@@ -71,6 +71,10 @@
   - [数组的扩展](#%E6%95%B0%E7%BB%84%E7%9A%84%E6%89%A9%E5%B1%95)
     - [扩展运算符](#%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6)
     - [Array.from()](#arrayfrom)
+    - [Array.of()](#arrayof)
+    - [数组实例的 copyWithin()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-copywithin)
+    - [数组实例的 find() 和 findIndex()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-find-%E5%92%8C-findindex)
+    - [数组实例的 fill()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-fill)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1825,5 +1829,115 @@ Array.from(arrayLike).map(x => x * x);
 Array.from([1, 2, 3], (x) => x * x)
 // [1, 4, 9]
 ```
+
+### Array.of()
+
+`Array.of`方法用于将一组值，转换为数组
+
+```javascript
+Array.of(3, 11, 8) // [3,11,8]
+Array.of(3) // [3]
+Array.of(3).length // 1
+```
+
+`Array.of`基本上可以用来替代`Array()`或`new Array()`，并且不存在由于参数不同而导致的重载。它的行为非常统一
+
+`Array.of`总是返回参数值组成的数组。如果没有参数，就返回一个空数组
+
+### 数组实例的 copyWithin()
+
+数组实例的`copyWithin()`方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组
+
+```javascript
+Array.prototype.copyWithin(target, start = 0, end = this.length)
+```
+
+它接受三个参数:
+
+- `target`（必需）：从该位置开始替换数据。如果为负值，表示倒数。
+- `start`（可选）：从该位置开始读取数据，默认为 0。如果为负值，表示从末尾开始计算。
+- `end`（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示从末尾开始计算。
+
+这三个参数都应该是数值，如果不是，会自动转为数值, 下面是一些例子：
+
+```javascript
+// 将3号位复制到0号位
+[1, 2, 3, 4, 5].copyWithin(0, 3, 4)
+// [4, 2, 3, 4, 5]
+
+// -2相当于3号位，-1相当于4号位
+[1, 2, 3, 4, 5].copyWithin(0, -2, -1)
+// [4, 2, 3, 4, 5]
+
+// 将3号位复制到0号位
+[].copyWithin.call({length: 5, 3: 1}, 0, 3)
+// {0: 1, 3: 1, length: 5}
+
+// 将2号位到数组结束，复制到0号位
+let i32a = new Int32Array([1, 2, 3, 4, 5]);
+i32a.copyWithin(0, 2);
+// Int32Array [3, 4, 5, 4, 5]
+
+// 对于没有部署 TypedArray 的 copyWithin 方法的平台
+// 需要采用下面的写法
+[].copyWithin.call(new Int32Array([1, 2, 3, 4, 5]), 0, 3, 4);
+// Int32Array [4, 2, 3, 4, 5]
+```
+
+### 数组实例的 find() 和 findIndex()
+
+数组实例的`find`方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为`true`的成员，然后返回该成员。如果没有符合条件的成员，则返回`undefined`
+
+```javascript
+[1, 4, -5, 10].find((n) => n < 0)
+// -5
+```
+
+`find`方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组
+
+```javascript
+[1, 5, 10, 15].find(function(value, index, arr) {
+  return value > 9;
+}) // 10
+```
+
+数组实例的`findIndex`方法的用法与`find`方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回`-1`
+
+```javascript
+[1, 5, 10, 15].findIndex(function(value, index, arr) {
+  return value > 9;
+}) // 2
+```
+
+这两个方法都可以接受第二个参数，用来绑定回调函数的`this`对象
+
+```javascript
+function f(v){
+  return v > this.age;
+}
+let person = {name: 'John', age: 20};
+[10, 12, 26, 15].find(f, person);    // 26
+```
+
+### 数组实例的 fill()
+
+`fill`方法使用给定值，填充一个数组
+
+```javascript
+['a', 'b', 'c'].fill(7)
+// [7, 7, 7]
+
+new Array(3).fill(7)
+// [7, 7, 7]
+```
+
+`fill`方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置
+
+```javascript
+['a', 'b', 'c'].fill(7, 1, 2)
+// ['a', 7, 'c']
+```
+
+
 
 
