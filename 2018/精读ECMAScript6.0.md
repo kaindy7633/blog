@@ -75,6 +75,11 @@
     - [数组实例的 copyWithin()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-copywithin)
     - [数组实例的 find() 和 findIndex()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-find-%E5%92%8C-findindex)
     - [数组实例的 fill()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-fill)
+    - [数组实例的 entries()，keys() 和 values()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-entrieskeys-%E5%92%8C-values)
+    - [数组实例的 includes()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-includes)
+    - [数组实例的 flat()，flatMap()](#%E6%95%B0%E7%BB%84%E5%AE%9E%E4%BE%8B%E7%9A%84-flatflatmap)
+    - [数组的空位](#%E6%95%B0%E7%BB%84%E7%9A%84%E7%A9%BA%E4%BD%8D)
+    - [Array.prototype.sort() 的排序稳定性](#arrayprototypesort-%E7%9A%84%E6%8E%92%E5%BA%8F%E7%A8%B3%E5%AE%9A%E6%80%A7)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1938,6 +1943,98 @@ new Array(3).fill(7)
 // ['a', 7, 'c']
 ```
 
+### 数组实例的 entries()，keys() 和 values()
 
+`ES6` 提供三个新的方法——`entries()`，`keys()`和`values()`——用于遍历数组。它们都返回一个遍历器对象，可以用`for...of`循环进行遍历，唯一的区别是`keys()`是对键名的遍历、`values()`是对键值的遍历，`entries()`是对键值对的遍历
 
+```javascript
+for (let index of ['a', 'b'].keys()) {
+  console.log(index);
+}
+// 0
+// 1
 
+for (let elem of ['a', 'b'].values()) {
+  console.log(elem);
+}
+// 'a'
+// 'b'
+
+for (let [index, elem] of ['a', 'b'].entries()) {
+  console.log(index, elem);
+}
+// 0 "a"
+// 1 "b"
+```
+
+也可以手动调用遍历器对象的next方法，进行遍历
+
+```javascript
+let letter = ['a', 'b', 'c'];
+let entries = letter.entries();
+console.log(entries.next().value); // [0, 'a']
+console.log(entries.next().value); // [1, 'b']
+console.log(entries.next().value); // [2, 'c']
+```
+
+### 数组实例的 includes()
+
+`Array.prototype.includes`方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的`includes`方法类似。`ES2016` 引入了该方法
+
+```javascript
+[1, 2, 3].includes(2)     // true
+[1, 2, 3].includes(4)     // false
+[1, 2, NaN].includes(NaN) // true
+```
+
+该方法的第二个参数表示搜索的起始位置，默认为`0`。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为-4，但数组长度为3），则会重置为从`0`开始
+
+### 数组实例的 flat()，flatMap()
+
+数组的成员有时还是数组，`Array.prototype.flat()`用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。
+
+```javascript
+[1, 2, [3, 4]].flat()
+// [1, 2, 3, 4]
+```
+
+`flat()`默认只会“拉平”一层，如果想要“拉平”多层的嵌套数组，可以将`flat()`方法的参数写成一个整数，表示想要拉平的层数，默认为1
+
+```javascript
+[1, 2, [3, [4, 5]]].flat()
+// [1, 2, 3, [4, 5]]
+
+[1, 2, [3, [4, 5]]].flat(2)
+// [1, 2, 3, 4, 5]
+```
+
+### 数组的空位
+
+数组的空位指，数组的某一个位置没有任何值。比如，`Array`构造函数返回的数组都是空位。
+
+```javascript
+Array(3) // [, , ,]
+```
+
+### Array.prototype.sort() 的排序稳定性
+
+排序稳定性（stable sorting）是排序算法的重要属性，指的是排序关键字相同的项目，排序前后的顺序不变
+
+```javascript
+const arr = [
+  'peach',
+  'straw',
+  'apple',
+  'spork'
+];
+
+const stableSorting = (s1, s2) => {
+  if (s1[0] < s2[0]) return -1;
+  return 1;
+};
+
+arr.sort(stableSorting)
+// ["apple", "peach", "straw", "spork"]
+```
+
+常见的排序算法之中，插入排序、合并排序、冒泡排序等都是稳定的，堆排序、快速排序等是不稳定的。不稳定排序的主要缺点是，多重排序时可能会产生问题, `ES2019` 明确规定，`Array.prototype.sort()`的默认排序算法必须稳定
