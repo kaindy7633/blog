@@ -88,6 +88,11 @@
     - [super 关键字](#super-%E5%85%B3%E9%94%AE%E5%AD%97)
     - [对象的扩展运算符](#%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6)
     - [链判断运算符](#%E9%93%BE%E5%88%A4%E6%96%AD%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [Null 判断运算符](#null-%E5%88%A4%E6%96%AD%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [对象的新增方法](#%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B0%E5%A2%9E%E6%96%B9%E6%B3%95)
+    - [Object.is()](#objectis)
+    - [Object.assign()](#objectassign)
+    - [Object.getOwnPropertyDescriptors()](#objectgetownpropertydescriptors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2243,3 +2248,234 @@ const obj = {
 ```
 
 ### 链判断运算符
+
+`ES2020` 引入了“链判断运算符”（optional chaining operator）`?.`
+
+```javascript
+const firstName = message?.body?.user?.firstName || 'default';
+const fooValue = myForm.querySelector('input[name=foo]')?.value
+```
+
+链判断运算符有三种用法:
+
+- `obj?.prop` // 对象属性
+- `obj?.[expr]` // 同上
+- `func?.(...args)` // 函数或对象方法的调用
+
+```javascript
+// 判断对象方法是否存在，如果存在则立即执行
+iterator.return?.()
+```
+
+下面是这个运算符常见的使用形式：
+
+```javascript
+a?.b
+// 等同于
+a == null ? undefined : a.b
+
+a?.[x]
+// 等同于
+a == null ? undefined : a[x]
+
+a?.b()
+// 等同于
+a == null ? undefined : a.b()
+
+a?.()
+// 等同于
+a == null ? undefined : a()
+```
+
+### Null 判断运算符
+
+`ES2020` 引入了一个新的 `Null` 判断运算符`??`。它的行为类似`||`，但是只有运算符左侧的值为`null`或`undefined`时，才会返回右侧的值
+
+```javascript
+const headerText = response.settings.headerText ?? 'Hello, world!';
+const animationDuration = response.settings.animationDuration ?? 300;
+const showSplashScreen = response.settings.showSplashScreen ?? true;
+```
+
+这个运算符跟链判断运算符 `?.` 配合使用，为`null`或`undefined`的值设置默认值。
+
+```javascript
+const animationDuration = response.settings?.animationDuration ?? 300;
+```
+
+## 对象的新增方法
+
+### Object.is()
+
+`ES6` 提出“Same-value equality”（同值相等）算法, `Object.is`就是部署这个算法的新方法。它用来比较两个值是否严格相等，与严格比较运算符（`===`）的行为基本一致
+
+```javascript
+Object.is('foo', 'foo')
+// true
+Object.is({}, {})
+// false
+```
+
+同时它也解决了 `ES5` 中的两个问题：+0不等于-0，NaN等于自身
+
+```javascript
+// ES5
++0 === -0 //true
+NaN === NaN // false
+
+Object.is(+0, -0) // false
+Object.is(NaN, NaN) // true
+```
+
+### Object.assign()
+
+`Object.assign`方法用于对象的合并，将源对象（`source`）的所有可枚举属性，复制到目标对象（`target`）
+
+```javascript
+const target = { a: 1 };
+
+const source1 = { b: 2 };
+const source2 = { c: 3 };
+
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
+```
+
+`Object.assign`方法的第一个参数是目标对象，后面的参数都是源对象
+
+如果只有一个参数，`Object.assign`会直接返回该参数。
+
+```javascript
+const obj = {a: 1};
+Object.assign(obj) === obj // true
+```
+
+如果该参数不是对象，则会先转成对象，然后返回。
+
+```javascript
+typeof Object.assign(2) // "object"
+```
+
+由于`undefined`和`null`无法转成对象，所以如果它们作为参数，就会报错。
+
+```javascript
+Object.assign(undefined) // 报错
+Object.assign(null) // 报错
+```
+
+`Object.assign`拷贝的属性是有限制的，只拷贝源对象的自身属性（不拷贝继承属性），也不拷贝不可枚举的属性（`enumerable: false`）
+
+```javascript
+Object.assign({b: 'c'},
+  Object.defineProperty({}, 'invisible', {
+    enumerable: false,
+    value: 'hello'
+  })
+)
+// { b: 'c' }
+```
+
+注意点：
+
+- `Object.assign`方法实行的是浅拷贝，而不是深拷贝。也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用
+
+  ```javascript
+  const obj1 = {a: {b: 1}};
+  const obj2 = Object.assign({}, obj1);
+
+  obj1.a.b = 2;
+  obj2.a.b // 2
+  ```
+
+- 对于这种嵌套的对象，一旦遇到同名属性，`Object.assign`的处理方法是替换，而不是添加
+
+  ```javascript
+  const target = { a: { b: 'c', d: 'e' } }
+  const source = { a: { b: 'hello' } }
+  Object.assign(target, source)
+  // { a: { b: 'hello' } }
+  ```
+
+- `Object.assign`可以用来处理数组，但是会把数组视为对象
+
+  ```javascript
+  Object.assign([1, 2, 3], [4, 5])
+  // [4, 5, 3]
+  ```
+
+- `Object.assign`只能进行值的复制，如果要复制的值是一个取值函数，那么将求值后再复制
+
+  ```javascript
+  const source = {
+    get foo() { return 1 }
+  };
+  const target = {};
+
+  Object.assign(target, source)
+  // { foo: 1 }
+  ```
+  
+常见用途:
+
+- 为对象添加属性
+
+  ```javascript
+  class Point {
+    constructor(x, y) {
+      Object.assign(this, {x, y});
+    }
+  }
+  ```
+
+- 为对象添加方法
+
+  ```javascript
+  Object.assign(SomeClass.prototype, {
+    someMethod(arg1, arg2) {
+      ···
+    },
+    anotherMethod() {
+      ···
+    }
+  });
+
+  // 等同于下面的写法
+  SomeClass.prototype.someMethod = function (arg1, arg2) {
+    ···
+  };
+  SomeClass.prototype.anotherMethod = function () {
+    ···
+  };
+  ```
+
+- 克隆对象
+
+  ```javascript
+  function clone(origin) {
+    return Object.assign({}, origin);
+  }
+  ```
+
+- 合并多个对象
+
+  ```javascript
+  const merge =
+    (target, ...sources) => Object.assign(target, ...sources);
+  ```
+
+- 为属性指定默认值
+
+  ```javascript
+  const DEFAULTS = {
+    logLevel: 0,
+    outputFormat: 'html'
+  };
+
+  function processContent(options) {
+    options = Object.assign({}, DEFAULTS, options);
+    console.log(options);
+    // ...
+  }
+  ```
+
+### Object.getOwnPropertyDescriptors()
