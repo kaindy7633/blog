@@ -2681,6 +2681,16 @@ Object.fromEntries([
 
 `ES6` 引入了一种新的原始数据类型`Symbol`，表示独一无二的值。它是 `JavaScript` 语言的第七种数据类型，前六种是：`undefined`、`null`、布尔值（`Boolean`）、字符串（`String`）、数值（`Number`）、对象（`Object`）。
 
+`Symbol` 值通过`Symbol`函数生成。这就是说，对象的属性名现在可以有两种类型，一种是原来就有的字符串，另一种就是新增的 `Symbol` 类型
+
+```javascript
+let s = Symbol();
+
+typeof s
+// "symbol"
+```
+
+
 
 
 
