@@ -102,6 +102,8 @@
       - [Object.values()](#objectvalues)
       - [Object.entries()](#objectentries)
     - [Object.fromEntries()](#objectfromentries)
+  - [Symbol](#symbol)
+    - [Symbol.prototype.description](#symbolprototypedescription)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2689,6 +2691,25 @@ let s = Symbol();
 typeof s
 // "symbol"
 ```
+
+`Symbol`函数前不能使用`new`命令，否则会报错
+
+`Symbol`函数可以接受一个字符串作为参数，表示对 `Symbol` 实例的描述，主要是为了在控制台显示，或者转为字符串时，比较容易区分
+
+```javascript
+let s1 = Symbol('foo');
+let s2 = Symbol('bar');
+
+s1 // Symbol(foo)
+s2 // Symbol(bar)
+
+s1.toString() // "Symbol(foo)"
+s2.toString() // "Symbol(bar)"
+```
+
+### Symbol.prototype.description
+
+
 
 
 
