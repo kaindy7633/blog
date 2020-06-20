@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [内置类型定义](#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89)
+  - [`Record`](#record)
+  - [`Partial`](#partial)
+  - [`Required`](#required)
+  - [`Readonly`](#readonly)
+  - [`Pick`](#pick)
+  - [`Exclude`](#exclude)
+  - [`Extract`](#extract)
+  - [`NonNullable`](#nonnullable)
+  - [`Parameters`](#parameters)
+  - [`ConstructorParameters`](#constructorparameters)
+  - [`ReturnType`](#returntype)
+  - [`InstanceType`](#instancetype)
+  - [`Omit`](#omit)
+- [非内置类型定义](#%E9%9D%9E%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89)
+  - [`DeepReadonly`](#deepreadonly)
+  - [`ConvertNumberToString`](#convertnumbertostring)
+  - [`ValueOf`](#valueof)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 在 `TypeScript` 中默认内置了很多工具泛型，能够合理灵活的使用这些工具，可以使我们的类型定义更加灵活
 
 这些泛型定义在`node_modules/typescript/lib/lib.es5.d.ts`文件中

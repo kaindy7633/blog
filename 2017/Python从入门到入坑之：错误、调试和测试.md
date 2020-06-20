@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python从入门到入坑之：错误、调试和测试](#python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%E9%94%99%E8%AF%AF%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95)
+  - [错误处理](#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
+    - [try](#try)
+    - [调用栈](#%E8%B0%83%E7%94%A8%E6%A0%88)
+    - [记录错误](#%E8%AE%B0%E5%BD%95%E9%94%99%E8%AF%AF)
+    - [抛出错误](#%E6%8A%9B%E5%87%BA%E9%94%99%E8%AF%AF)
+  - [调试](#%E8%B0%83%E8%AF%95)
+    - [断言](#%E6%96%AD%E8%A8%80)
+    - [logging](#logging)
+    - [pdb](#pdb)
+    - [pdb.set_trace()](#pdbset_trace)
+    - [IDE](#ide)
+  - [单元测试](#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+    - [运行单元测试](#%E8%BF%90%E8%A1%8C%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95)
+    - [setUp与tearDown](#setup%E4%B8%8Eteardown)
+  - [文档测试](#%E6%96%87%E6%A1%A3%E6%B5%8B%E8%AF%95)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python从入门到入坑之：错误、调试和测试
 
 在程序运行过程中，总会遇到各种各样的错误。

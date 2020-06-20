@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第三章 使用字符串](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2)
+  - [字符串基本操作](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C)
+  - [设置字符串格式：精简版](#%E8%AE%BE%E7%BD%AE%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E7%B2%BE%E7%AE%80%E7%89%88)
+  - [设置字符串格式：完整版](#%E8%AE%BE%E7%BD%AE%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%AE%8C%E6%95%B4%E7%89%88)
+    - [替换字段名](#%E6%9B%BF%E6%8D%A2%E5%AD%97%E6%AE%B5%E5%90%8D)
+    - [基本转换](#%E5%9F%BA%E6%9C%AC%E8%BD%AC%E6%8D%A2)
+    - [宽度、精度和千位分隔符](#%E5%AE%BD%E5%BA%A6%E7%B2%BE%E5%BA%A6%E5%92%8C%E5%8D%83%E4%BD%8D%E5%88%86%E9%9A%94%E7%AC%A6)
+    - [符号、对齐和用0填充](#%E7%AC%A6%E5%8F%B7%E5%AF%B9%E9%BD%90%E5%92%8C%E7%94%A80%E5%A1%AB%E5%85%85)
+  - [字符串的方法](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%96%B9%E6%B3%95)
+    - [center](#center)
+    - [find](#find)
+    - [join](#join)
+    - [lower](#lower)
+    - [replace](#replace)
+    - [split](#split)
+    - [strip](#strip)
+    - [translate](#translate)
+    - [判断字符串是否满足特定的条件](#%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E6%BB%A1%E8%B6%B3%E7%89%B9%E5%AE%9A%E7%9A%84%E6%9D%A1%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第三章 使用字符串
 
 ## 字符串基本操作

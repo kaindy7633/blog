@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [异常](#%E5%BC%82%E5%B8%B8)
+- [异常处理](#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86)
+- [IO流](#io%E6%B5%81)
+- [File类](#file%E7%B1%BB)
+- [字符流读写](#%E5%AD%97%E7%AC%A6%E6%B5%81%E8%AF%BB%E5%86%99)
+- [字节流读写](#%E5%AD%97%E8%8A%82%E6%B5%81%E8%AF%BB%E5%86%99)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### 异常
 
 > 异常，即非正常情况，通俗的说，异常就是程序出现的错误

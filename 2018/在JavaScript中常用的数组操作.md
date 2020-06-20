@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [改变原始数据的操作方法](#%E6%94%B9%E5%8F%98%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95)
+- [不会修改原始数组的操作方法](#%E4%B8%8D%E4%BC%9A%E4%BF%AE%E6%94%B9%E5%8E%9F%E5%A7%8B%E6%95%B0%E7%BB%84%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95)
+- [使用](#%E4%BD%BF%E7%94%A8)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 数组操作在前端工程师的日常工作中随处可见，下面来总结一些常见的数组操作
 
 ## 改变原始数据的操作方法

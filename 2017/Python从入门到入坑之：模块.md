@@ -1,3 +1,56 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [使用模块](#%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%9D%97)
+- [作用域](#%E4%BD%9C%E7%94%A8%E5%9F%9F)
+- [安装第三方模块](#%E5%AE%89%E8%A3%85%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97)
+- [常用内建模块](#%E5%B8%B8%E7%94%A8%E5%86%85%E5%BB%BA%E6%A8%A1%E5%9D%97)
+  - [datetime](#datetime)
+    - [获取当前日期和时间](#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4)
+    - [获取指定日期和时间](#%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9A%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4)
+    - [datetime转换为timestamp](#datetime%E8%BD%AC%E6%8D%A2%E4%B8%BAtimestamp)
+    - [timestamp转换为datetime](#timestamp%E8%BD%AC%E6%8D%A2%E4%B8%BAdatetime)
+    - [str转换为datetime](#str%E8%BD%AC%E6%8D%A2%E4%B8%BAdatetime)
+    - [datetime转换为str](#datetime%E8%BD%AC%E6%8D%A2%E4%B8%BAstr)
+    - [datetime加减](#datetime%E5%8A%A0%E5%87%8F)
+    - [本地时间转换为UTC时间](#%E6%9C%AC%E5%9C%B0%E6%97%B6%E9%97%B4%E8%BD%AC%E6%8D%A2%E4%B8%BAutc%E6%97%B6%E9%97%B4)
+    - [时区转换](#%E6%97%B6%E5%8C%BA%E8%BD%AC%E6%8D%A2)
+  - [collections](#collections)
+    - [namedtuple](#namedtuple)
+    - [deque](#deque)
+    - [defaultdict](#defaultdict)
+    - [OrderedDict](#ordereddict)
+    - [Counter](#counter)
+  - [base64](#base64)
+  - [struct](#struct)
+  - [hashlib](#hashlib)
+    - [摘要算法简介](#%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B)
+    - [摘要算法应用](#%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8)
+  - [hmac](#hmac)
+    - [itertools](#itertools)
+  - [contextlib](#contextlib)
+    - [@contextmanager](#contextmanager)
+    - [@closing](#closing)
+  - [urllib](#urllib)
+    - [Get](#get)
+    - [Post](#post)
+    - [Handler](#handler)
+  - [XML](#xml)
+  - [HTMLParser](#htmlparser)
+- [常用第三方模块](#%E5%B8%B8%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97)
+  - [Pillow](#pillow)
+  - [requests](#requests)
+  - [chardet](#chardet)
+  - [psutil](#psutil)
+    - [获取CPU信息](#%E8%8E%B7%E5%8F%96cpu%E4%BF%A1%E6%81%AF)
+    - [获取内存信息](#%E8%8E%B7%E5%8F%96%E5%86%85%E5%AD%98%E4%BF%A1%E6%81%AF)
+    - [获取磁盘信息](#%E8%8E%B7%E5%8F%96%E7%A3%81%E7%9B%98%E4%BF%A1%E6%81%AF)
+    - [获取网络信息](#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF)
+    - [获取进程信息](#%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 使用模块
 
 Python本身就内置了很多非常有用的模块，只要安装完毕，这些模块就可以立刻使用。

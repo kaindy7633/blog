@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、搭建自动化的前端开发、调试和测试环境](#%E4%B8%80%E6%90%AD%E5%BB%BA%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83)
+- [二、常用工具的介绍](#%E4%BA%8C%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BB%8B%E7%BB%8D)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 一、搭建自动化的前端开发、调试和测试环境
 
 我们先来看一个完整的项目实例，这是AngularJS官方为我们提供的Phonecat项目。在AngularJS的官方网站上有详细的指导，有兴趣的朋友可以去看看，地址：http://docs.angularjs.org/tutorial。

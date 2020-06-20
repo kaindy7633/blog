@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [相同点](#%E7%9B%B8%E5%90%8C%E7%82%B9)
+  - [都可以描述一个对象或者函数](#%E9%83%BD%E5%8F%AF%E4%BB%A5%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%88%96%E8%80%85%E5%87%BD%E6%95%B0)
+    - [interface](#interface)
+    - [type](#type)
+  - [都允许拓展（`extends`）](#%E9%83%BD%E5%85%81%E8%AE%B8%E6%8B%93%E5%B1%95extends)
+    - [`interface extends interface`](#interface-extends-interface)
+    - [`type extends type`](#type-extends-type)
+    - [`interface extends type`](#interface-extends-type)
+    - [`type extends interface`](#type-extends-interface)
+  - [不同点](#%E4%B8%8D%E5%90%8C%E7%82%B9)
+    - [`type` 可以而 `interface` 不行](#type-%E5%8F%AF%E4%BB%A5%E8%80%8C-interface-%E4%B8%8D%E8%A1%8C)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 `typescript` 总会使用到 `interface` 和 `type`，官方规范稍微说了下两者的区别
 
 > An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.

@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [继承的概念](#%E7%BB%A7%E6%89%BF%E7%9A%84%E6%A6%82%E5%BF%B5)
+- [继承使用场景](#%E7%BB%A7%E6%89%BF%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF)
+- [继承中的变量使用](#%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E4%BD%BF%E7%94%A8)
+- [this和super](#this%E5%92%8Csuper)
+- [父子类中的构造方法](#%E7%88%B6%E5%AD%90%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95)
+- [方法重写](#%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99)
+- [访问修饰符](#%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6)
+- [方法重载和方法重写](#%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD%E5%92%8C%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99)
+- [Java中继承的特点](#java%E4%B8%AD%E7%BB%A7%E6%89%BF%E7%9A%84%E7%89%B9%E7%82%B9)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### 继承的概念
 
 继承，泛指把前人的作风、文化、知识、财产等接收过来的过程。

@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [GIT （分布式版本控制系统）](#git-%E5%88%86%E5%B8%83%E5%BC%8F%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F)
+  - [Git的自动完成](#git%E7%9A%84%E8%87%AA%E5%8A%A8%E5%AE%8C%E6%88%90)
+  - [Git的基本配置](#git%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## GIT （分布式版本控制系统）
 
 Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目。

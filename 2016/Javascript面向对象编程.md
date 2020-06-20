@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、认识面向对象](#%E4%B8%80%E8%AE%A4%E8%AF%86%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
+- [二、基本面向对象](#%E4%BA%8C%E5%9F%BA%E6%9C%AC%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
+- [三、函数构造器对象](#%E4%B8%89%E5%87%BD%E6%95%B0%E6%9E%84%E9%80%A0%E5%99%A8%E5%AF%B9%E8%B1%A1)
+- [四、深入Javascript面向对象](#%E5%9B%9B%E6%B7%B1%E5%85%A5javascript%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 一、认识面向对象
 
 1. 一切事物皆为对象 - JS中一切东西都为对象

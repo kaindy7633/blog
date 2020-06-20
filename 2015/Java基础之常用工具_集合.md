@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [集合](#%E9%9B%86%E5%90%88)
+- [List](#list)
+- [增强For循环和迭代器](#%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8)
+- [泛型](#%E6%B3%9B%E5%9E%8B)
+- [Collections工具类](#collections%E5%B7%A5%E5%85%B7%E7%B1%BB)
+- [Set](#set)
+- [Map](#map)
+- [综合示例：斗地主发牌](#%E7%BB%BC%E5%90%88%E7%A4%BA%E4%BE%8B%E6%96%97%E5%9C%B0%E4%B8%BB%E5%8F%91%E7%89%8C)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ### 集合
 

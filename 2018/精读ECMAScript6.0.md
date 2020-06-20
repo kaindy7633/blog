@@ -93,6 +93,15 @@
     - [Object.is()](#objectis)
     - [Object.assign()](#objectassign)
     - [Object.getOwnPropertyDescriptors()](#objectgetownpropertydescriptors)
+    - [__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()](#__proto__%E5%B1%9E%E6%80%A7objectsetprototypeofobjectgetprototypeof)
+      - [__proto__属性](#__proto__%E5%B1%9E%E6%80%A7)
+      - [Object.setPrototypeOf()](#objectsetprototypeof)
+      - [Object.getPrototypeOf()](#objectgetprototypeof)
+    - [Object.keys()，Object.values()，Object.entries()](#objectkeysobjectvaluesobjectentries)
+      - [Object.keys()](#objectkeys)
+      - [Object.values()](#objectvalues)
+      - [Object.entries()](#objectentries)
+    - [Object.fromEntries()](#objectfromentries)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2479,3 +2488,197 @@ Object.assign({b: 'c'},
   ```
 
 ### Object.getOwnPropertyDescriptors()
+
+`ES5` 的`Object.getOwnPropertyDescriptor()`方法会返回某个对象属性的描述对象（`descriptor`）。`ES2017` 引入了`Object.getOwnPropertyDescriptors()`方法，返回指定对象所有自身属性（非继承属性）的描述对象
+
+```javascript
+const obj = {
+  foo: 123,
+  get bar() { return 'abc' }
+};
+
+Object.getOwnPropertyDescriptors(obj)
+// { foo:
+//    { value: 123,
+//      writable: true,
+//      enumerable: true,
+//      configurable: true },
+//   bar:
+//    { get: [Function: get bar],
+//      set: undefined,
+//      enumerable: true,
+//      configurable: true } }
+```
+
+该方法的引入目的，主要是为了解决`Object.assign()`无法正确拷贝`get`属性和`set`属性的问题
+
+### __proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+
+`JavaScript` 语言的对象继承是通过原型链实现的。`ES6` 提供了更多原型对象的操作方法
+
+#### __proto__属性
+
+`__proto__`属性（前后各两个下划线），用来读取或设置当前对象的原型对象（`prototype`）。目前，所有浏览器（包括 IE11）都部署了这个属性
+
+```javascript
+// es5 的写法
+const obj = {
+  method: function() { ... }
+};
+obj.__proto__ = someOtherObj;
+
+// es6 的写法
+var obj = Object.create(someOtherObj);
+obj.method = function() { ... };
+```
+
+虽然 `__proto__` 属性已成为 `ES6` 的标准，但无论从语义的角度，还是从兼容性的角度，都不要使用这个属性，而是使用以下API：
+
+- `Object.setPrototypeOf()`（写操作）
+- `Object.getPrototypeOf()`（读操作）
+- `Object.create()`（生成操作）
+
+#### Object.setPrototypeOf()
+
+`Object.setPrototypeOf()`方法的作用与`__proto__`相同，用来设置一个对象的原型对象（`prototype`），返回参数对象本身。它是 `ES6` 正式推荐的设置原型对象的方法。
+
+```javascript
+// 格式
+Object.setPrototypeOf(object, prototype)
+
+// 用法
+const o = Object.setPrototypeOf({}, null);
+```
+
+例子：
+
+```javascript
+let proto = {};
+let obj = { x: 10 };
+Object.setPrototypeOf(obj, proto);
+
+proto.y = 20;
+proto.z = 40;
+
+obj.x // 10
+obj.y // 20
+obj.z // 40
+```
+
+#### Object.getPrototypeOf()
+
+该方法与`Object.setPrototypeOf`方法配套，用于读取一个对象的原型对象
+
+```javascript
+function Rectangle() {
+  // ...
+}
+
+const rec = new Rectangle();
+
+Object.getPrototypeOf(rec) === Rectangle.prototype
+// true
+
+Object.setPrototypeOf(rec, Object.prototype);
+Object.getPrototypeOf(rec) === Rectangle.prototype
+// false
+```
+
+### Object.keys()，Object.values()，Object.entries()
+
+#### Object.keys()
+
+`ES5` 引入了`Object.keys`方法，返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（`enumerable`）属性的键名
+
+```javascript
+var obj = { foo: 'bar', baz: 42 };
+Object.keys(obj)
+// ["foo", "baz"]
+```
+
+`ES2017` 引入了跟`Object.keys`配套的`Object.values`和`Object.entries`，作为遍历一个对象的补充手段，供`for...of`循环使用
+
+```javascript
+let {keys, values, entries} = Object;
+let obj = { a: 1, b: 2, c: 3 };
+
+for (let key of keys(obj)) {
+  console.log(key); // 'a', 'b', 'c'
+}
+
+for (let value of values(obj)) {
+  console.log(value); // 1, 2, 3
+}
+
+for (let [key, value] of entries(obj)) {
+  console.log([key, value]); // ['a', 1], ['b', 2], ['c', 3]
+}
+```
+
+#### Object.values()
+
+`Object.values`方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（`enumerable`）属性的键值
+
+```javascript
+const obj = { foo: 'bar', baz: 42 };
+Object.values(obj)
+// ["bar", 42]
+```
+
+`Object.values`只返回对象自身的可遍历属性。
+
+```javascript
+const obj = Object.create({}, {p: {value: 42}});
+Object.values(obj) // []
+```
+
+#### Object.entries()
+
+`Object.entries()`方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（`enumerable`）属性的键值对数组。
+
+```javascript
+const obj = { foo: 'bar', baz: 42 };
+Object.entries(obj)
+// [ ["foo", "bar"], ["baz", 42] ]
+```
+
+`Object.entries`的基本用途是遍历对象的属性
+
+```javascript
+let obj = { one: 1, two: 2 };
+for (let [k, v] of Object.entries(obj)) {
+  console.log(
+    `${JSON.stringify(k)}: ${JSON.stringify(v)}`
+  );
+}
+// "one": 1
+// "two": 2
+```
+
+`Object.entries`方法的另一个用处是，将对象转为真正的`Map`结构。
+
+```javascript
+const obj = { foo: 'bar', baz: 42 };
+const map = new Map(Object.entries(obj));
+map // Map { foo: "bar", baz: 42 }
+```
+
+### Object.fromEntries()
+
+`Object.fromEntries()`方法是`Object.entries()`的逆操作，用于将一个键值对数组转为对象。
+
+```javascript
+Object.fromEntries([
+  ['foo', 'bar'],
+  ['baz', 42]
+])
+// { foo: "bar", baz: 42 }
+```
+
+
+
+
+
+
+
+

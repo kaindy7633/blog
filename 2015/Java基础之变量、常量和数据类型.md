@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [注释](#%E6%B3%A8%E9%87%8A)
+- [关键字](#%E5%85%B3%E9%94%AE%E5%AD%97)
+- [常量](#%E5%B8%B8%E9%87%8F)
+- [变量](#%E5%8F%98%E9%87%8F)
+- [数据类型及转换](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%8F%8A%E8%BD%AC%E6%8D%A2)
+- [标识符](#%E6%A0%87%E8%AF%86%E7%AC%A6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 注释
 
 `Java`中的注释分为单行注释和多行注释

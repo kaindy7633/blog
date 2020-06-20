@@ -1,3 +1,40 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第二章 列表和元组](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84)
+  - [序列概述](#%E5%BA%8F%E5%88%97%E6%A6%82%E8%BF%B0)
+  - [通用的序列操作](#%E9%80%9A%E7%94%A8%E7%9A%84%E5%BA%8F%E5%88%97%E6%93%8D%E4%BD%9C)
+    - [索引](#%E7%B4%A2%E5%BC%95)
+    - [切片](#%E5%88%87%E7%89%87)
+      - [切片的简写](#%E5%88%87%E7%89%87%E7%9A%84%E7%AE%80%E5%86%99)
+      - [更大的步长](#%E6%9B%B4%E5%A4%A7%E7%9A%84%E6%AD%A5%E9%95%BF)
+    - [序列相加](#%E5%BA%8F%E5%88%97%E7%9B%B8%E5%8A%A0)
+    - [乘法](#%E4%B9%98%E6%B3%95)
+    - [成员资格](#%E6%88%90%E5%91%98%E8%B5%84%E6%A0%BC)
+  - [列表：Python的主力](#%E5%88%97%E8%A1%A8python%E7%9A%84%E4%B8%BB%E5%8A%9B)
+    - [函数list](#%E5%87%BD%E6%95%B0list)
+    - [基本的列表操作](#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%88%97%E8%A1%A8%E6%93%8D%E4%BD%9C)
+      - [修改列表：给元素赋值](#%E4%BF%AE%E6%94%B9%E5%88%97%E8%A1%A8%E7%BB%99%E5%85%83%E7%B4%A0%E8%B5%8B%E5%80%BC)
+      - [删除元素](#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0)
+      - [给切片赋值](#%E7%BB%99%E5%88%87%E7%89%87%E8%B5%8B%E5%80%BC)
+    - [列表方法](#%E5%88%97%E8%A1%A8%E6%96%B9%E6%B3%95)
+      - [append](#append)
+      - [clear](#clear)
+      - [copy](#copy)
+      - [count](#count)
+      - [extend](#extend)
+      - [index](#index)
+    - [insert](#insert)
+      - [pop](#pop)
+      - [remove](#remove)
+      - [reverse](#reverse)
+      - [sort](#sort)
+      - [高级排序](#%E9%AB%98%E7%BA%A7%E6%8E%92%E5%BA%8F)
+  - [元组：不可修改的序列](#%E5%85%83%E7%BB%84%E4%B8%8D%E5%8F%AF%E4%BF%AE%E6%94%B9%E7%9A%84%E5%BA%8F%E5%88%97)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第二章 列表和元组
 
 我们先来说说数据结构，数据结构是以某种方式组合起来的数据元素集合。在Python中，最基本的数据结构为**序列**(Sequence)。序列中的每个元素都有编号，即其位置或索引，其中第一个元素的索引为0，第二个元素的索引为1，依次类推...，同时可回绕到序列末尾，用负索引表示序列末尾元素的位置。

@@ -1,3 +1,31 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一文入门Dart](#%E4%B8%80%E6%96%87%E5%85%A5%E9%97%A8dart)
+  - [从 Hello World 开始](#%E4%BB%8E-hello-world-%E5%BC%80%E5%A7%8B)
+  - [数据类型](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B)
+  - [函数](#%E5%87%BD%E6%95%B0)
+  - [操作符和流程控制语句](#%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%92%8C%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5)
+  - [类和对象](#%E7%B1%BB%E5%92%8C%E5%AF%B9%E8%B1%A1)
+    - [定义](#%E5%AE%9A%E4%B9%89)
+    - [构造函数](#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+    - [Getters & Setters](#getters--setters)
+    - [抽象类](#%E6%8A%BD%E8%B1%A1%E7%B1%BB)
+    - [继承和实现](#%E7%BB%A7%E6%89%BF%E5%92%8C%E5%AE%9E%E7%8E%B0)
+  - [容器](#%E5%AE%B9%E5%99%A8)
+    - [StringBuffer](#stringbuffer)
+    - [List](#list)
+    - [Set](#set)
+    - [Map](#map)
+    - [迭代](#%E8%BF%AD%E4%BB%A3)
+  - [库的引用](#%E5%BA%93%E7%9A%84%E5%BC%95%E7%94%A8)
+    - [import](#import)
+    - [library](#library)
+    - [export](#export)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 一文入门Dart
 
 > Flutter使用 Dart 语言开发，Dart是面向对象编程语言。

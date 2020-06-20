@@ -1,3 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [使用Github](#%E4%BD%BF%E7%94%A8github)
+- [自定义Git](#%E8%87%AA%E5%AE%9A%E4%B9%89git)
+- [忽略特殊文件](#%E5%BF%BD%E7%95%A5%E7%89%B9%E6%AE%8A%E6%96%87%E4%BB%B6)
+- [配置别名](#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D)
+- [配置文件](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)
+- [搭建Git服务器](#%E6%90%AD%E5%BB%BAgit%E6%9C%8D%E5%8A%A1%E5%99%A8)
+  - [第一步： 安装git](#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E5%AE%89%E8%A3%85git)
+  - [第二步： 创建一个git用户，用来运行git服务](#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAgit%E7%94%A8%E6%88%B7%E7%94%A8%E6%9D%A5%E8%BF%90%E8%A1%8Cgit%E6%9C%8D%E5%8A%A1)
+  - [第三步： 创建证书登录](#%E7%AC%AC%E4%B8%89%E6%AD%A5-%E5%88%9B%E5%BB%BA%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95)
+  - [第四步： 初始化Git仓库](#%E7%AC%AC%E5%9B%9B%E6%AD%A5-%E5%88%9D%E5%A7%8B%E5%8C%96git%E4%BB%93%E5%BA%93)
+  - [第五步： 禁用shell登录](#%E7%AC%AC%E4%BA%94%E6%AD%A5-%E7%A6%81%E7%94%A8shell%E7%99%BB%E5%BD%95)
+  - [第六步： 克隆远程仓库](#%E7%AC%AC%E5%85%AD%E6%AD%A5-%E5%85%8B%E9%9A%86%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 使用github、自定义git、自己搭建git服务器
 
 ## 使用Github

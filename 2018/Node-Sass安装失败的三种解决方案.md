@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [node-sass 安装失败的原因](#node-sass-%E5%AE%89%E8%A3%85%E5%A4%B1%E8%B4%A5%E7%9A%84%E5%8E%9F%E5%9B%A0)
+- [解决方法一：使用淘宝镜像源（推荐）](#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%B8%80%E4%BD%BF%E7%94%A8%E6%B7%98%E5%AE%9D%E9%95%9C%E5%83%8F%E6%BA%90%E6%8E%A8%E8%8D%90)
+- [解决方法二：使用 cnpm](#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%BA%8C%E4%BD%BF%E7%94%A8-cnpm)
+- [解决方法三：创建.npmrc文件](#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E4%B8%89%E5%88%9B%E5%BB%BAnpmrc%E6%96%87%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## node-sass 安装失败的原因
 
 `npm` 安装 `node-sass` 依赖时，会从 `github.com` 上下载 `.node` 文件。由于国内网络环境的问题，这个下载时间可能会很长，甚至导致超时失败。

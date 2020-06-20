@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第十一章 文件](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%96%87%E4%BB%B6)
+  - [打开文件](#%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6)
+  - [文件的基本方法](#%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95)
+    - [读取和写入](#%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5)
+    - [使用管道重定向输出](#%E4%BD%BF%E7%94%A8%E7%AE%A1%E9%81%93%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%87%BA)
+    - [随机存取](#%E9%9A%8F%E6%9C%BA%E5%AD%98%E5%8F%96)
+    - [读取和写入行](#%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E8%A1%8C)
+    - [关闭文件](#%E5%85%B3%E9%97%AD%E6%96%87%E4%BB%B6)
+      - [上下文管理器](#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8)
+    - [使用文件的基本方法](#%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95)
+  - [迭代文件的内容](#%E8%BF%AD%E4%BB%A3%E6%96%87%E4%BB%B6%E7%9A%84%E5%86%85%E5%AE%B9)
+    - [每次一个字符(或字节)](#%E6%AF%8F%E6%AC%A1%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E6%88%96%E5%AD%97%E8%8A%82)
+    - [每次一行](#%E6%AF%8F%E6%AC%A1%E4%B8%80%E8%A1%8C)
+    - [读取所有内容](#%E8%AF%BB%E5%8F%96%E6%89%80%E6%9C%89%E5%86%85%E5%AE%B9)
+    - [使用fileinput实现延迟行迭代](#%E4%BD%BF%E7%94%A8fileinput%E5%AE%9E%E7%8E%B0%E5%BB%B6%E8%BF%9F%E8%A1%8C%E8%BF%AD%E4%BB%A3)
+    - [文件迭代器](#%E6%96%87%E4%BB%B6%E8%BF%AD%E4%BB%A3%E5%99%A8)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第十一章 文件
 
 ## 打开文件

@@ -1,3 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [前言](#%E5%89%8D%E8%A8%80)
+- [调用函数](#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0)
+  - [内置函数](#%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0)
+  - [数据类型转换](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2)
+- [定义函数](#%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0)
+  - [定义](#%E5%AE%9A%E4%B9%89)
+  - [空函数](#%E7%A9%BA%E5%87%BD%E6%95%B0)
+  - [参数检查](#%E5%8F%82%E6%95%B0%E6%A3%80%E6%9F%A5)
+  - [返回多个值](#%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E5%80%BC)
+- [函数的参数](#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0)
+  - [位置参数](#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
+  - [默认参数](#%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0)
+  - [可变参数](#%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0)
+  - [关键字参数](#%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0)
+  - [命名关键字参数](#%E5%91%BD%E5%90%8D%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0)
+  - [参数组合](#%E5%8F%82%E6%95%B0%E7%BB%84%E5%90%88)
+- [递归函数](#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 前言
 
 <p style="height:20px"></p>

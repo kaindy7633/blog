@@ -1,3 +1,29 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Web性能优化 - 关键渲染路径及其优化策略](#web%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96---%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84%E5%8F%8A%E5%85%B6%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5)
+  - [页面性能可能是一个感性的东西](#%E9%A1%B5%E9%9D%A2%E6%80%A7%E8%83%BD%E5%8F%AF%E8%83%BD%E6%98%AF%E4%B8%80%E4%B8%AA%E6%84%9F%E6%80%A7%E7%9A%84%E4%B8%9C%E8%A5%BF)
+  - [什么是关键渲染路径](#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84)
+  - [全景图](#%E5%85%A8%E6%99%AF%E5%9B%BE)
+  - [文档对象模型 (DOM)](#%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-dom)
+  - [CSS 对象模型 (CSSOM)](#css-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-cssom)
+  - [DOM + CSSOM = 渲染树](#dom--cssom--%E6%B8%B2%E6%9F%93%E6%A0%91)
+  - [布局和绘制](#%E5%B8%83%E5%B1%80%E5%92%8C%E7%BB%98%E5%88%B6)
+  - [JavaScript](#javascript)
+  - [优化策略](#%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5)
+    - [第一步，分析你的网站渲染状况](#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%88%86%E6%9E%90%E4%BD%A0%E7%9A%84%E7%BD%91%E7%AB%99%E6%B8%B2%E6%9F%93%E7%8A%B6%E5%86%B5)
+    - [第二步，分析关键渲染路径](#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%88%86%E6%9E%90%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84)
+    - [第三步，根据分析采取优化手段](#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%A0%B9%E6%8D%AE%E5%88%86%E6%9E%90%E9%87%87%E5%8F%96%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5)
+      - [1、减少关键资源的大小](#1%E5%87%8F%E5%B0%91%E5%85%B3%E9%94%AE%E8%B5%84%E6%BA%90%E7%9A%84%E5%A4%A7%E5%B0%8F)
+      - [2、延迟JavaScript非阻塞资源加载](#2%E5%BB%B6%E8%BF%9Fjavascript%E9%9D%9E%E9%98%BB%E5%A1%9E%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD)
+      - [3、尽早和按需的加载CSS](#3%E5%B0%BD%E6%97%A9%E5%92%8C%E6%8C%89%E9%9C%80%E7%9A%84%E5%8A%A0%E8%BD%BDcss)
+      - [4、内联CSS来提高渲染性能](#4%E5%86%85%E8%81%94css%E6%9D%A5%E6%8F%90%E9%AB%98%E6%B8%B2%E6%9F%93%E6%80%A7%E8%83%BD)
+      - [5、一个神奇的数字14kb](#5%E4%B8%80%E4%B8%AA%E7%A5%9E%E5%A5%87%E7%9A%84%E6%95%B0%E5%AD%9714kb)
+  - [其他Web资源和关键渲染路径的关系](#%E5%85%B6%E4%BB%96web%E8%B5%84%E6%BA%90%E5%92%8C%E5%85%B3%E9%94%AE%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84%E7%9A%84%E5%85%B3%E7%B3%BB)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Web性能优化 - 关键渲染路径及其优化策略
 
 想一想，如果你希望你的网站在一秒钟之内呈现用户想看的关键信息，有哪些可行的手段？Minify，压缩，雪碧图等等。

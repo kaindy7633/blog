@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [多态](#%E5%A4%9A%E6%80%81)
+- [抽象类](#%E6%8A%BD%E8%B1%A1%E7%B1%BB)
+- [final关键字](#final%E5%85%B3%E9%94%AE%E5%AD%97)
+- [static关键字](#static%E5%85%B3%E9%94%AE%E5%AD%97)
+- [接口](#%E6%8E%A5%E5%8F%A3)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### 多态
 
 多态即多种状态，是指同一对象在不同情况下表现出不同的状态或行为

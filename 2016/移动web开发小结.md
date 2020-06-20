@@ -1,3 +1,29 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Meta标签:](#meta%E6%A0%87%E7%AD%BE)
+- [获取滚动条的值：](#%E8%8E%B7%E5%8F%96%E6%BB%9A%E5%8A%A8%E6%9D%A1%E7%9A%84%E5%80%BC)
+- [禁止选择文本：](#%E7%A6%81%E6%AD%A2%E9%80%89%E6%8B%A9%E6%96%87%E6%9C%AC)
+- [屏蔽阴影：](#%E5%B1%8F%E8%94%BD%E9%98%B4%E5%BD%B1)
+- [css之border-box：](#css%E4%B9%8Bborder-box)
+- [css3多文本换行：](#css3%E5%A4%9A%E6%96%87%E6%9C%AC%E6%8D%A2%E8%A1%8C)
+- [Retina屏幕高清图片：](#retina%E5%B1%8F%E5%B9%95%E9%AB%98%E6%B8%85%E5%9B%BE%E7%89%87)
+- [html5重力感应事件：](#html5%E9%87%8D%E5%8A%9B%E6%84%9F%E5%BA%94%E4%BA%8B%E4%BB%B6)
+- [移动端touch事件：](#%E7%A7%BB%E5%8A%A8%E7%AB%AFtouch%E4%BA%8B%E4%BB%B6)
+- [单击延迟：](#%E5%8D%95%E5%87%BB%E5%BB%B6%E8%BF%9F)
+- [IOS里面fixed的文本框焦点居中](#ios%E9%87%8C%E9%9D%A2fixed%E7%9A%84%E6%96%87%E6%9C%AC%E6%A1%86%E7%84%A6%E7%82%B9%E5%B1%85%E4%B8%AD)
+- [position:sticky](#positionsticky)
+- [移动端点透事件](#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%82%B9%E9%80%8F%E4%BA%8B%E4%BB%B6)
+- [base64编码图片替换url图片](#base64%E7%BC%96%E7%A0%81%E5%9B%BE%E7%89%87%E6%9B%BF%E6%8D%A2url%E5%9B%BE%E7%89%87)
+- [手机拍照和上传图片](#%E6%89%8B%E6%9C%BA%E6%8B%8D%E7%85%A7%E5%92%8C%E4%B8%8A%E4%BC%A0%E5%9B%BE%E7%89%87)
+- [动画效果时开启硬件加速](#%E5%8A%A8%E7%94%BB%E6%95%88%E6%9E%9C%E6%97%B6%E5%BC%80%E5%90%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F)
+- [快速回弹滚动](#%E5%BF%AB%E9%80%9F%E5%9B%9E%E5%BC%B9%E6%BB%9A%E5%8A%A8)
+- [ios和android局部滚动时隐藏原生滚动条](#ios%E5%92%8Candroid%E5%B1%80%E9%83%A8%E6%BB%9A%E5%8A%A8%E6%97%B6%E9%9A%90%E8%97%8F%E5%8E%9F%E7%94%9F%E6%BB%9A%E5%8A%A8%E6%9D%A1)
+- [设置placeholder时候 focus时候文字没有隐藏](#%E8%AE%BE%E7%BD%AEplaceholder%E6%97%B6%E5%80%99-focus%E6%97%B6%E5%80%99%E6%96%87%E5%AD%97%E6%B2%A1%E6%9C%89%E9%9A%90%E8%97%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 做了多年的桌面浏览器应用开发，到了新公司后，接触到了移动web，下面把一些心得记录下来，目前还不完整，待后续完善总结一篇更完整的
 
 ## Meta标签:

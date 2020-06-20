@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [创建标签](#%E5%88%9B%E5%BB%BA%E6%A0%87%E7%AD%BE)
+- [操作标签](#%E6%93%8D%E4%BD%9C%E6%A0%87%E7%AD%BE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 当我们需要提交一个软件版本时，可以往这个版本上打一个标签，以后可以按照某个标签来取回某个版本的代码，实际上标签就是一个软件版本的快照。
 
 标签实际上是一个指向某个`commit`的指针，跟分支很像，但分支可以移动，而标签却不能。

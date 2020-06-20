@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第十四章 网络编程](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B)
+  - [几个网络模块](#%E5%87%A0%E4%B8%AA%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9D%97)
+    - [模块socket](#%E6%A8%A1%E5%9D%97socket)
+    - [模块urllib和urllib2](#%E6%A8%A1%E5%9D%97urllib%E5%92%8Curllib2)
+      - [打开远程文件](#%E6%89%93%E5%BC%80%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6)
+      - [获取远程文件](#%E8%8E%B7%E5%8F%96%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6)
+  - [SocketServer及相关的类](#socketserver%E5%8F%8A%E7%9B%B8%E5%85%B3%E7%9A%84%E7%B1%BB)
+  - [多个连接](#%E5%A4%9A%E4%B8%AA%E8%BF%9E%E6%8E%A5)
+    - [使用SocketServer实现分叉和线程化](#%E4%BD%BF%E7%94%A8socketserver%E5%AE%9E%E7%8E%B0%E5%88%86%E5%8F%89%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%8C%96)
+    - [使用select和poll实现异步IO](#%E4%BD%BF%E7%94%A8select%E5%92%8Cpoll%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5io)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第十四章 网络编程
 
 > Python提供了强大的网络编程支持，有很多库实现了常见的网络协议以及基于这些协议的抽象层，让你能够专注于程序的逻辑。

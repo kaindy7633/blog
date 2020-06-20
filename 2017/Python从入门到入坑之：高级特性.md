@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [切片](#%E5%88%87%E7%89%87)
+- [迭代](#%E8%BF%AD%E4%BB%A3)
+- [列表生成式](#%E5%88%97%E8%A1%A8%E7%94%9F%E6%88%90%E5%BC%8F)
+- [生成器](#%E7%94%9F%E6%88%90%E5%99%A8)
+- [迭代器](#%E8%BF%AD%E4%BB%A3%E5%99%A8)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 切片
 
 在Python中，取一个 `list` 或 `tuple` 的部分元素是非常常见的操作。比如，一个 `list` 如下：

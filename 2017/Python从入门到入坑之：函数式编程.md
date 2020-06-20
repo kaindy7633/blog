@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [前言](#%E5%89%8D%E8%A8%80)
+- [高阶函数](#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0)
+  - [变量可以指向函数](#%E5%8F%98%E9%87%8F%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%90%91%E5%87%BD%E6%95%B0)
+  - [函数名也是变量](#%E5%87%BD%E6%95%B0%E5%90%8D%E4%B9%9F%E6%98%AF%E5%8F%98%E9%87%8F)
+  - [传入函数](#%E4%BC%A0%E5%85%A5%E5%87%BD%E6%95%B0)
+  - [map/reduce](#mapreduce)
+    - [map](#map)
+    - [reduce](#reduce)
+  - [filter](#filter)
+  - [sorted](#sorted)
+- [返回函数](#%E8%BF%94%E5%9B%9E%E5%87%BD%E6%95%B0)
+  - [函数作为返回值](#%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E8%BF%94%E5%9B%9E%E5%80%BC)
+  - [闭包](#%E9%97%AD%E5%8C%85)
+- [匿名函数](#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0)
+- [装饰器](#%E8%A3%85%E9%A5%B0%E5%99%A8)
+- [偏函数](#%E5%81%8F%E5%87%BD%E6%95%B0)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 前言
 
 <p style="width:100%;height:25px;"></p>

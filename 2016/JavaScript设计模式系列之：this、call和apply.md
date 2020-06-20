@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、this](#%E4%B8%80this)
+- [二、call和apply](#%E4%BA%8Ccall%E5%92%8Capply)
+  - [1、改变this指向](#1%E6%94%B9%E5%8F%98this%E6%8C%87%E5%90%91)
+  - [2、`Function.prototype.bind`](#2functionprototypebind)
+  - [3、借用其他对象的方法](#3%E5%80%9F%E7%94%A8%E5%85%B6%E4%BB%96%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > `this`、`call` 和 `apply` 在Javascript编程中应用非常广泛，所以，我们必须先了解它们。
 
 ## 一、this

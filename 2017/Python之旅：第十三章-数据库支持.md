@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第十三章 数据库支持](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%AF%E6%8C%81)
+  - [Python数据库API](#python%E6%95%B0%E6%8D%AE%E5%BA%93api)
+    - [全局变量](#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F)
+    - [异常](#%E5%BC%82%E5%B8%B8)
+    - [连接和游标](#%E8%BF%9E%E6%8E%A5%E5%92%8C%E6%B8%B8%E6%A0%87)
+    - [类型](#%E7%B1%BB%E5%9E%8B)
+  - [SQLite和PySQLite](#sqlite%E5%92%8Cpysqlite)
+    - [起步](#%E8%B5%B7%E6%AD%A5)
+    - [数据库应用程序示例](#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%A4%BA%E4%BE%8B)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第十三章 数据库支持
 
 > Python支持对多种数据库的访问操作，它支持数据并发访问，并允许多个用户读写磁盘数据，也可以根据多个数据字段或属性进行复杂的搜索。本章将谈论Python数据库API，一种链接到SQL数据库的标准化方式，并演示如何使用这个API来执行一些基本的SQL操作。当然除了SQL数据库，Python也支持访问对象数据库，或一些NOSQL数据库，比如MongoDB等。

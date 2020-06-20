@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [let,const](#letconst)
+- [class,extends,super](#classextendssuper)
+- [arrow function](#arrow-function)
+- [template string](#template-string)
+- [destructuring](#destructuring)
+- [default, rest](#default-rest)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > ECMAScript6(简称ES6)，是JavaScript的下一代标准，因为ES6是在2015年发布的，所以又称ECMAScript2015（ES6 === ECMAScript2015）
 
 目前不是所有的浏览器都完全兼容ES6,但很多程序猿已经开始使用ES6了，所以了解并逐步掌握ES6，甚至在你的项目中使用ES6,是非常有必要的，至少也要看得懂小伙伴写的ES6代码吧？

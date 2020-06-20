@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [如何为自己的个人站点添加https访问](#%E5%A6%82%E4%BD%95%E4%B8%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%AA%E4%BA%BA%E7%AB%99%E7%82%B9%E6%B7%BB%E5%8A%A0https%E8%AE%BF%E9%97%AE)
+  - [第一步 下载certbot](#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E4%B8%8B%E8%BD%BDcertbot)
+  - [第二步 生成免费证书](#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E7%94%9F%E6%88%90%E5%85%8D%E8%B4%B9%E8%AF%81%E4%B9%A6)
+  - [第三步 获取证书](#%E7%AC%AC%E4%B8%89%E6%AD%A5-%E8%8E%B7%E5%8F%96%E8%AF%81%E4%B9%A6)
+  - [第四步 生成 `dhparams`](#%E7%AC%AC%E5%9B%9B%E6%AD%A5-%E7%94%9F%E6%88%90-dhparams)
+  - [第五步 配置 `Nginx`](#%E7%AC%AC%E4%BA%94%E6%AD%A5-%E9%85%8D%E7%BD%AE-nginx)
+  - [第六步 强制跳转 `https`](#%E7%AC%AC%E5%85%AD%E6%AD%A5-%E5%BC%BA%E5%88%B6%E8%B7%B3%E8%BD%AC-https)
+  - [第七步 证书更新](#%E7%AC%AC%E4%B8%83%E6%AD%A5-%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0)
+  - [如何配置自动更新](#%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 如何为自己的个人站点添加https访问
 
 很早之前在搭建这个博客的时候就使用了免费的https证书访问，当然申请的是 `Let's Encrypt` 的，这个证书有3个月的有效期，3个月之后就失效了。前两天突然访问的时候就发现证书无效了，弄了一两个小时才OK，所以把这个过程记录下来，给有需要的朋友参考。

@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、动态类型语言](#%E4%B8%80%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80)
+- [二、多态](#%E4%BA%8C%E5%A4%9A%E6%80%81)
+- [二、封装](#%E4%BA%8C%E5%B0%81%E8%A3%85)
+  - [1、封装数据](#1%E5%B0%81%E8%A3%85%E6%95%B0%E6%8D%AE)
+  - [2、封装实现](#2%E5%B0%81%E8%A3%85%E5%AE%9E%E7%8E%B0)
+  - [3、封装类型](#3%E5%B0%81%E8%A3%85%E7%B1%BB%E5%9E%8B)
+  - [4、封装变化](#4%E5%B0%81%E8%A3%85%E5%8F%98%E5%8C%96)
+- [四、原型模式和基于原型继承的JavaScript](#%E5%9B%9B%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%9F%BA%E4%BA%8E%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84javascript)
+  - [使用克隆的原型模式](#%E4%BD%BF%E7%94%A8%E5%85%8B%E9%9A%86%E7%9A%84%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F)
+  - [原型编程泛型的一些规则](#%E5%8E%9F%E5%9E%8B%E7%BC%96%E7%A8%8B%E6%B3%9B%E5%9E%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%84%E5%88%99)
+  - [JavaScript中的原型继承](#javascript%E4%B8%AD%E7%9A%84%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > JavaScript没有提供传统面向对象语言中的类式继承，而是通过原型委托的方式来实现对象与对象之间的继承。JavaScript也咩有在语言层面提供对抽象类和接口的支持
 
 ## 一、动态类型语言

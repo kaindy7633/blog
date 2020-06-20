@@ -1,3 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [使用`__slots__`](#%E4%BD%BF%E7%94%A8__slots__)
+  - [使用`__slots__`](#%E4%BD%BF%E7%94%A8__slots__-1)
+- [使用`@property`](#%E4%BD%BF%E7%94%A8property)
+- [多重继承](#%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF)
+  - [MixIn](#mixin)
+- [定制类](#%E5%AE%9A%E5%88%B6%E7%B1%BB)
+  - [`__str__`](#__str__)
+  - [`__iter__`](#__iter__)
+  - [`__getitem__`](#__getitem__)
+  - [`__getattr__`](#__getattr__)
+  - [`__call__`](#__call__)
+- [使用枚举类](#%E4%BD%BF%E7%94%A8%E6%9E%9A%E4%B8%BE%E7%B1%BB)
+- [使用元类](#%E4%BD%BF%E7%94%A8%E5%85%83%E7%B1%BB)
+  - [type()](#type)
+  - [metaclass](#metaclass)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 使用`__slots__`
 
 正常情况下，当我们定义了一个`class`，创建了一个`class`的实例后，我们可以给该实例绑定任何属性和方法，这就是动态语言的灵活性。先定义`class`：

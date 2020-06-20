@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [JavaScript事件绑定](#javascript%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A)
+- [传统方式](#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F)
+- [W3C方式](#w3c%E6%96%B9%E5%BC%8F)
+- [IE方式](#ie%E6%96%B9%E5%BC%8F)
+- [Dean Edwards的方案（addEvent/removeEvent库）](#dean-edwards%E7%9A%84%E6%96%B9%E6%A1%88addeventremoveevent%E5%BA%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > JavaScript各种绑定事件方式的优缺点
 
 ## JavaScript事件绑定

@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [使用CSS实现火焰效果](#%E4%BD%BF%E7%94%A8css%E5%AE%9E%E7%8E%B0%E7%81%AB%E7%84%B0%E6%95%88%E6%9E%9C)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 使用CSS实现火焰效果
 
 效果：

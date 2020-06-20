@@ -1,3 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第七章 再谈抽象-面向对象编程](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%86%8D%E8%B0%88%E6%8A%BD%E8%B1%A1-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B)
+  - [对象魔法](#%E5%AF%B9%E8%B1%A1%E9%AD%94%E6%B3%95)
+    - [多态](#%E5%A4%9A%E6%80%81)
+    - [多态和方法](#%E5%A4%9A%E6%80%81%E5%92%8C%E6%96%B9%E6%B3%95)
+    - [封装](#%E5%B0%81%E8%A3%85)
+    - [继承](#%E7%BB%A7%E6%89%BF)
+  - [类](#%E7%B1%BB)
+    - [类到底是什么](#%E7%B1%BB%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88)
+    - [创建自定义类](#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB)
+    - [属性、函数和方法](#%E5%B1%9E%E6%80%A7%E5%87%BD%E6%95%B0%E5%92%8C%E6%96%B9%E6%B3%95)
+    - [再谈隐藏](#%E5%86%8D%E8%B0%88%E9%9A%90%E8%97%8F)
+    - [类的命名空间](#%E7%B1%BB%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4)
+    - [指定超类](#%E6%8C%87%E5%AE%9A%E8%B6%85%E7%B1%BB)
+    - [深入讨论继承](#%E6%B7%B1%E5%85%A5%E8%AE%A8%E8%AE%BA%E7%BB%A7%E6%89%BF)
+    - [多个超类](#%E5%A4%9A%E4%B8%AA%E8%B6%85%E7%B1%BB)
+    - [接口和内省](#%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%86%85%E7%9C%81)
+    - [抽象基类](#%E6%8A%BD%E8%B1%A1%E5%9F%BA%E7%B1%BB)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第七章 再谈抽象-面向对象编程
 
 > 前面我们介绍了Python内置的主要对象类型(数、字符串、列表、元组和字典),还有众多的内置函数和标准库，自定义函数，本章主要介绍自定义对象。

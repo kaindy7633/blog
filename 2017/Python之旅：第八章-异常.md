@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第八章 异常](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%BC%82%E5%B8%B8)
+  - [异常是什么](#%E5%BC%82%E5%B8%B8%E6%98%AF%E4%BB%80%E4%B9%88)
+  - [让事情沿你指定的轨道出错](#%E8%AE%A9%E4%BA%8B%E6%83%85%E6%B2%BF%E4%BD%A0%E6%8C%87%E5%AE%9A%E7%9A%84%E8%BD%A8%E9%81%93%E5%87%BA%E9%94%99)
+    - [raise语句](#raise%E8%AF%AD%E5%8F%A5)
+    - [自定义的异常类](#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E5%BC%82%E5%B8%B8%E7%B1%BB)
+  - [捕获异常](#%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8)
+    - [不用提供参数](#%E4%B8%8D%E7%94%A8%E6%8F%90%E4%BE%9B%E5%8F%82%E6%95%B0)
+    - [多个except子句](#%E5%A4%9A%E4%B8%AAexcept%E5%AD%90%E5%8F%A5)
+    - [一箭双雕](#%E4%B8%80%E7%AE%AD%E5%8F%8C%E9%9B%95)
+    - [捕获对象](#%E6%8D%95%E8%8E%B7%E5%AF%B9%E8%B1%A1)
+    - [一网打尽](#%E4%B8%80%E7%BD%91%E6%89%93%E5%B0%BD)
+    - [万事大吉时](#%E4%B8%87%E4%BA%8B%E5%A4%A7%E5%90%89%E6%97%B6)
+    - [最后](#%E6%9C%80%E5%90%8E)
+  - [异常和函数](#%E5%BC%82%E5%B8%B8%E5%92%8C%E5%87%BD%E6%95%B0)
+  - [异常之禅](#%E5%BC%82%E5%B8%B8%E4%B9%8B%E7%A6%85)
+  - [不那么异常的情况](#%E4%B8%8D%E9%82%A3%E4%B9%88%E5%BC%82%E5%B8%B8%E7%9A%84%E6%83%85%E5%86%B5)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第八章 异常
 
 ## 异常是什么

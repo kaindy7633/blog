@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、创建与合并分支](#%E4%B8%80%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF)
+- [二、 解决冲突](#%E4%BA%8C-%E8%A7%A3%E5%86%B3%E5%86%B2%E7%AA%81)
+- [三、分支管理](#%E4%B8%89%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86)
+- [四、BUG分支](#%E5%9B%9Bbug%E5%88%86%E6%94%AF)
+- [五、Feature分支](#%E4%BA%94feature%E5%88%86%E6%94%AF)
+- [六、多人协作](#%E5%85%AD%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 分支是什么呢？团队开发的过程中，每个人都会有一个不同于别人的分支，各自都在自己的分支上编写代码，等到需要的时候，再把各分支合并起来，这样既安全也不会相互影响。
 
 ## 一、创建与合并分支

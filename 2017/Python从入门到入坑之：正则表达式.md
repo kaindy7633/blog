@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python从入门到入坑之：正则表达式](#python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+  - [进阶](#%E8%BF%9B%E9%98%B6)
+  - [re模块](#re%E6%A8%A1%E5%9D%97)
+  - [切分字符串](#%E5%88%87%E5%88%86%E5%AD%97%E7%AC%A6%E4%B8%B2)
+  - [分组](#%E5%88%86%E7%BB%84)
+  - [贪婪匹配](#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D)
+  - [编译](#%E7%BC%96%E8%AF%91)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python从入门到入坑之：正则表达式
 
 字符串是编程时涉及到的最多的一种数据结构，对字符串进行操作的需求几乎无处不在。比如判断一个字符串是否是合法的Email地址，虽然可以编程提取`@`前后的子串，再分别判断是否是单词和域名，但这样做不但麻烦，而且代码难以复用。

@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [JavaScript装逼指南](#javascript%E8%A3%85%E9%80%BC%E6%8C%87%E5%8D%97)
+  - [Boolean](#boolean)
+  - [Number](#number)
+  - [IIFE(自动执行函数)](#iife%E8%87%AA%E5%8A%A8%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0)
+  - [Closure(闭包)](#closure%E9%97%AD%E5%8C%85)
+  - [Event](#event)
+  - [parseInt](#parseint)
+  - [Hex](#hex)
+  - [«](#%C2%AB)
+  - [BTW](#btw)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # JavaScript装逼指南
 
 ## Boolean

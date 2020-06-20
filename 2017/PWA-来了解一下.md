@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [PWA概述](#pwa%E6%A6%82%E8%BF%B0)
+  - [什么是PWA](#%E4%BB%80%E4%B9%88%E6%98%AFpwa)
+  - [PWA中所涉及到的一些技术](#pwa%E4%B8%AD%E6%89%80%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%80%E6%9C%AF)
+  - [DEMO](#demo)
+- [PWA中的Manifest](#pwa%E4%B8%AD%E7%9A%84manifest)
+  - [Web App Manifest](#web-app-manifest)
+    - [name, short_name](#name-short_name)
+    - [start_url](#start_url)
+    - [display](#display)
+    - [orientation](#orientation)
+    - [icons， background_color](#icons-background_color)
+    - [theme_color](#theme_color)
+    - [description](#description)
+  - [使用Manifest](#%E4%BD%BF%E7%94%A8manifest)
+  - [iOS（safari）中的处理方式](#iossafari%E4%B8%AD%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F)
+  - [IE中的处理方式](#ie%E4%B8%AD%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F)
+- [离线可用的WebApp](#%E7%A6%BB%E7%BA%BF%E5%8F%AF%E7%94%A8%E7%9A%84webapp)
+- [TroubleShooting](#troubleshooting)
+- [Web Push功能](#web-push%E5%8A%9F%E8%83%BD)
+- [在Chrome中调试PWA](#%E5%9C%A8chrome%E4%B8%AD%E8%B0%83%E8%AF%95pwa)
+- [使用Notification API进行提醒](#%E4%BD%BF%E7%94%A8notification-api%E8%BF%9B%E8%A1%8C%E6%8F%90%E9%86%92)
+- [Service Worker](#service-worker)
+- [PWA实践中的问题与解决方案](#pwa%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+- [Resource Hint](#resource-hint)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # PWA概述
 
 ## 什么是PWA

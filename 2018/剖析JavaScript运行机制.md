@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [先了解进程和线程](#%E5%85%88%E4%BA%86%E8%A7%A3%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B)
+  - [进程](#%E8%BF%9B%E7%A8%8B)
+  - [线程](#%E7%BA%BF%E7%A8%8B)
+  - [进程和线程](#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B)
+  - [多进程和多线程](#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B)
+- [JavaScript是单线程的](#javascript%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E7%9A%84)
+- [浏览器中的进程和线程](#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B)
+  - [浏览器是多进程的](#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%98%AF%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%9A%84)
+  - [浏览器中进程的分类](#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%88%86%E7%B1%BB)
+  - [浏览器需要多进程](#%E6%B5%8F%E8%A7%88%E5%99%A8%E9%9C%80%E8%A6%81%E5%A4%9A%E8%BF%9B%E7%A8%8B)
+  - [单独阐述渲染进程Renderer(重点)](#%E5%8D%95%E7%8B%AC%E9%98%90%E8%BF%B0%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8Brenderer%E9%87%8D%E7%82%B9)
+    - [GUI渲染线程](#gui%E6%B8%B2%E6%9F%93%E7%BA%BF%E7%A8%8B)
+    - [JS引擎线程](#js%E5%BC%95%E6%93%8E%E7%BA%BF%E7%A8%8B)
+    - [事件触发线程](#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E7%BA%BF%E7%A8%8B)
+    - [定时触发器线程](#%E5%AE%9A%E6%97%B6%E8%A7%A6%E5%8F%91%E5%99%A8%E7%BA%BF%E7%A8%8B)
+    - [异步HTTP请求线程](#%E5%BC%82%E6%AD%A5http%E8%AF%B7%E6%B1%82%E7%BA%BF%E7%A8%8B)
+- [事件循环（Event Loop）](#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AFevent-loop)
+- [宏任务和微任务](#%E5%AE%8F%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > JavaScript在浏览器环境中的运行机制，无论是平时的开发，或者面试，都会经常用到，所以有必要精炼的总结一下这方面的知识点
 
 ## 先了解进程和线程

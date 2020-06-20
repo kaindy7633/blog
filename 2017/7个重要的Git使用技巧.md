@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、修改错误的提交信息（commit message）](#%E4%B8%80%E4%BF%AE%E6%94%B9%E9%94%99%E8%AF%AF%E7%9A%84%E6%8F%90%E4%BA%A4%E4%BF%A1%E6%81%AFcommit-message)
+- [二、提交之前撤销 `git add`](#%E4%BA%8C%E6%8F%90%E4%BA%A4%E4%B9%8B%E5%89%8D%E6%92%A4%E9%94%80-git-add)
+- [三、撤销最近一次代码提交](#%08%E4%B8%89%E6%92%A4%E9%94%80%E6%9C%80%E8%BF%91%E4%B8%80%E6%AC%A1%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4)
+- [四、Git仓库撤销至前一次提交时的状态](#%E5%9B%9Bgit%E4%BB%93%E5%BA%93%E6%92%A4%E9%94%80%E8%87%B3%E5%89%8D%E4%B8%80%E6%AC%A1%E6%8F%90%E4%BA%A4%E6%97%B6%E7%9A%84%E7%8A%B6%E6%80%81)
+- [五、撤销合并（Merge）](#%E4%BA%94%E6%92%A4%E9%94%80%E5%90%88%E5%B9%B6merge)
+- [六、从当前Git分支移除未追踪的本地文件](#%E5%85%AD%E4%BB%8E%E5%BD%93%E5%89%8Dgit%E5%88%86%E6%94%AF%E7%A7%BB%E9%99%A4%E6%9C%AA%E8%BF%BD%E8%B8%AA%E7%9A%84%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6)
+- [七、删除本地和远程Git分支](#%E4%B8%83%E5%88%A0%E9%99%A4%E6%9C%AC%E5%9C%B0%E5%92%8C%E8%BF%9C%E7%A8%8Bgit%E5%88%86%E6%94%AF)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 我们经常使用Git来保存自己的工作，在我们迷迷糊糊的犯下错误之后，就可以使用Git将代码返回到之前的状态。通常，大部分时间我们都只会用到`add`、`commit`、`branch`和`push/pull`这些命令。但如果自己往仓库中添加了错误的文件，或是将代码提交到了错误的分支，而且提交信息还写错了的话，自己怎样才能取消之前的操作？
 
 ## 一、修改错误的提交信息（commit message）

@@ -1,3 +1,37 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第九章 魔法方法、特性和迭代器](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%E7%89%B9%E6%80%A7%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8)
+  - [构造函数](#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+    - [重写普通方法和特殊的构造函数](#%E9%87%8D%E5%86%99%E6%99%AE%E9%80%9A%E6%96%B9%E6%B3%95%E5%92%8C%E7%89%B9%E6%AE%8A%E7%9A%84%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+    - [调用未关联的超类构造函数](#%E8%B0%83%E7%94%A8%E6%9C%AA%E5%85%B3%E8%81%94%E7%9A%84%E8%B6%85%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+    - [使用函数`super`](#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0super)
+  - [元素访问](#%E5%85%83%E7%B4%A0%E8%AE%BF%E9%97%AE)
+    - [基本的序列和映射协议](#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%BA%8F%E5%88%97%E5%92%8C%E6%98%A0%E5%B0%84%E5%8D%8F%E8%AE%AE)
+    - [从`list`、`dict`和`str`派生](#%E4%BB%8Elistdict%E5%92%8Cstr%E6%B4%BE%E7%94%9F)
+  - [特性](#%E7%89%B9%E6%80%A7)
+    - [函数`property`](#%E5%87%BD%E6%95%B0property)
+    - [静态方法和类方法](#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E5%92%8C%E7%B1%BB%E6%96%B9%E6%B3%95)
+    - [`__getattr__`和`__setattr__`等方法](#__getattr__%E5%92%8C__setattr__%E7%AD%89%E6%96%B9%E6%B3%95)
+  - [迭代器](#%E8%BF%AD%E4%BB%A3%E5%99%A8)
+    - [迭代器协议](#%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%8D%8F%E8%AE%AE)
+    - [从迭代器创建序列](#%E4%BB%8E%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%88%9B%E5%BB%BA%E5%BA%8F%E5%88%97)
+  - [生成器](#%E7%94%9F%E6%88%90%E5%99%A8)
+    - [创建生成器](#%E5%88%9B%E5%BB%BA%E7%94%9F%E6%88%90%E5%99%A8)
+    - [递归式生成器](#%E9%80%92%E5%BD%92%E5%BC%8F%E7%94%9F%E6%88%90%E5%99%A8)
+    - [通用生成器](#%E9%80%9A%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8)
+    - [生成器的方法](#%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E6%96%B9%E6%B3%95)
+  - [八皇后问题](#%E5%85%AB%E7%9A%87%E5%90%8E%E9%97%AE%E9%A2%98)
+    - [生成器的回溯](#%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E5%9B%9E%E6%BA%AF)
+    - [问题](#%E9%97%AE%E9%A2%98)
+    - [状态表示](#%E7%8A%B6%E6%80%81%E8%A1%A8%E7%A4%BA)
+    - [检验冲突](#%E6%A3%80%E9%AA%8C%E5%86%B2%E7%AA%81)
+    - [基线条件](#%E5%9F%BA%E7%BA%BF%E6%9D%A1%E4%BB%B6)
+    - [递归条件](#%E9%80%92%E5%BD%92%E6%9D%A1%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第九章 魔法方法、特性和迭代器
 
 > 在Python中有一些开头和结尾都是两个下划线的方法，这些方法称为魔法(特殊)方法,它们都会在特定的情况下被Python直接调用，如`__init__`,除此之外，本章还会讨论特性(property)和迭代器(iterator)

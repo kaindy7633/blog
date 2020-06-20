@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Scanner类](#scanner%E7%B1%BB)
+- [流程控制结构](#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84)
+- [流程控制之选择结构](#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B9%8B%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Scanner类
 
 先来看看`Scanner`类吧，使用`Scanner`可以从外部接收用户在控制台输入的数据，它就像一个扫描器，并将扫描到的数据存入我们定义的变量中。

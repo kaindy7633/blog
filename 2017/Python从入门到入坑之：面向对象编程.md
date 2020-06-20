@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [面向对象编程](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B)
+  - [类和实例](#%E7%B1%BB%E5%92%8C%E5%AE%9E%E4%BE%8B)
+    - [数据封装](#%E6%95%B0%E6%8D%AE%E5%B0%81%E8%A3%85)
+  - [访问限制](#%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6)
+  - [继承和多态](#%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E6%80%81)
+    - [静态语言 vs 动态语言](#%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80-vs-%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80)
+  - [获取对象信息](#%E8%8E%B7%E5%8F%96%E5%AF%B9%E8%B1%A1%E4%BF%A1%E6%81%AF)
+    - [使用type()](#%E4%BD%BF%E7%94%A8type)
+    - [使用isinstance()](#%E4%BD%BF%E7%94%A8isinstance)
+    - [使用dir()](#%E4%BD%BF%E7%94%A8dir)
+  - [实例属性和类属性](#%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7%E5%92%8C%E7%B1%BB%E5%B1%9E%E6%80%A7)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 面向对象编程——Object Oriented Programming，简称OOP，是一种程序设计思想。OOP把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数
 
 # 面向对象编程

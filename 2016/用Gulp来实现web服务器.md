@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [以前的实现方式](#%E4%BB%A5%E5%89%8D%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F)
+- [更棒的实现方式](#%E6%9B%B4%E6%A3%92%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F)
+  - [加入`livereload`的支持](#%E5%8A%A0%E5%85%A5livereload%E7%9A%84%E6%94%AF%E6%8C%81)
+  - [一些小小调整](#%E4%B8%80%E4%BA%9B%E5%B0%8F%E5%B0%8F%E8%B0%83%E6%95%B4)
+  - [更换Hostname和Port](#%E6%9B%B4%E6%8D%A2hostname%E5%92%8Cport)
+  - [一些进阶特性](#%E4%B8%80%E4%BA%9B%E8%BF%9B%E9%98%B6%E7%89%B9%E6%80%A7)
+  - [重构我们的代码](#%E9%87%8D%E6%9E%84%E6%88%91%E4%BB%AC%E7%9A%84%E4%BB%A3%E7%A0%81)
+  - [总结](#%E6%80%BB%E7%BB%93)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > gulp现在是越来越流行了。它可以做的事情实在是太多了，比如，拼接js文件，压缩图片。
 
 在这个教程里，你会了解怎么使用`gulp.js`来实现一个应用了内置的`livereload`功能的本地web服务。

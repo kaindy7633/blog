@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、AngularJS是什么？](#%E4%B8%80angularjs%E6%98%AF%E4%BB%80%E4%B9%88)
+- [二、 AngularJS的四大核心特性](#%E4%BA%8C-angularjs%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7)
+- [三、AngularJS四大核心特性解析](#%E4%B8%89angularjs%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%E8%A7%A3%E6%9E%90)
+  - [1、AngularJS的第一个核心特性：MVC](#1angularjs%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7mvc)
+  - [2、AngularJS的第二个核心特性：模块化](#2angularjs%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%E6%A8%A1%E5%9D%97%E5%8C%96)
+  - [3、AngularJS的第三个核心特性：指令系统](#3angularjs%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F)
+  - [4、AngularJS的第四个核心特性：双向数据绑定](#4angularjs%E7%9A%84%E7%AC%AC%E5%9B%9B%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%E5%8F%8C%E5%90%91%E6%95%B0%E6%8D%AE%E7%BB%91%E5%AE%9A)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 一、AngularJS是什么？
 
 AngularJS是由Misko Hevery 和 Adam Abrons 两个人共同创建的，在2009年卖给了Google，它是一个构建动态Web应用的一个Javascript框架，目的是为了克服HTML在构建Web应用程序上的不足而设计的。

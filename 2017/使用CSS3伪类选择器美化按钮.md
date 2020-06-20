@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [使用CSS3伪类选择器美化按钮](#%E4%BD%BF%E7%94%A8css3%E4%BC%AA%E7%B1%BB%E9%80%89%E6%8B%A9%E5%99%A8%E7%BE%8E%E5%8C%96%E6%8C%89%E9%92%AE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 使用CSS3伪类选择器美化按钮
 
 ```html

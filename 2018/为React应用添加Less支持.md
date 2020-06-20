@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Eject](#eject)
+- [安装less](#%E5%AE%89%E8%A3%85less)
+- [配置webpack.config.js](#%E9%85%8D%E7%BD%AEwebpackconfigjs)
+- [第二种配置方式](#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 `create-react-app` 在 `webpack` 上封装了一层 `react-scripts`，一方面是可以使得不习惯 `eslint`，`babel` 和 `webpack` 的新手只需关注于组件的编写，另一方面是可以不断的更新和改进默认选项，而不会影响到业务代码。
 
 可见，`react-scripts` 的作用就是通过将一些底层配置封装起来，从而向上屏蔽了众多细节，使得业务开发者只需关注业务代码的开发。

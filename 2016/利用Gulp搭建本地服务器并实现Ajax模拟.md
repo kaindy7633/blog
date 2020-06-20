@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [第一步，创建`package.json`](#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%88%9B%E5%BB%BApackagejson)
+- [第二步，安装模块](#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%89%E8%A3%85%E6%A8%A1%E5%9D%97)
+- [第三步，创建`gulpfile.js`文件](#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%88%9B%E5%BB%BAgulpfilejs%E6%96%87%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 利用gulp搭建本地服务器，实现自动打开页面，自动刷新，模拟ajax操作
 
 用到的模块如下：

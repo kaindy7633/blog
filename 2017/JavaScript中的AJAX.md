@@ -1,3 +1,27 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [XMLHttpRequest对象](#xmlhttprequest%E5%AF%B9%E8%B1%A1)
+- [XHR用法](#xhr%E7%94%A8%E6%B3%95)
+- [发送异步请求](#%E5%8F%91%E9%80%81%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82)
+- [HTTP头部信息](#http%E5%A4%B4%E9%83%A8%E4%BF%A1%E6%81%AF)
+- [GET请求](#get%E8%AF%B7%E6%B1%82)
+- [POST请求](#post%E8%AF%B7%E6%B1%82)
+- [XMLHttpRequest2级](#xmlhttprequest2%E7%BA%A7)
+  - [FormData](#formdata)
+- [跨域资源共享](#%E8%B7%A8%E5%9F%9F%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB)
+- [IE 对 CORS 的实现](#ie-%E5%AF%B9-cors-%E7%9A%84%E5%AE%9E%E7%8E%B0)
+- [其他浏览器对 CORS 的实现](#%E5%85%B6%E4%BB%96%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%B9-cors-%E7%9A%84%E5%AE%9E%E7%8E%B0)
+- [Preflighted Requests](#preflighted-requests)
+- [带凭据的请求（Requests with Credential）](#%E5%B8%A6%E5%87%AD%E6%8D%AE%E7%9A%84%E8%AF%B7%E6%B1%82requests-with-credential)
+- [跨浏览器的 CORS (兼容性 CORS的写法)](#%E8%B7%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84-cors-%E5%85%BC%E5%AE%B9%E6%80%A7-cors%E7%9A%84%E5%86%99%E6%B3%95)
+- [其他跨域技术](#%E5%85%B6%E4%BB%96%E8%B7%A8%E5%9F%9F%E6%8A%80%E6%9C%AF)
+  - [JSONP](#jsonp)
+- [其他跨域](#%E5%85%B6%E4%BB%96%E8%B7%A8%E5%9F%9F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## XMLHttpRequest对象
 
 IE7+,FireFox,Chrome,Opera,Safari创建XHR对象:

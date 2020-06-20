@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python从入门到入坑之：IO编程](#python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8Bio%E7%BC%96%E7%A8%8B)
+  - [文件读写](#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99)
+    - [读文件](#%E8%AF%BB%E6%96%87%E4%BB%B6)
+    - [file-like Object](#file-like-object)
+    - [二进制文件](#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6)
+    - [字符编码](#%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81)
+    - [写文件](#%E5%86%99%E6%96%87%E4%BB%B6)
+  - [StringIO和BytesIO](#stringio%E5%92%8Cbytesio)
+    - [StringIO](#stringio)
+    - [BytesIO](#bytesio)
+  - [操作文件和目录](#%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95)
+    - [环境变量](#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+    - [操作文件和目录](#%E6%93%8D%E4%BD%9C%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95-1)
+  - [序列化](#%E5%BA%8F%E5%88%97%E5%8C%96)
+    - [JSON](#json)
+    - [JSON进阶](#json%E8%BF%9B%E9%98%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python从入门到入坑之：IO编程
 
 IO在计算机中指Input/Output，也就是输入和输出。由于程序和运行时数据是在内存中驻留，由CPU这个超快的计算核心来执行，涉及到数据交换的地方，通常是磁盘、网络等，就需要IO接口。

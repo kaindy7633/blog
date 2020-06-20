@@ -1,3 +1,25 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [ython从入门到入坑之：进程和线程](#ython%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B)
+  - [多进程](#%E5%A4%9A%E8%BF%9B%E7%A8%8B)
+    - [multiprocessing](#multiprocessing)
+    - [Pool](#pool)
+    - [子进程](#%E5%AD%90%E8%BF%9B%E7%A8%8B)
+    - [进程间通信](#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1)
+  - [多线程](#%E5%A4%9A%E7%BA%BF%E7%A8%8B)
+    - [Lock](#lock)
+    - [多核CPU](#%E5%A4%9A%E6%A0%B8cpu)
+  - [ThreadLocal](#threadlocal)
+  - [进程 vs. 线程](#%E8%BF%9B%E7%A8%8B-vs-%E7%BA%BF%E7%A8%8B)
+    - [线程切换](#%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2)
+    - [计算密集型 vs. IO密集型](#%E8%AE%A1%E7%AE%97%E5%AF%86%E9%9B%86%E5%9E%8B-vs-io%E5%AF%86%E9%9B%86%E5%9E%8B)
+    - [异步IO](#%E5%BC%82%E6%AD%A5io)
+  - [分布式进程](#%E5%88%86%E5%B8%83%E5%BC%8F%E8%BF%9B%E7%A8%8B)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # ython从入门到入坑之：进程和线程
 
 很多同学都听说过，现代操作系统比如Mac OS X，UNIX，Linux，Windows等，都是支持“多任务”的操作系统。

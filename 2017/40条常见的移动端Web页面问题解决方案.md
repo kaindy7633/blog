@@ -1,3 +1,51 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [40条常见的移动端Web页面问题解决方案](#40%E6%9D%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFweb%E9%A1%B5%E9%9D%A2%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+  - [安卓浏览器看背景图片，有些设备会模糊](#%E5%AE%89%E5%8D%93%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9C%8B%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87%E6%9C%89%E4%BA%9B%E8%AE%BE%E5%A4%87%E4%BC%9A%E6%A8%A1%E7%B3%8A)
+  - [图片加载](#%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD)
+  - [假如手机网站不用兼容IE浏览器，一般我们会使用`zeptojs`](#%E5%81%87%E5%A6%82%E6%89%8B%E6%9C%BA%E7%BD%91%E7%AB%99%E4%B8%8D%E7%94%A8%E5%85%BC%E5%AE%B9ie%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%80%E8%88%AC%E6%88%91%E4%BB%AC%E4%BC%9A%E4%BD%BF%E7%94%A8zeptojs)
+  - [防止手机中网页放大和缩小。](#%E9%98%B2%E6%AD%A2%E6%89%8B%E6%9C%BA%E4%B8%AD%E7%BD%91%E9%A1%B5%E6%94%BE%E5%A4%A7%E5%92%8C%E7%BC%A9%E5%B0%8F)
+  - [apple-mobile-web-app-capable](#apple-mobile-web-app-capable)
+  - [format-detection](#format-detection)
+  - [html5调用安卓或者ios的拨号功能](#html5%E8%B0%83%E7%94%A8%E5%AE%89%E5%8D%93%E6%88%96%E8%80%85ios%E7%9A%84%E6%8B%A8%E5%8F%B7%E5%8A%9F%E8%83%BD)
+  - [html5GPS定位功能](#html5gps%E5%AE%9A%E4%BD%8D%E5%8A%9F%E8%83%BD)
+  - [上下拉动滚动条时卡顿、慢](#%E4%B8%8A%E4%B8%8B%E6%8B%89%E5%8A%A8%E6%BB%9A%E5%8A%A8%E6%9D%A1%E6%97%B6%E5%8D%A1%E9%A1%BF%E6%85%A2)
+  - [禁止复制、选中文本](#%E7%A6%81%E6%AD%A2%E5%A4%8D%E5%88%B6%E9%80%89%E4%B8%AD%E6%96%87%E6%9C%AC)
+  - [长时间按住页面出现闪退](#%E9%95%BF%E6%97%B6%E9%97%B4%E6%8C%89%E4%BD%8F%E9%A1%B5%E9%9D%A2%E5%87%BA%E7%8E%B0%E9%97%AA%E9%80%80)
+  - [iphone及ipad下输入框默认内阴影](#iphone%E5%8F%8Aipad%E4%B8%8B%E8%BE%93%E5%85%A5%E6%A1%86%E9%BB%98%E8%AE%A4%E5%86%85%E9%98%B4%E5%BD%B1)
+  - [ios和android下触摸元素时出现半透明灰色遮罩](#ios%E5%92%8Candroid%E4%B8%8B%E8%A7%A6%E6%91%B8%E5%85%83%E7%B4%A0%E6%97%B6%E5%87%BA%E7%8E%B0%E5%8D%8A%E9%80%8F%E6%98%8E%E7%81%B0%E8%89%B2%E9%81%AE%E7%BD%A9)
+  - [active兼容处理 即 伪类 :active 失效](#active%E5%85%BC%E5%AE%B9%E5%A4%84%E7%90%86-%E5%8D%B3-%E4%BC%AA%E7%B1%BB-active-%E5%A4%B1%E6%95%88)
+  - [动画定义3D启用硬件加速](#%E5%8A%A8%E7%94%BB%E5%AE%9A%E4%B9%893d%E5%90%AF%E7%94%A8%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F)
+  - [Retina屏的1px边框](#retina%E5%B1%8F%E7%9A%841px%E8%BE%B9%E6%A1%86)
+  - [webkit mask 兼容处理](#webkit-mask-%E5%85%BC%E5%AE%B9%E5%A4%84%E7%90%86)
+  - [旋转屏幕时，字体大小调整的问题](#%E6%97%8B%E8%BD%AC%E5%B1%8F%E5%B9%95%E6%97%B6%E5%AD%97%E4%BD%93%E5%A4%A7%E5%B0%8F%E8%B0%83%E6%95%B4%E7%9A%84%E9%97%AE%E9%A2%98)
+  - [transition闪屏](#transition%E9%97%AA%E5%B1%8F)
+  - [圆角bug](#%E5%9C%86%E8%A7%92bug)
+  - [顶部状态栏背景色](#%E9%A1%B6%E9%83%A8%E7%8A%B6%E6%80%81%E6%A0%8F%E8%83%8C%E6%99%AF%E8%89%B2)
+  - [设置缓存](#%E8%AE%BE%E7%BD%AE%E7%BC%93%E5%AD%98)
+  - [桌面图标](#%E6%A1%8C%E9%9D%A2%E5%9B%BE%E6%A0%87)
+  - [启动画面](#%E5%90%AF%E5%8A%A8%E7%94%BB%E9%9D%A2)
+  - [浏览器私有及其它meta](#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A7%81%E6%9C%89%E5%8F%8A%E5%85%B6%E5%AE%83meta)
+  - [IOS中input键盘事件keyup、keydown、keypress支持不是很好](#ios%E4%B8%ADinput%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6keyupkeydownkeypress%E6%94%AF%E6%8C%81%E4%B8%8D%E6%98%AF%E5%BE%88%E5%A5%BD)
+  - [h5网站input 设置为`type=number`的问题](#h5%E7%BD%91%E7%AB%99input-%E8%AE%BE%E7%BD%AE%E4%B8%BAtypenumber%E7%9A%84%E9%97%AE%E9%A2%98)
+  - [ios设置input按钮样式会被默认样式覆盖](#ios%E8%AE%BE%E7%BD%AEinput%E6%8C%89%E9%92%AE%E6%A0%B7%E5%BC%8F%E4%BC%9A%E8%A2%AB%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F%E8%A6%86%E7%9B%96)
+  - [IOS键盘字母输入，默认首字母大写](#ios%E9%94%AE%E7%9B%98%E5%AD%97%E6%AF%8D%E8%BE%93%E5%85%A5%E9%BB%98%E8%AE%A4%E9%A6%96%E5%AD%97%E6%AF%8D%E5%A4%A7%E5%86%99)
+  - [select下拉选择设置右对齐](#select%E4%B8%8B%E6%8B%89%E9%80%89%E6%8B%A9%E8%AE%BE%E7%BD%AE%E5%8F%B3%E5%AF%B9%E9%BD%90)
+  - [通过`transfor`m进行`skew`变形，`rotate`旋转会造成出现锯齿现象](#%E9%80%9A%E8%BF%87transform%E8%BF%9B%E8%A1%8Cskew%E5%8F%98%E5%BD%A2rotate%E6%97%8B%E8%BD%AC%E4%BC%9A%E9%80%A0%E6%88%90%E5%87%BA%E7%8E%B0%E9%94%AF%E9%BD%BF%E7%8E%B0%E8%B1%A1)
+  - [移动端点击300ms延迟](#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%82%B9%E5%87%BB300ms%E5%BB%B6%E8%BF%9F)
+  - [移动端点透问题](#%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%82%B9%E9%80%8F%E9%97%AE%E9%A2%98)
+  - [消除 IE10 里面的那个叉号](#%E6%B6%88%E9%99%A4-ie10-%E9%87%8C%E9%9D%A2%E7%9A%84%E9%82%A3%E4%B8%AA%E5%8F%89%E5%8F%B7)
+  - [关于 iOS 与 OS X 端字体的优化(横竖屏会出现字体加粗不一致等)](#%E5%85%B3%E4%BA%8E-ios-%E4%B8%8E-os-x-%E7%AB%AF%E5%AD%97%E4%BD%93%E7%9A%84%E4%BC%98%E5%8C%96%E6%A8%AA%E7%AB%96%E5%B1%8F%E4%BC%9A%E5%87%BA%E7%8E%B0%E5%AD%97%E4%BD%93%E5%8A%A0%E7%B2%97%E4%B8%8D%E4%B8%80%E8%87%B4%E7%AD%89)
+  - [关于iOS系统中，中文输入法输入英文时，字母之间可能会出现一个六分之一空格](#%E5%85%B3%E4%BA%8Eios%E7%B3%BB%E7%BB%9F%E4%B8%AD%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%E8%BE%93%E5%85%A5%E8%8B%B1%E6%96%87%E6%97%B6%E5%AD%97%E6%AF%8D%E4%B9%8B%E9%97%B4%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%87%BA%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%85%AD%E5%88%86%E4%B9%8B%E4%B8%80%E7%A9%BA%E6%A0%BC)
+  - [移动端 HTML5 audio autoplay 失效问题](#%E7%A7%BB%E5%8A%A8%E7%AB%AF-html5-audio-autoplay-%E5%A4%B1%E6%95%88%E9%97%AE%E9%A2%98)
+  - [移动端 HTML5 input date 不支持 placeholder 问题](#%E7%A7%BB%E5%8A%A8%E7%AB%AF-html5-input-date-%E4%B8%8D%E6%94%AF%E6%8C%81-placeholder-%E9%97%AE%E9%A2%98)
+  - [部分机型存在type为search的input，自带close按钮样式修改方法](#%E9%83%A8%E5%88%86%E6%9C%BA%E5%9E%8B%E5%AD%98%E5%9C%A8type%E4%B8%BAsearch%E7%9A%84input%E8%87%AA%E5%B8%A6close%E6%8C%89%E9%92%AE%E6%A0%B7%E5%BC%8F%E4%BF%AE%E6%94%B9%E6%96%B9%E6%B3%95)
+  - [唤起select的option展开](#%E5%94%A4%E8%B5%B7select%E7%9A%84option%E5%B1%95%E5%BC%80)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 40条常见的移动端Web页面问题解决方案
 
 ## 安卓浏览器看背景图片，有些设备会模糊

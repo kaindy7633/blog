@@ -1,3 +1,33 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第一章 快速上手](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B)
+  - [交互式解释器](#%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%A7%A3%E9%87%8A%E5%99%A8)
+  - [算法是什么](#%E7%AE%97%E6%B3%95%E6%98%AF%E4%BB%80%E4%B9%88)
+  - [数和表达式](#%E6%95%B0%E5%92%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+  - [变量](#%E5%8F%98%E9%87%8F)
+  - [语句](#%E8%AF%AD%E5%8F%A5)
+  - [获取用户输入](#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5)
+  - [函数](#%E5%87%BD%E6%95%B0)
+  - [模块](#%E6%A8%A1%E5%9D%97)
+    - [cmath和复数](#cmath%E5%92%8C%E5%A4%8D%E6%95%B0)
+    - [回到未来](#%E5%9B%9E%E5%88%B0%E6%9C%AA%E6%9D%A5)
+  - [保存并执行程序](#%E4%BF%9D%E5%AD%98%E5%B9%B6%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F)
+    - [从命令提示符运行Python脚本](#%E4%BB%8E%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E7%AC%A6%E8%BF%90%E8%A1%8Cpython%E8%84%9A%E6%9C%AC)
+    - [让脚本像普通程序一样](#%E8%AE%A9%E8%84%9A%E6%9C%AC%E5%83%8F%E6%99%AE%E9%80%9A%E7%A8%8B%E5%BA%8F%E4%B8%80%E6%A0%B7)
+    - [注释](#%E6%B3%A8%E9%87%8A)
+  - [字符串](#%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [单引号字符串以及对引号转义](#%E5%8D%95%E5%BC%95%E5%8F%B7%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%BB%A5%E5%8F%8A%E5%AF%B9%E5%BC%95%E5%8F%B7%E8%BD%AC%E4%B9%89)
+    - [拼接字符串](#%E6%8B%BC%E6%8E%A5%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [字符串表示str和repr](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A1%A8%E7%A4%BAstr%E5%92%8Crepr)
+    - [长字符串、原始字符串和字节](#%E9%95%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8E%9F%E5%A7%8B%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%AD%97%E8%8A%82)
+      - [长字符串](#%E9%95%BF%E5%AD%97%E7%AC%A6%E4%B8%B2)
+      - [原始字符串](#%E5%8E%9F%E5%A7%8B%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [Unicode、bytes和bytearray](#unicodebytes%E5%92%8Cbytearray)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第一章 快速上手
 
 Python是一种面向对象的解释性高级编程语言，它拥有动态类型系统和垃圾回收功能，能够自动管理内存使用，并且支持多种编程范式，包括面向对象、命令式、函数式和过程式编程，其本身拥有一个巨大而广泛的标准库

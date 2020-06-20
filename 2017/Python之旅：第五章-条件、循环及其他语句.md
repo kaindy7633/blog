@@ -1,3 +1,53 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第五章 条件、循环及其他语句](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%9D%A1%E4%BB%B6%E5%BE%AA%E7%8E%AF%E5%8F%8A%E5%85%B6%E4%BB%96%E8%AF%AD%E5%8F%A5)
+  - [再谈print和import](#%E5%86%8D%E8%B0%88print%E5%92%8Cimport)
+    - [使用print打印多个参数](#%E4%BD%BF%E7%94%A8print%E6%89%93%E5%8D%B0%E5%A4%9A%E4%B8%AA%E5%8F%82%E6%95%B0)
+    - [使用import导入模块时重命名](#%E4%BD%BF%E7%94%A8import%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97%E6%97%B6%E9%87%8D%E5%91%BD%E5%90%8D)
+  - [赋值魔法](#%E8%B5%8B%E5%80%BC%E9%AD%94%E6%B3%95)
+    - [序列解包](#%E5%BA%8F%E5%88%97%E8%A7%A3%E5%8C%85)
+    - [链式赋值](#%E9%93%BE%E5%BC%8F%E8%B5%8B%E5%80%BC)
+    - [增强赋值](#%E5%A2%9E%E5%BC%BA%E8%B5%8B%E5%80%BC)
+  - [代码块：缩进的乐趣](#%E4%BB%A3%E7%A0%81%E5%9D%97%E7%BC%A9%E8%BF%9B%E7%9A%84%E4%B9%90%E8%B6%A3)
+  - [条件和条件语句](#%E6%9D%A1%E4%BB%B6%E5%92%8C%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5)
+    - [这正是布尔值的用武之地](#%E8%BF%99%E6%AD%A3%E6%98%AF%E5%B8%83%E5%B0%94%E5%80%BC%E7%9A%84%E7%94%A8%E6%AD%A6%E4%B9%8B%E5%9C%B0)
+    - [有条件的执行和if语句](#%E6%9C%89%E6%9D%A1%E4%BB%B6%E7%9A%84%E6%89%A7%E8%A1%8C%E5%92%8Cif%E8%AF%AD%E5%8F%A5)
+    - [else子句](#else%E5%AD%90%E5%8F%A5)
+    - [elif子句](#elif%E5%AD%90%E5%8F%A5)
+    - [代码块嵌套](#%E4%BB%A3%E7%A0%81%E5%9D%97%E5%B5%8C%E5%A5%97)
+    - [更复杂的条件](#%E6%9B%B4%E5%A4%8D%E6%9D%82%E7%9A%84%E6%9D%A1%E4%BB%B6)
+      - [比较运算符](#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6)
+        - [相等运算符](#%E7%9B%B8%E7%AD%89%E8%BF%90%E7%AE%97%E7%AC%A6)
+        - [相同运算符](#%E7%9B%B8%E5%90%8C%E8%BF%90%E7%AE%97%E7%AC%A6)
+        - [`in`：成员资格运算符](#in%E6%88%90%E5%91%98%E8%B5%84%E6%A0%BC%E8%BF%90%E7%AE%97%E7%AC%A6)
+        - [字符串和序列的比较](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E5%BA%8F%E5%88%97%E7%9A%84%E6%AF%94%E8%BE%83)
+      - [布尔运算符](#%E5%B8%83%E5%B0%94%E8%BF%90%E7%AE%97%E7%AC%A6)
+    - [断言](#%E6%96%AD%E8%A8%80)
+  - [循环](#%E5%BE%AA%E7%8E%AF)
+    - [while循环](#while%E5%BE%AA%E7%8E%AF)
+    - [for循环](#for%E5%BE%AA%E7%8E%AF)
+    - [迭代字典](#%E8%BF%AD%E4%BB%A3%E5%AD%97%E5%85%B8)
+    - [一些迭代工具](#%E4%B8%80%E4%BA%9B%E8%BF%AD%E4%BB%A3%E5%B7%A5%E5%85%B7)
+      - [并行迭代](#%E5%B9%B6%E8%A1%8C%E8%BF%AD%E4%BB%A3)
+      - [迭代时获取索引](#%E8%BF%AD%E4%BB%A3%E6%97%B6%E8%8E%B7%E5%8F%96%E7%B4%A2%E5%BC%95)
+      - [反向迭代和排序后再迭代](#%E5%8F%8D%E5%90%91%E8%BF%AD%E4%BB%A3%E5%92%8C%E6%8E%92%E5%BA%8F%E5%90%8E%E5%86%8D%E8%BF%AD%E4%BB%A3)
+    - [跳出循环](#%E8%B7%B3%E5%87%BA%E5%BE%AA%E7%8E%AF)
+      - [break](#break)
+      - [continue](#continue)
+      - [while True/break成例](#while-truebreak%E6%88%90%E4%BE%8B)
+    - [循环中的else语句](#%E5%BE%AA%E7%8E%AF%E4%B8%AD%E7%9A%84else%E8%AF%AD%E5%8F%A5)
+  - [简单推导](#%E7%AE%80%E5%8D%95%E6%8E%A8%E5%AF%BC)
+  - [三人行：pass、del和exec](#%E4%B8%89%E4%BA%BA%E8%A1%8Cpassdel%E5%92%8Cexec)
+    - [什么都不做](#%E4%BB%80%E4%B9%88%E9%83%BD%E4%B8%8D%E5%81%9A)
+    - [使用del删除](#%E4%BD%BF%E7%94%A8del%E5%88%A0%E9%99%A4)
+    - [使用exec和eval执行字符串及计算其结果](#%E4%BD%BF%E7%94%A8exec%E5%92%8Ceval%E6%89%A7%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%85%B6%E7%BB%93%E6%9E%9C)
+      - [exec](#exec)
+      - [eval](#eval)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第五章 条件、循环及其他语句
 
 ## 再谈print和import

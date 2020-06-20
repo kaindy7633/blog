@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [团队开发中ESLint的使用及其相关规范介绍](#%E5%9B%A2%E9%98%9F%E5%BC%80%E5%8F%91%E4%B8%ADeslint%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E8%A7%84%E8%8C%83%E4%BB%8B%E7%BB%8D)
+  - [ESLint的安装](#eslint%E7%9A%84%E5%AE%89%E8%A3%85)
+  - [如何使用](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+  - [如何即时发现错误](#%E5%A6%82%E4%BD%95%E5%8D%B3%E6%97%B6%E5%8F%91%E7%8E%B0%E9%94%99%E8%AF%AF)
+  - [关于 editorconfig 的设置](#%E5%85%B3%E4%BA%8E-editorconfig-%E7%9A%84%E8%AE%BE%E7%BD%AE)
+  - [进一步的优化](#%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%9A%84%E4%BC%98%E5%8C%96)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 团队开发中ESLint的使用及其相关规范介绍
 
 > 在目前的团队开发中，前端团队的代码规范问题是很让人头痛的。如果让你去看一个你不熟悉的代码风格，其实是非常耗时且效率低下的事。那有什么方法可以规范团队中每个成员的代码书写风格呢？答案是肯定的，使用ESLint可以很方便的，或者说可以强制性的规范每个人的代码书写风格，在中小团队中，我们可以不去自定义风格，而去使用ESLint官方推荐的代码风格(Standard)，这篇博文简单的介绍了如何使用ESLint去做这些事，甚至我们可以通过一些方法在Git中加入钩子，强制不规范的代码不能提交。

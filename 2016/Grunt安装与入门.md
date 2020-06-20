@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、`grunt` 简介](#%E4%B8%80grunt-%E7%AE%80%E4%BB%8B)
+- [二、安装grunt](#%E4%BA%8C%E5%AE%89%E8%A3%85grunt)
+- [三、`package.json`和 `gruntfile`](#%E4%B8%89packagejson%E5%92%8C-gruntfile)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 一、`grunt` 简介
 
 `grunt` 是什么？

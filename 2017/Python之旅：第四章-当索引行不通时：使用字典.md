@@ -1,3 +1,28 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第四章 当索引行不通时：使用字典](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%BD%93%E7%B4%A2%E5%BC%95%E8%A1%8C%E4%B8%8D%E9%80%9A%E6%97%B6%E4%BD%BF%E7%94%A8%E5%AD%97%E5%85%B8)
+  - [字典的用途](#%E5%AD%97%E5%85%B8%E7%9A%84%E7%94%A8%E9%80%94)
+  - [创建和使用字典](#%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E5%AD%97%E5%85%B8)
+    - [函数dict](#%E5%87%BD%E6%95%B0dict)
+    - [基本的字典操作](#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%AD%97%E5%85%B8%E6%93%8D%E4%BD%9C)
+    - [将字符串格式设置功能用于字典](#%E5%B0%86%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E8%AE%BE%E7%BD%AE%E5%8A%9F%E8%83%BD%E7%94%A8%E4%BA%8E%E5%AD%97%E5%85%B8)
+    - [字典方法](#%E5%AD%97%E5%85%B8%E6%96%B9%E6%B3%95)
+      - [clear](#clear)
+      - [copy](#copy)
+      - [fromkeys](#fromkeys)
+      - [get](#get)
+      - [itmes](#itmes)
+      - [keys](#keys)
+      - [pop](#pop)
+      - [popitem](#popitem)
+      - [setdefault](#setdefault)
+      - [update](#update)
+      - [values](#values)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第四章 当索引行不通时：使用字典
 
 前面几个章节介绍的序列是一种通过索引(编号)来访问各个元素的数据结构。通过名称来访问其各个元素值的数据结构，叫做**映射(mapping)**，而字典则是Python中唯一的内置映射类型。字典中的值是没有顺序的，而是存储在键下，键可以是数字、字符串或元组。

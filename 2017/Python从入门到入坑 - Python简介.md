@@ -1,3 +1,46 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python简介](#python%E7%AE%80%E4%BB%8B)
+  - [Python是什么](#python%E6%98%AF%E4%BB%80%E4%B9%88)
+  - [安装Python](#%E5%AE%89%E8%A3%85python)
+    - [安装Python 3.6](#%E5%AE%89%E8%A3%85python-36)
+      - [在Mac上安装Python](#%E5%9C%A8mac%E4%B8%8A%E5%AE%89%E8%A3%85python)
+      - [在Linux上安装Python](#%E5%9C%A8linux%E4%B8%8A%E5%AE%89%E8%A3%85python)
+      - [在Windows上安装Python](#%E5%9C%A8windows%E4%B8%8A%E5%AE%89%E8%A3%85python)
+- [语法基础](#%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80)
+  - [数据类型和变量](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%8F%98%E9%87%8F)
+    - [数据类型](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B)
+      - [整数](#%E6%95%B4%E6%95%B0)
+      - [浮点数](#%E6%B5%AE%E7%82%B9%E6%95%B0)
+      - [字符串](#%E5%AD%97%E7%AC%A6%E4%B8%B2)
+      - [布尔值](#%E5%B8%83%E5%B0%94%E5%80%BC)
+      - [空值](#%E7%A9%BA%E5%80%BC)
+    - [变量](#%E5%8F%98%E9%87%8F)
+    - [常量](#%E5%B8%B8%E9%87%8F)
+  - [字符串和编码](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E7%BC%96%E7%A0%81)
+    - [Python的字符串](#python%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [格式化](#%E6%A0%BC%E5%BC%8F%E5%8C%96)
+    - [format()](#format)
+  - [列表(list)和元组(tuple)](#%E5%88%97%E8%A1%A8list%E5%92%8C%E5%85%83%E7%BB%84tuple)
+    - [列表(list)](#%E5%88%97%E8%A1%A8list)
+    - [元组(tuple)](#%E5%85%83%E7%BB%84tuple)
+  - [条件判断](#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD)
+    - [`input()`方法中的坑](#input%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E5%9D%91)
+  - [循环](#%E5%BE%AA%E7%8E%AF)
+    - [`for...in`](#forin)
+    - [`while`](#while)
+    - [`break`](#break)
+    - [`continue`](#continue)
+  - [字典(dict)和set](#%E5%AD%97%E5%85%B8dict%E5%92%8Cset)
+    - [字典(dict)](#%E5%AD%97%E5%85%B8dict)
+    - [set](#set)
+    - [不可变对象](#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1)
+  - [结束语](#%E7%BB%93%E6%9D%9F%E8%AF%AD)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python简介
 
 ## Python是什么

@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [用ESLint来规范Typescript代码](#%E7%94%A8eslint%E6%9D%A5%E8%A7%84%E8%8C%83typescript%E4%BB%A3%E7%A0%81)
+- [用ESLint来规范React代码](#%E7%94%A8eslint%E6%9D%A5%E8%A7%84%E8%8C%83react%E4%BB%A3%E7%A0%81)
+- [结合Prettier和ESLint来规范代码](#%E7%BB%93%E5%90%88prettier%E5%92%8Ceslint%E6%9D%A5%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81)
+- [在VSCode中集成ESLint配置](#%E5%9C%A8vscode%E4%B8%AD%E9%9B%86%E6%88%90eslint%E9%85%8D%E7%BD%AE)
+- [husky和lint-staged构建代码工作流](#husky%E5%92%8Clint-staged%E6%9E%84%E5%BB%BA%E4%BB%A3%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%B5%81)
+- [gitlab的CI/CD来规范代码](#gitlab%E7%9A%84cicd%E6%9D%A5%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 对于`Typescript`项目的编码规范而言，主要有两种选择`ESLint`和`TSLint`。`ESLint`不仅能规范js代码，通过配置解析器，也能规范TS代码。此外由于性能问题，`TypeScript` 官方决定全面采用`ESLint`，甚至把仓库作为测试平台，而 `ESLint` 的 `TypeScript` 解析器也成为独立项目，专注解决双方兼容性问题。
 
 - 用`ESLint`来规范`Typescript`代码

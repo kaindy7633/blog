@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [什么是CSS hack](#%E4%BB%80%E4%B9%88%E6%98%AFcss-hack)
+- [CSS hack的原理](#css-hack%E7%9A%84%E5%8E%9F%E7%90%86)
+- [CSS hack分类](#css-hack%E5%88%86%E7%B1%BB)
+- [CSS hack方式一：条件注释法](#css-hack%E6%96%B9%E5%BC%8F%E4%B8%80%E6%9D%A1%E4%BB%B6%E6%B3%A8%E9%87%8A%E6%B3%95)
+- [CSS hack方式二：类内属性前缀法](#css-hack%E6%96%B9%E5%BC%8F%E4%BA%8C%E7%B1%BB%E5%86%85%E5%B1%9E%E6%80%A7%E5%89%8D%E7%BC%80%E6%B3%95)
+- [CSS hack方式三：选择器前缀法](#css-hack%E6%96%B9%E5%BC%8F%E4%B8%89%E9%80%89%E6%8B%A9%E5%99%A8%E5%89%8D%E7%BC%80%E6%B3%95)
+- [CSS3选择器结合JavaScript的Hack](#css3%E9%80%89%E6%8B%A9%E5%99%A8%E7%BB%93%E5%90%88javascript%E7%9A%84hack)
+- [CSS hack利弊](#css-hack%E5%88%A9%E5%BC%8A)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 做前端多年，虽然不是经常需要hack，但是我们经常会遇到各浏览器表现不一致的情况。基于此，某些情况我们会极不情愿的使用这个不太友好的方式来达到大家要求的页面表现。我个人是不太推荐使用hack的，要知道一名好的前端，要尽可能不使用hack的情况下实现需求，做到较好的用户体验。可是啊，现实太残酷，浏览器厂商之间历史遗留的问题让我们在目标需求下不得不向hack妥协，虽然这只是个别情况。今天，结合自己的经验和理解，做了几个demo把IE6~IE10和其他标准浏览器的CSS hack做一个总结，也许本文应该是目前最全面的hack总结了吧。
 
 ## 什么是CSS hack

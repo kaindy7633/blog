@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [我的技术日志博客](#%E6%88%91%E7%9A%84%E6%8A%80%E6%9C%AF%E6%97%A5%E5%BF%97%E5%8D%9A%E5%AE%A2)
+  - [目录](#%E7%9B%AE%E5%BD%95)
+    - [2019年](#2019%E5%B9%B4)
+    - [2018年](#2018%E5%B9%B4)
+    - [2017年](#2017%E5%B9%B4)
+    - [2016年](#2016%E5%B9%B4)
+    - [2015年](#2015%E5%B9%B4)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 我的技术日志博客
 
 > todever.com不再维护，但保留域名，期间的个人技术积累将移植到Github上来

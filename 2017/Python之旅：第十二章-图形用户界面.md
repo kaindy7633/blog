@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第十二章-图形用户界面/](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2)
+  - [创建GUI示例程序](#%E5%88%9B%E5%BB%BAgui%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F)
+    - [初探](#%E5%88%9D%E6%8E%A2)
+    - [布局](#%E5%B8%83%E5%B1%80)
+    - [事件处理](#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86)
+    - [最终程序](#%E6%9C%80%E7%BB%88%E7%A8%8B%E5%BA%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第十二章-图形用户界面/
 
 > 本章将简短的介绍Python程序创建图形用户界面(GUI)的基本知识。GUI就是包含按钮、文本框等空间的窗口。`Tkinter`是Python标准的GUI工具包，包含在Python的标准安装中。

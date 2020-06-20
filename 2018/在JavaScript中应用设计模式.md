@@ -1,3 +1,32 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [在JavaScript中应用设计模式](#%E5%9C%A8javascript%E4%B8%AD%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+  - [JavaScript中的面向对象编程](#javascript%E4%B8%AD%E7%9A%84%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B)
+    - [概念](#%E6%A6%82%E5%BF%B5)
+    - [封装、继承和多态](#%E5%B0%81%E8%A3%85%E7%BB%A7%E6%89%BF%E5%92%8C%E5%A4%9A%E6%80%81)
+  - [UML类图](#uml%E7%B1%BB%E5%9B%BE)
+  - [SOLID设计原则](#solid%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99)
+    - [设计准则](#%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99)
+    - [SOLID](#solid)
+  - [JavaScript中常用的设计模式](#javascript%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+    - [工厂模式](#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F)
+    - [单例模式](#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F)
+    - [适配器模式](#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F)
+    - [装饰器模式](#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F)
+    - [代理模式](#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F)
+    - [外观模式](#%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F)
+    - [观察者模式](#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F)
+    - [迭代器模式](#%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F)
+    - [状态模式](#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F)
+  - [其他不常用设计模式](#%E5%85%B6%E4%BB%96%E4%B8%8D%E5%B8%B8%E7%94%A8%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)
+    - [原型模式](#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F)
+    - [桥接模式](#%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F)
+    - [组合模式](#%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 在JavaScript中应用设计模式
 
 > 作为开发多年，一直在业务中不停的撸码，当你想到要提升时，设计模式必然是绕不过去的坎，我也一样，所以这里把JavaScript相关的设计模式知识整理一下，写成这篇Blog

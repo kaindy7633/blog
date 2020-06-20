@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [在github上创建自己的远程仓库](#%E5%9C%A8github%E4%B8%8A%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93)
+- [从远程仓库克隆项目](#%E4%BB%8E%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%85%8B%E9%9A%86%E9%A1%B9%E7%9B%AE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 通常我们在软件开发使用的版本控制系统有两种，一种是集中式版本控制，如SVN，另一种就是分布式版本控制系统，如GIT。Git的特点就是分布式，不但可以在本地机器上做版本仓库，还可以将代码上传至远程Git服务器，方便团队协作，也实现了另外一个远程代码备份。
 
 ## 在github上创建自己的远程仓库

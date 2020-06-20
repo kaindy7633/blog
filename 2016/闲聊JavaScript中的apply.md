@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [闲聊JavaScript中的apply](#%E9%97%B2%E8%81%8Ajavascript%E4%B8%AD%E7%9A%84apply)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 闲聊JavaScript中的apply
 
 `apply` 方法: 它能劫持另外一个对象的方法，继承另外一个对象的属性

@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [API简介](#api%E7%AE%80%E4%BB%8B)
+- [Object类](#object%E7%B1%BB)
+- [Scanner类](#scanner%E7%B1%BB)
+- [String类](#string%E7%B1%BB)
+- [StringBuilder和StringBuffer类](#stringbuilder%E5%92%8Cstringbuffer%E7%B1%BB)
+- [Date和Calendar类](#date%E5%92%8Ccalendar%E7%B1%BB)
+- [基本类型的包装类](#%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%85%E8%A3%85%E7%B1%BB)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ### API简介
 
 Application Programming Interface，即应用程序编程接口，这里指的是API文档，通常叫："Java文档"，是`Java`种提供的类的使用说明书

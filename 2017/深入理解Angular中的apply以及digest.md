@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [深入理解Angular中的apply以及digest](#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3angular%E4%B8%AD%E7%9A%84apply%E4%BB%A5%E5%8F%8Adigest)
+  - [探索`$apply()`和`$digest()`](#%E6%8E%A2%E7%B4%A2apply%E5%92%8Cdigest)
+  - [什么时候手动调用`$apply()`方法？](#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E6%89%8B%E5%8A%A8%E8%B0%83%E7%94%A8apply%E6%96%B9%E6%B3%95)
+  - [`$digest`循环会运行多少次？](#digest%E5%BE%AA%E7%8E%AF%E4%BC%9A%E8%BF%90%E8%A1%8C%E5%A4%9A%E5%B0%91%E6%AC%A1)
+  - [结语](#%E7%BB%93%E8%AF%AD)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # 深入理解Angular中的apply以及digest
 
 > `$apply()`和`$digest()`在AngularJS中是两个核心概念，但是有时候它们又让人困惑。而为了了解AngularJS的工作方式，首先需要了解`$apply()`和`$digest()`是如何工作的。这篇文章旨在解释`$apply()`和`$digest()`是什么，以及在日常的编码中如何应用它们。

@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、创建自己的版本库](#%E4%B8%80%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E7%89%88%E6%9C%AC%E5%BA%93)
+- [二、版本回退](#%E4%BA%8C%E7%89%88%E6%9C%AC%E5%9B%9E%E9%80%80)
+- [三、工作区和暂存区](#%E4%B8%89%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E6%9A%82%E5%AD%98%E5%8C%BA)
+  - [工作区（Working Directory）](#%E5%B7%A5%E4%BD%9C%E5%8C%BAworking-directory)
+  - [版本库（Repository）](#%E7%89%88%E6%9C%AC%E5%BA%93repository)
+- [四、管理修改](#%E5%9B%9B%E7%AE%A1%E7%90%86%E4%BF%AE%E6%94%B9)
+- [五、撤销修改](#%E4%BA%94%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9)
+- [六、删除文件](#%E5%85%AD%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 我们在上一节介绍了`git`及一些简单的配置，具体在各个平台上（如Linux、windows）的安装，可以参考廖雪峰老师的博客上的文章
 
 ## 一、创建自己的版本库

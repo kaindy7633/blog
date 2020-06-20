@@ -1,3 +1,31 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Python之旅：第六章 抽象](#python%E4%B9%8B%E6%97%85%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%8A%BD%E8%B1%A1)
+  - [懒惰是一种美德](#%E6%87%92%E6%83%B0%E6%98%AF%E4%B8%80%E7%A7%8D%E7%BE%8E%E5%BE%B7)
+  - [抽象和结构](#%E6%8A%BD%E8%B1%A1%E5%92%8C%E7%BB%93%E6%9E%84)
+  - [自定义函数](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0)
+    - [给函数编写文档](#%E7%BB%99%E5%87%BD%E6%95%B0%E7%BC%96%E5%86%99%E6%96%87%E6%A1%A3)
+    - [其实并不是函数的函数](#%E5%85%B6%E5%AE%9E%E5%B9%B6%E4%B8%8D%E6%98%AF%E5%87%BD%E6%95%B0%E7%9A%84%E5%87%BD%E6%95%B0)
+  - [参数魔法](#%E5%8F%82%E6%95%B0%E9%AD%94%E6%B3%95)
+    - [值从哪里来](#%E5%80%BC%E4%BB%8E%E5%93%AA%E9%87%8C%E6%9D%A5)
+    - [我能修改参数吗](#%E6%88%91%E8%83%BD%E4%BF%AE%E6%94%B9%E5%8F%82%E6%95%B0%E5%90%97)
+      - [为何要修改参数](#%E4%B8%BA%E4%BD%95%E8%A6%81%E4%BF%AE%E6%94%B9%E5%8F%82%E6%95%B0)
+      - [如果参数是不可变的](#%E5%A6%82%E6%9E%9C%E5%8F%82%E6%95%B0%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84)
+    - [关键字参数和默认值](#%E5%85%B3%E9%94%AE%E5%AD%97%E5%8F%82%E6%95%B0%E5%92%8C%E9%BB%98%E8%AE%A4%E5%80%BC)
+    - [收集参数](#%E6%94%B6%E9%9B%86%E5%8F%82%E6%95%B0)
+    - [分配参数](#%E5%88%86%E9%85%8D%E5%8F%82%E6%95%B0)
+    - [练习使用参数](#%E7%BB%83%E4%B9%A0%E4%BD%BF%E7%94%A8%E5%8F%82%E6%95%B0)
+  - [作用域](#%E4%BD%9C%E7%94%A8%E5%9F%9F)
+    - ["遮盖"的问题](#%E9%81%AE%E7%9B%96%E7%9A%84%E9%97%AE%E9%A2%98)
+    - [作用域嵌套](#%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%B5%8C%E5%A5%97)
+  - [递归](#%E9%80%92%E5%BD%92)
+    - [两个经典案例：阶乘和幂](#%E4%B8%A4%E4%B8%AA%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E9%98%B6%E4%B9%98%E5%92%8C%E5%B9%82)
+    - [另一个经典案例：二分查找](#%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Python之旅：第六章 抽象
 
 ## 懒惰是一种美德

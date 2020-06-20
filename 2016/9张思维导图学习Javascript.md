@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [思维导图小tips：](#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E5%B0%8Ftips)
+  - [javascript变量](#javascript%E5%8F%98%E9%87%8F)
+  - [javascript运算符](#javascript%E8%BF%90%E7%AE%97%E7%AC%A6)
+  - [javascript数组](#javascript%E6%95%B0%E7%BB%84)
+  - [javascript流程语句](#javascript%E6%B5%81%E7%A8%8B%E8%AF%AD%E5%8F%A5)
+  - [javascript字符串函数](#javascript%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0)
+  - [javascript函数基础](#javascript%E5%87%BD%E6%95%B0%E5%9F%BA%E7%A1%80)
+  - [javascript基础DOM操作](#javascript%E5%9F%BA%E7%A1%80dom%E6%93%8D%E4%BD%9C)
+  - [BOM浏览器对象模型](#bom%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B)
+  - [javascript正则表达式](#javascript%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## 思维导图小tips：
 
 思维导图又叫心智图，是表达发射性思维的有效的图形思维工具 ，它简单却又极其有效，是一种革命性的思维工具。

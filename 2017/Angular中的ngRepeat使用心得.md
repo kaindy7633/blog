@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Angular中的ngRepeat使用心得](#angular%E4%B8%AD%E7%9A%84ngrepeat%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Angular中的ngRepeat使用心得
 
 前段时间在实际项目中遇到一个问题，前端通过Ajax获取到一段数据，其中包括一段整形数字，这个数字表示一个动态的业务值，而这个值是由客户决定的。

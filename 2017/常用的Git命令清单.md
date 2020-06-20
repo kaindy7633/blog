@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [一、新建代码库](#%E4%B8%80%E6%96%B0%E5%BB%BA%E4%BB%A3%E7%A0%81%E5%BA%93)
+- [二、配置](#%E4%BA%8C%E9%85%8D%E7%BD%AE)
+- [三、增加/删除文件](#%E4%B8%89%E5%A2%9E%E5%8A%A0%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6)
+- [四、代码提交](#%E5%9B%9B%E4%BB%A3%E7%A0%81%E6%8F%90%E4%BA%A4)
+- [五、分支](#%E4%BA%94%E5%88%86%E6%94%AF)
+- [六、标签](#%E5%85%AD%E6%A0%87%E7%AD%BE)
+- [七、查看信息](#%E4%B8%83%E6%9F%A5%E7%9C%8B%E4%BF%A1%E6%81%AF)
+- [八、远程同步](#%E5%85%AB%E8%BF%9C%E7%A8%8B%E5%90%8C%E6%AD%A5)
+- [九、撤销](#%E4%B9%9D%E6%92%A4%E9%94%80)
+- [十、其他](#%E5%8D%81%E5%85%B6%E4%BB%96)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 > 我每天使用 `Git`，但是很多命令记不住。
 
 一般来说，日常使用只要记住下图6个命令，就可以了。但是熟练使用，恐怕要记住60～100个命令。
