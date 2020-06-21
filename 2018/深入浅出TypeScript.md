@@ -9,6 +9,14 @@
     - [安装](#%E5%AE%89%E8%A3%85)
     - [环境](#%E7%8E%AF%E5%A2%83)
     - [编写第一个 TypeScript 程序](#%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA-typescript-%E7%A8%8B%E5%BA%8F)
+  - [Typescript的原始类型](#typescript%E7%9A%84%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B)
+    - [布尔类型](#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B)
+    - [数字](#%E6%95%B0%E5%AD%97)
+    - [字符串](#%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [空值](#%E7%A9%BA%E5%80%BC)
+    - [Null 和 Undefined](#null-%E5%92%8C-undefined)
+    - [Symbol](#symbol)
+    - [BigInt](#bigint)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -138,3 +146,122 @@ function greeter(person) {
 const user = "Jane User"
 ```
 
+上面的代码会得到一个错误警告，表示参数具有隐式的类型转换，这是在`tsconfig.js`中配置的，所以我们为参数加上类型说明
+
+```ts
+function greeter(person: string) {
+  return `Hello ${person}`
+}
+```
+
+## Typescript的原始类型
+
+`TypeScript`的原始类型包括: `boolean`、`number`、`string`、`void`、`undefined`、`null`、`symbol`、`bigint`。
+
+### 布尔类型
+
+我们用 `boolean` 来表示布尔类型，注意开头是小写的，如果你在`Typescript`文件中写成 `Boolean` 那代表是 `JavaScript` 中的布尔对象
+
+```ts
+const isLoading: boolean = false
+```
+
+### 数字
+
+`JavaScript`中的二进制、十进制、十六进制等数都可以用 `number` 类型表示。
+
+```ts
+const decLiteral: number = 6
+const hexLiteral: number = 0xf00d
+const binaryLiteral: number = 0b1010
+const octalLiteral: number = 0o744
+```
+
+### 字符串
+
+```ts
+const book: string = '深入浅出 Typescript'
+```
+
+### 空值
+
+表示没有任何类型，当一个函数没有返回值时，你通常会见到其返回值类型是 `void`：
+
+```ts
+function warnUser(): void {
+    alert("This is my warning message");
+}
+```
+
+实际上只有`null`和`undefined`可以赋给`void`:
+
+```ts
+const a: void = undefined
+```
+
+### Null 和 Undefined
+
+`TypeScript` 里，`undefined` 和 `null` 两者各自有自己的类型分别叫做 `undefined` 和 `null`，和`void`相似，它们的本身的类型用处不是很大：
+
+```ts
+let a: undefined = undefined;
+let b: null = null;
+```
+
+默认情况下 `null` 和 `undefined` 是所有类型的子类型，就是说你可以把 `null` 和 `undefined` 赋值给 `number` 类型的变量。
+
+但是在正式项目中一般都是开启 `--strictNullChecks` 检测的，即 `null` 和 `undefined` 只能赋值给 `any` 和它们各自(一个例外是 undefined 是也可以分配给void)，可以规避非常多的问题
+
+### Symbol
+
+`Symbol` 是在`ES2015`之后成为新的原始类型,它通过 `Symbol` 构造函数创建:
+
+```ts
+const sym1 = Symbol('key1');
+const sym2 = Symbol('key2');
+```
+
+而且 `Symbol` 的值是唯一不变的：
+
+```ts
+Symbol('key1') === Symbol('key1') // false
+```
+
+### BigInt
+
+`BigInt` 类型在 `TypeScript3.2` 版本被内置，使用 `BigInt` 可以安全地存储和操作大整数，即使这个数已经超出了`JavaScript`构造函数 `Number` 能够表示的安全整数范围。
+
+在 `JavaScript` 中采用双精度浮点数,这导致精度有限，比如 `Number.MAX_SAFE_INTEGER` 给出了可以安全递增的最大可能整数，即`2**53-1`,我们看一下案例:
+
+```ts
+const max = Number.MAX_SAFE_INTEGER;
+
+const max1 = max + 1
+const max2 = max + 2
+
+max1 === max2 //true
+```
+
+`max1`与`max2`居然相等？这就是超过精读范围造成的问题，而`BigInt`正是解决这类问题而生的:
+
+```ts
+// 注意，这里是 JavaScript 代码，并不是 typescript
+const max = BigInt(Number.MAX_SAFE_INTEGER);
+
+const max1 = max + 1n
+const max2 = max + 2n
+
+max1 === max2 // false
+```
+
+如果类型是 `BigInt` ,那么数字后面需要加 `n`
+
+在`TypeScript`中，`number` 类型虽然和 `BigInt` 都是有表示数字的意思，但是实际上两者类型是不同的:
+
+```ts
+declare let foo: number;
+declare let bar: bigint;
+
+foo = bar; // error: Type 'bigint' is not assignable to type 'number'.
+bar = foo; // error: Type 'number' is not assignable to type 'bigint'.
+```
