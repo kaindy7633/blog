@@ -109,6 +109,18 @@
     - [属性名的遍历](#%E5%B1%9E%E6%80%A7%E5%90%8D%E7%9A%84%E9%81%8D%E5%8E%86)
     - [Symbol.for()，Symbol.keyFor()](#symbolforsymbolkeyfor)
     - [模块的 Singleton 模式](#%E6%A8%A1%E5%9D%97%E7%9A%84-singleton-%E6%A8%A1%E5%BC%8F)
+    - [内置的 Symbol 值](#%E5%86%85%E7%BD%AE%E7%9A%84-symbol-%E5%80%BC)
+      - [Symbol.hasInstance](#symbolhasinstance)
+      - [Symbol.isConcatSpreadable](#symbolisconcatspreadable)
+      - [Symbol.species](#symbolspecies)
+      - [Symbol.match](#symbolmatch)
+      - [Symbol.replace](#symbolreplace)
+      - [Symbol.search](#symbolsearch)
+      - [Symbol.split](#symbolsplit)
+      - [Symbol.iterator](#symboliterator)
+      - [Symbol.toPrimitive](#symboltoprimitive)
+      - [Symbol.toStringTag](#symboltostringtag)
+      - [Symbol.unscopables](#symbolunscopables)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2850,12 +2862,173 @@ Symbol.keyFor(s2) // undefined
 
 `Singleton` 模式指的是调用一个类，任何时候返回的都是同一个实例
 
+在 `Nodejs` 中实现 `Singleton` 模式，只需要把实例放到顶层对象 `Global` 里就可以了，但问题是这个放在顶层对象中的实例可以被修改，此时可以通过 `Symbol` 来实现
 
+### 内置的 Symbol 值
 
+`ES6` 还提供了 11 个内置的 `Symbol` 值，指向语言内部使用的方法
 
+#### Symbol.hasInstance
 
+对象的`Symbol.hasInstance`属性，指向一个内部方法。当其他对象使用`instanceof`运算符，判断是否为该对象的实例时，会调用这个方法
 
+```js
+class MyClass {
+  [Symbol.hasInstance](foo) {
+    return foo instanceof Array;
+  }
+}
 
+[1, 2, 3] instanceof new MyClass() // true
+```
 
+#### Symbol.isConcatSpreadable
 
+对象的`Symbol.isConcatSpreadable`属性等于一个布尔值，表示该对象用于`Array.prototype.concat()`时，是否可以展开
 
+```js
+let arr1 = ['c', 'd'];
+['a', 'b'].concat(arr1, 'e') // ['a', 'b', 'c', 'd', 'e']
+arr1[Symbol.isConcatSpreadable] // undefined
+
+let arr2 = ['c', 'd'];
+arr2[Symbol.isConcatSpreadable] = false;
+['a', 'b'].concat(arr2, 'e') // ['a', 'b', ['c','d'], 'e']
+```
+
+#### Symbol.species
+
+对象的`Symbol.species`属性，指向一个构造函数。创建衍生对象时，会使用该属性
+
+```js
+class MyArray extends Array {
+}
+
+const a = new MyArray(1, 2, 3);
+const b = a.map(x => x);
+const c = a.filter(x => x > 1);
+
+b instanceof MyArray // true
+c instanceof MyArray // true
+```
+
+```js
+class MyArray extends Array {
+  static get [Symbol.species]() { return Array; }
+}
+```
+
+上面代码中，由于定义了`Symbol.species`属性，创建衍生对象时就会使用这个属性返回的函数，作为构造函数
+
+#### Symbol.match
+
+对象的`Symbol.match`属性，指向一个函数。当执行`str.match(myObject)`时，如果该属性存在，会调用它，返回该方法的返回值
+
+```js
+String.prototype.match(regexp)
+// 等同于
+regexp[Symbol.match](this)
+
+class MyMatcher {
+  [Symbol.match](string) {
+    return 'hello world'.indexOf(string);
+  }
+}
+
+'e'.match(new MyMatcher()) // 1
+```
+
+#### Symbol.replace
+
+对象的`Symbol.replace`属性，指向一个方法，当该对象被`String.prototype.replace`方法调用时，会返回该方法的返回值。
+
+```js
+String.prototype.replace(searchValue, replaceValue)
+// 等同于
+searchValue[Symbol.replace](this, replaceValue)
+```
+
+#### Symbol.search
+
+对象的`Symbol.search`属性，指向一个方法，当该对象被`String.prototype.search`方法调用时，会返回该方法的返回值。
+
+```js
+String.prototype.search(regexp)
+// 等同于
+regexp[Symbol.search](this)
+
+class MySearch {
+  constructor(value) {
+    this.value = value;
+  }
+  [Symbol.search](string) {
+    return string.indexOf(this.value);
+  }
+}
+'foobar'.search(new MySearch('foo')) // 0
+```
+
+#### Symbol.split
+
+对象的`Symbol.split`属性，指向一个方法，当该对象被`String.prototype.split`方法调用时，会返回该方法的返回值。
+
+```js
+String.prototype.split(separator, limit)
+// 等同于
+separator[Symbol.split](this, limit)
+```
+
+#### Symbol.iterator
+
+对象的`Symbol.iterator`属性，指向该对象的默认遍历器方法
+
+```js
+const myIterable = {};
+myIterable[Symbol.iterator] = function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+};
+
+[...myIterable] // [1, 2, 3]
+```
+
+#### Symbol.toPrimitive
+
+对象的`Symbol.toPrimitive`属性，指向一个方法。该对象被转为原始类型的值时，会调用这个方法，返回该对象对应的原始类型值
+
+`Symbol.toPrimitive`被调用时，会接受一个字符串参数，表示当前运算的模式，一共有三种模式。
+
+- `Number`：该场合需要转成数值
+- `String`：该场合需要转成字符串
+- `Default`：该场合可以转成数值，也可以转成字符串
+
+```js
+let obj = {
+  [Symbol.toPrimitive](hint) {
+    switch (hint) {
+      case 'number':
+        return 123;
+      case 'string':
+        return 'str';
+      case 'default':
+        return 'default';
+      default:
+        throw new Error();
+     }
+   }
+};
+
+2 * obj // 246
+3 + obj // '3default'
+obj == 'default' // true
+String(obj) // 'str'
+```
+
+#### Symbol.toStringTag
+
+对象的`Symbol.toStringTag`属性，指向一个方法。在该对象上面调用`Object.prototype.toString`方法时，如果这个属性存在，它的返回值会出现在`toString`方法返回的字符串之中，表示对象的类型
+
+#### Symbol.unscopables
+
+对象的`Symbol.unscopables`属性，指向一个对象。该对象指定了使用`with`关键字时，哪些属性会被`with`环境排除
