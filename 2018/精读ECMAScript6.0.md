@@ -104,6 +104,11 @@
     - [Object.fromEntries()](#objectfromentries)
   - [Symbol](#symbol)
     - [Symbol.prototype.description](#symbolprototypedescription)
+    - [作为属性名的 Symbol](#%E4%BD%9C%E4%B8%BA%E5%B1%9E%E6%80%A7%E5%90%8D%E7%9A%84-symbol)
+    - [消除魔术字符串](#%E6%B6%88%E9%99%A4%E9%AD%94%E6%9C%AF%E5%AD%97%E7%AC%A6%E4%B8%B2)
+    - [属性名的遍历](#%E5%B1%9E%E6%80%A7%E5%90%8D%E7%9A%84%E9%81%8D%E5%8E%86)
+    - [Symbol.for()，Symbol.keyFor()](#symbolforsymbolkeyfor)
+    - [模块的 Singleton 模式](#%E6%A8%A1%E5%9D%97%E7%9A%84-singleton-%E6%A8%A1%E5%BC%8F)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2708,6 +2713,143 @@ s2.toString() // "Symbol(bar)"
 ```
 
 ### Symbol.prototype.description
+
+创建 `Symbol` 的时候，可以添加一个描述。
+
+```js
+const sym = Symbol('foo');
+```
+
+`ES2019` 提供了一个实例属性`description`，直接返回 `Symbol` 的描述。
+
+```js
+const sym = Symbol('foo');
+
+sym.description // "foo"
+```
+
+### 作为属性名的 Symbol
+
+由于每一个 `Symbol` 值都是不相等的，这意味着 `Symbol` 值可以作为标识符，用于对象的属性名，就能保证不会出现同名的属性
+
+```js
+let mySymbol = Symbol();
+
+// 第一种写法
+let a = {};
+a[mySymbol] = 'Hello!';
+
+// 第二种写法
+let a = {
+  [mySymbol]: 'Hello!'
+};
+
+// 第三种写法
+let a = {};
+Object.defineProperty(a, mySymbol, { value: 'Hello!' });
+
+// 以上写法都得到同样结果
+a[mySymbol] // "Hello!"
+```
+
+`Symbol` 类型还可以用于定义一组常量，保证这组常量的值都是不相等的
+
+```js
+const log = {};
+
+log.levels = {
+  DEBUG: Symbol('debug'),
+  INFO: Symbol('info'),
+  WARN: Symbol('warn')
+};
+console.log(log.levels.DEBUG, 'debug message');
+console.log(log.levels.INFO, 'info message');
+```
+
+### 消除魔术字符串
+
+魔术字符串指的是，在代码之中多次出现、与代码形成强耦合的某一个具体的字符串或者数值。风格良好的代码，应该尽量消除魔术字符串，改由含义清晰的变量代替, 常用的消除魔术字符串的方法，就是把它写成一个变量
+
+```js
+const shapeType = {
+  triangle: 'Triangle'
+};
+
+function getArea(shape, options) {
+  let area = 0;
+  switch (shape) {
+    case shapeType.triangle:
+      area = .5 * options.width * options.height;
+      break;
+  }
+  return area;
+}
+
+getArea(shapeType.triangle, { width: 100, height: 100 });
+```
+
+### 属性名的遍历
+
+`Symbol` 作为属性名，遍历对象的时候，该属性不会出现在`for...in`、`for...of`循环中，也不会被`Object.keys()`、`Object.getOwnPropertyNames()`、`JSON.stringify()`返回
+
+`Object.getOwnPropertySymbols()`方法，可以获取指定对象的所有 `Symbol` 属性名。该方法返回一个数组，成员是当前对象的所有用作属性名的 `Symbol` 值
+
+```js
+const obj = {};
+let a = Symbol('a');
+let b = Symbol('b');
+
+obj[a] = 'Hello';
+obj[b] = 'World';
+
+const objectSymbols = Object.getOwnPropertySymbols(obj);
+
+objectSymbols
+// [Symbol(a), Symbol(b)]
+```
+
+使用`for...in`循环和`Object.getOwnPropertyNames()`方法都得不到 `Symbol` 键名，需要使用`Object.getOwnPropertySymbols()`方法
+
+另一个新的 API，`Reflect.ownKeys()`方法可以返回所有类型的键名，包括常规键名和 `Symbol` 键名
+
+```js
+let obj = {
+  [Symbol('my_key')]: 1,
+  enum: 2,
+  nonEnum: 3
+};
+
+Reflect.ownKeys(obj)
+//  ["enum", "nonEnum", Symbol(my_key)]
+```
+
+### Symbol.for()，Symbol.keyFor()
+
+`Symbol.for()`方法接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 `Symbol` 值。如果有，就返回这个 `Symbol` 值，否则就新建一个以该字符串为名称的 `Symbol` 值，并将其注册到全局。
+
+```js
+let s1 = Symbol.for('foo');
+let s2 = Symbol.for('foo');
+
+s1 === s2 // true
+```
+
+`Symbol.for()`与`Symbol()`这两种写法，都会生成新的 `Symbol`。它们的区别是，前者会被登记在全局环境中供搜索，后者不会
+
+`Symbol.keyFor()`方法返回一个已登记的 `Symbol` 类型值的`key`
+
+```js
+let s1 = Symbol.for("foo");
+Symbol.keyFor(s1) // "foo"
+
+let s2 = Symbol("foo");
+Symbol.keyFor(s2) // undefined
+```
+
+### 模块的 Singleton 模式
+
+`Singleton` 模式指的是调用一个类，任何时候返回的都是同一个实例
+
 
 
 
