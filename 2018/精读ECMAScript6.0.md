@@ -121,6 +121,11 @@
       - [Symbol.toPrimitive](#symboltoprimitive)
       - [Symbol.toStringTag](#symboltostringtag)
       - [Symbol.unscopables](#symbolunscopables)
+  - [Set和Map数据结构](#set%E5%92%8Cmap%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+    - [Set](#set)
+      - [基本用法](#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95)
+      - [Set 实例的属性和方法](#set-%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95)
+      - [遍历操作](#%E9%81%8D%E5%8E%86%E6%93%8D%E4%BD%9C)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -3032,3 +3037,204 @@ String(obj) // 'str'
 #### Symbol.unscopables
 
 对象的`Symbol.unscopables`属性，指向一个对象。该对象指定了使用`with`关键字时，哪些属性会被`with`环境排除
+
+## Set和Map数据结构
+
+### Set
+
+#### 基本用法
+
+`ES6` 提供了新的数据结构 `Set`。它类似于数组，但是成员的值都是唯一的，没有重复的值。
+
+`Set`本身是一个构造函数，用来生成 `Set` 数据结构
+
+```js
+const s = new Set();
+
+[2, 3, 5, 4, 5, 2, 2].forEach(x => s.add(x));
+
+for (let i of s) {
+  console.log(i);
+}
+// 2 3 5 4
+```
+
+`Set`函数可以接受一个数组（或者具有 `iterable` 接口的其他数据结构）作为参数，用来初始化。
+
+```js
+// 例一
+const set = new Set([1, 2, 3, 4, 4]);
+[...set]
+// [1, 2, 3, 4]
+
+// 例二
+const items = new Set([1, 2, 3, 4, 5, 5, 5, 5]);
+items.size // 5
+
+// 例三
+const set = new Set(document.querySelectorAll('div'));
+set.size // 56
+
+// 类似于
+const set = new Set();
+document
+ .querySelectorAll('div')
+ .forEach(div => set.add(div));
+set.size // 56
+```
+
+`Set`也成为一种去除数组重复成员的方法
+
+```js
+// 去除数组的重复成员
+[...new Set(array)]
+```
+
+也可以用于去除字符串里面的重复字符
+
+```js
+[...new Set('ababbc')].join('')
+// "abc"
+```
+
+#### Set 实例的属性和方法
+
+`Set` 结构的实例有以下属性:
+
+- `Set.prototype.constructor`：构造函数，默认就是`Set`函数。
+- `Set.prototype.size`：返回`Set`实例的成员总数。
+
+`Set` 实例的方法分为两大类：操作方法（用于操作数据）和遍历方法（用于遍历成员）。下面先介绍四个操作方法。
+
+- `Set.prototype.add(value)`：添加某个值，返回 `Set` 结构本身。
+- `Set.prototype.delete(value)`：删除某个值，返回一个布尔值，表示删除是否成功。
+- `Set.prototype.has(value)`：返回一个布尔值，表示该值是否为`Set`的成员。
+- `Set.prototype.clear()`：清除所有成员，没有返回值
+
+```js
+s.add(1).add(2).add(2);
+// 注意2被加入了两次
+
+s.size // 2
+
+s.has(1) // true
+s.has(2) // true
+s.has(3) // false
+
+s.delete(2);
+s.has(2) // false
+```
+
+`Array.from`方法可以将 `Set` 结构转为数组
+
+```js
+const items = new Set([1, 2, 3, 4, 5]);
+const array = Array.from(items);
+```
+
+#### 遍历操作
+
+`Set` 结构的实例有四个遍历方法，可以用于遍历成员。
+
+- `Set.prototype.keys()`：返回键名的遍历器
+- `Set.prototype.values()`：返回键值的遍历器
+- `Set.prototype.entries()`：返回键值对的遍历器
+- `Set.prototype.forEach()`：使用回调函数遍历每个成员
+
+`keys`方法、`values`方法、`entries`方法返回的都是遍历器对象
+
+```js
+let set = new Set(['red', 'green', 'blue']);
+
+for (let item of set.keys()) {
+  console.log(item);
+}
+// red
+// green
+// blue
+
+for (let item of set.values()) {
+  console.log(item);
+}
+// red
+// green
+// blue
+
+for (let item of set.entries()) {
+  console.log(item);
+}
+// ["red", "red"]
+// ["green", "green"]
+// ["blue", "blue"]
+```
+
+`Set` 结构可以直接用`for...of`循环遍历
+
+```js
+let set = new Set(['red', 'green', 'blue']);
+
+for (let x of set) {
+  console.log(x);
+}
+// red
+// green
+// blue
+```
+
+`Set` 结构的实例与数组一样，也拥有`forEach`方法，用于对每个成员执行某种操作，没有返回值
+
+```js
+let set = new Set([1, 4, 9]);
+set.forEach((value, key) => console.log(key + ' : ' + value))
+// 1 : 1
+// 4 : 4
+// 9 : 9
+```
+
+扩展运算符（`...`）内部使用`for...of`循环，所以也可以用于 `Set` 结构
+
+```js
+let set = new Set(['red', 'green', 'blue']);
+let arr = [...set];
+// ['red', 'green', 'blue']
+```
+
+扩展运算符和 `Set` 结构相结合，就可以去除数组的重复成员。
+
+```js
+let arr = [3, 5, 2, 2, 5, 5];
+let unique = [...new Set(arr)];
+// [3, 5, 2]
+```
+
+数组的`map`和`filter`方法也可以间接用于 `Set `
+
+```js
+let set = new Set([1, 2, 3]);
+set = new Set([...set].map(x => x * 2));
+// 返回Set结构：{2, 4, 6}
+
+let set = new Set([1, 2, 3, 4, 5]);
+set = new Set([...set].filter(x => (x % 2) == 0));
+// 返回Set结构：{2, 4}
+```
+
+使用 `Set` 可以很容易地实现并集（`Union`）、交集（`Intersect`）和差集（`Difference`）
+
+```js
+let a = new Set([1, 2, 3]);
+let b = new Set([4, 3, 2]);
+
+// 并集
+let union = new Set([...a, ...b]);
+// Set {1, 2, 3, 4}
+
+// 交集
+let intersect = new Set([...a].filter(x => b.has(x)));
+// set {2, 3}
+
+// （a 相对于 b 的）差集
+let difference = new Set([...a].filter(x => !b.has(x)));
+// Set {1}
+```
+

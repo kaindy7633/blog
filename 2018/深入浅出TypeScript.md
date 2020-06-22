@@ -265,3 +265,4 @@ declare let bar: bigint;
 foo = bar; // error: Type 'bigint' is not assignable to type 'number'.
 bar = foo; // error: Type 'number' is not assignable to type 'bigint'.
 ```
+
