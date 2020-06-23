@@ -126,6 +126,13 @@
       - [基本用法](#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95)
       - [Set 实例的属性和方法](#set-%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95)
       - [遍历操作](#%E9%81%8D%E5%8E%86%E6%93%8D%E4%BD%9C)
+    - [WeakSet](#weakset)
+      - [含义](#%E5%90%AB%E4%B9%89)
+      - [语法](#%E8%AF%AD%E6%B3%95)
+    - [Map](#map)
+      - [含义和基本用法](#%E5%90%AB%E4%B9%89%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95)
+      - [实例的属性和操作方法](#%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95)
+      - [遍历方法](#%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -3236,5 +3243,274 @@ let intersect = new Set([...a].filter(x => b.has(x)));
 // （a 相对于 b 的）差集
 let difference = new Set([...a].filter(x => !b.has(x)));
 // Set {1}
+```
+
+### WeakSet
+
+#### 含义
+
+`WeakSet` 的成员只能是对象，而不能是其他类型的值
+
+```js
+const ws = new WeakSet();
+ws.add(1)
+// TypeError: Invalid value used in weak set
+ws.add(Symbol())
+// TypeError: invalid value used in weak set
+```
+
+`WeakSet` 中的对象都是弱引用，即垃圾回收机制不考虑 `WeakSet` 对该对象的引用，也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，不考虑该对象还存在于 `WeakSet` 之中
+
+`ES6` 规定 `WeakSet` 不可遍历
+
+#### 语法
+
+`WeakSet` 是一个构造函数，可以使用`new`命令，创建 `WeakSet` 数据结构
+
+```js
+const ws = new WeakSet();
+```
+
+作为构造函数，`WeakSet` 可以接受一个数组或类似数组的对象作为参数, 该数组的所有成员，都会自动成为 `WeakSet` 实例对象的成员。
+
+```js
+const a = [[1, 2], [3, 4]];
+const ws = new WeakSet(a);
+// WeakSet {[1, 2], [3, 4]}
+```
+
+`WeakSet` 结构有以下三个方法:
+
+- `WeakSet.prototype.add(value)`：向 `WeakSet` 实例添加一个新成员。
+- `WeakSet.prototype.delete(value)`：清除 `WeakSet` 实例的指定成员。
+- `WeakSet.prototype.has(value)`：返回一个布尔值，表示某个值是否在 `WeakSet` 实例之中。
+
+```js
+const ws = new WeakSet();
+const obj = {};
+const foo = {};
+
+ws.add(window);
+ws.add(obj);
+
+ws.has(window); // true
+ws.has(foo);    // false
+
+ws.delete(window);
+ws.has(window);    // false
+```
+
+`WeakSet` 没有`size`属性，没有办法遍历它的成员
+
+`WeakSet` 的一个用处，是储存 `DOM` 节点，而不用担心这些节点从文档移除时，会引发内存泄漏
+
+### Map
+
+#### 含义和基本用法
+
+`JavaScript` 的对象（`Object`），本质上是键值对的集合（`Hash` 结构），但是传统上只能用字符串当作键
+
+`ES6` 提供了 `Map` 数据结构。它类似于对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当作键
+
+```js
+const m = new Map();
+const o = {p: 'Hello World'};
+
+m.set(o, 'content')
+m.get(o) // "content"
+
+m.has(o) // true
+m.delete(o) // true
+m.has(o) // false
+```
+
+作为构造函数，`Map` 也可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组
+
+```js
+const map = new Map([
+  ['name', '张三'],
+  ['title', 'Author']
+]);
+
+map.size // 2
+map.has('name') // true
+map.get('name') // "张三"
+map.has('title') // true
+map.get('title') // "Author"
+```
+
+不仅仅是数组，任何具有 `Iterator` 接口、且每个成员都是一个双元素的数组的数据结构都可以当作`Map`构造函数的参数
+
+```js
+const set = new Set([
+  ['foo', 1],
+  ['bar', 2]
+]);
+const m1 = new Map(set);
+m1.get('foo') // 1
+
+const m2 = new Map([['baz', 3]]);
+const m3 = new Map(m2);
+m3.get('baz') // 3
+```
+
+#### 实例的属性和操作方法
+
+- `size`属性返回 `Map` 结构的成员总数
+
+  ```js
+  const map = new Map();
+  map.set('foo', true);
+  map.set('bar', false);
+
+  map.size // 2
+  ```
+
+- `Map.prototype.set(key, value)`, `set`方法设置键名`key`对应的键值为`value`，然后返回整个 `Map` 结构。如果`key`已经有值，则键值会被更新，否则就新生成该键
+
+  ```js
+  const m = new Map();
+
+  m.set('edition', 6)        // 键是字符串
+  m.set(262, 'standard')     // 键是数值
+  m.set(undefined, 'nah')    // 键是 undefined
+  ```
+
+- `Map.prototype.get(key)`, `get`方法读取`key`对应的键值，如果找不到`key`，返回`undefined`
+
+  ```js
+  const m = new Map();
+
+  const hello = function() {console.log('hello');};
+  m.set(hello, 'Hello ES6!') // 键是函数
+
+  m.get(hello)  // Hello ES6!
+  ```
+
+- `Map.prototype.has(key)`, `has`方法返回一个布尔值，表示某个键是否在当前 `Map` 对象之中。
+
+  ```js
+  const m = new Map();
+
+  m.set('edition', 6);
+  m.set(262, 'standard');
+  m.set(undefined, 'nah');
+
+  m.has('edition')     // true
+  m.has('years')       // false
+  m.has(262)           // true
+  m.has(undefined)     // true
+  ```
+
+- `Map.prototype.delete(key)`, `delete`方法删除某个键，返回`true`。如果删除失败，返回`false`。
+
+  ```js
+  const m = new Map();
+  m.set(undefined, 'nah');
+  m.has(undefined)     // true
+
+  m.delete(undefined)
+  m.has(undefined)       // false
+  ```
+
+- `Map.prototype.clear()`, `clear`方法清除所有成员，没有返回值。
+
+  ```js
+  let map = new Map();
+  map.set('foo', true);
+  map.set('bar', false);
+
+  map.size // 2
+  map.clear()
+  map.size // 0
+  ```
+
+#### 遍历方法
+
+`Map` 结构原生提供三个遍历器生成函数和一个遍历方法。
+
+- `Map.prototype.keys()`：返回键名的遍历器。
+- `Map.prototype.values()`：返回键值的遍历器。
+- `Map.prototype.entries()`：返回所有成员的遍历器。
+- `Map.prototype.forEach()`：遍历 `Map` 的所有成员。
+
+```js
+const map = new Map([
+  ['F', 'no'],
+  ['T',  'yes'],
+]);
+
+for (let key of map.keys()) {
+  console.log(key);
+}
+// "F"
+// "T"
+
+for (let value of map.values()) {
+  console.log(value);
+}
+// "no"
+// "yes"
+
+for (let item of map.entries()) {
+  console.log(item[0], item[1]);
+}
+// "F" "no"
+// "T" "yes"
+
+// 或者
+for (let [key, value] of map.entries()) {
+  console.log(key, value);
+}
+// "F" "no"
+// "T" "yes"
+
+// 等同于使用map.entries()
+for (let [key, value] of map) {
+  console.log(key, value);
+}
+// "F" "no"
+// "T" "yes"
+```
+
+`Map` 结构转为数组结构，比较快速的方法是使用扩展运算符（`...`）。
+
+```js
+const map = new Map([
+  [1, 'one'],
+  [2, 'two'],
+  [3, 'three'],
+]);
+
+[...map.keys()]
+// [1, 2, 3]
+
+[...map.values()]
+// ['one', 'two', 'three']
+
+[...map.entries()]
+// [[1,'one'], [2, 'two'], [3, 'three']]
+
+[...map]
+// [[1,'one'], [2, 'two'], [3, 'three']]
+```
+
+结合数组的`map`方法、`filter`方法，可以实现 `Map` 的遍历和过滤
+
+```js
+const map0 = new Map()
+  .set(1, 'a')
+  .set(2, 'b')
+  .set(3, 'c');
+
+const map1 = new Map(
+  [...map0].filter(([k, v]) => k < 3)
+);
+// 产生 Map 结构 {1 => 'a', 2 => 'b'}
+
+const map2 = new Map(
+  [...map0].map(([k, v]) => [k * 2, '_' + v])
+    );
+// 产生 Map 结构 {2 => '_a', 4 => '_b', 6 => '_c'}
 ```
 
