@@ -133,6 +133,10 @@
       - [含义和基本用法](#%E5%90%AB%E4%B9%89%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95)
       - [实例的属性和操作方法](#%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E5%92%8C%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95)
       - [遍历方法](#%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95)
+      - [与其他数据结构的互相转换](#%E4%B8%8E%E5%85%B6%E4%BB%96%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2)
+    - [WeakMap](#weakmap)
+      - [含义](#%E5%90%AB%E4%B9%89-1)
+      - [WeakMap 的语法](#weakmap-%E7%9A%84%E8%AF%AD%E6%B3%95)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -3513,4 +3517,173 @@ const map2 = new Map(
     );
 // 产生 Map 结构 {2 => '_a', 4 => '_b', 6 => '_c'}
 ```
+
+#### 与其他数据结构的互相转换
+
+- `Map` 转为数组, `Map` 转为数组最方便的方法，就是使用扩展运算符（`...`）。
+
+  ```js
+  const myMap = new Map()
+    .set(true, 7)
+    .set({foo: 3}, ['abc']);
+  [...myMap]
+  // [ [ true, 7 ], [ { foo: 3 }, [ 'abc' ] ] ]
+  ```
+
+- 数组 转为 `Map`, 将数组传入 `Map` 构造函数，就可以转为 `Map`。
+
+  ```js
+  new Map([
+    [true, 7],
+    [{foo: 3}, ['abc']]
+  ])
+  // Map {
+  //   true => 7,
+  //   Object {foo: 3} => ['abc']
+  // }
+  ```
+
+- `Map` 转为对象, 如果所有 `Map` 的键都是字符串，它可以无损地转为对象。
+
+  ```js
+  function strMapToObj(strMap) {
+    let obj = Object.create(null);
+    for (let [k,v] of strMap) {
+      obj[k] = v;
+    }
+    return obj;
+  }
+
+  const myMap = new Map()
+    .set('yes', true)
+    .set('no', false);
+  strMapToObj(myMap)
+  // { yes: true, no: false }
+  ```
+
+- 对象转为 `Map`, 对象转为 `Map` 可以通过`Object.entries()`。
+
+  ```js
+  let obj = {"a":1, "b":2};
+  let map = new Map(Object.entries(obj));
+  ```
+
+- `Map` 转为 `JSON`
+  
+  `Map` 转为 `JSON` 要区分两种情况。一种情况是，`Map` 的键名都是字符串，这时可以选择转为对象 `JSON`。
+
+  ```js
+  function strMapToJson(strMap) {
+    return JSON.stringify(strMapToObj(strMap));
+  }
+
+  let myMap = new Map().set('yes', true).set('no', false);
+  strMapToJson(myMap)
+  // '{"yes":true,"no":false}'
+  ```
+
+  另一种情况是，`Map` 的键名有非字符串，这时可以选择转为数组 `JSON`。
+
+  ```js
+  function mapToArrayJson(map) {
+    return JSON.stringify([...map]);
+  }
+
+  let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+  mapToArrayJson(myMap)
+  // '[[true,7],[{"foo":3},["abc"]]]'
+  ```
+
+- `JSON` 转为 `Map`
+
+  `JSON` 转为 `Map`，正常情况下，所有键名都是字符串。
+
+  ```js
+  function jsonToStrMap(jsonStr) {
+    return objToStrMap(JSON.parse(jsonStr));
+  }
+
+  jsonToStrMap('{"yes": true, "no": false}')
+  // Map {'yes' => true, 'no' => false}
+  ```
+
+### WeakMap
+
+#### 含义
+
+`WeakMap`结构与`Map`结构类似，也是用于生成键值对的集合。
+
+```js
+// WeakMap 可以使用 set 方法添加成员
+const wm1 = new WeakMap();
+const key = {foo: 1};
+wm1.set(key, 2);
+wm1.get(key) // 2
+
+// WeakMap 也可以接受一个数组，
+// 作为构造函数的参数
+const k1 = [1, 2, 3];
+const k2 = [4, 5, 6];
+const wm2 = new WeakMap([[k1, 'foo'], [k2, 'bar']]);
+wm2.get(k2) // "bar"
+```
+
+`WeakMap`与`Map`的区别有两点:
+
+- `WeakMap`只接受对象作为键名（`null`除外），不接受其他类型的值作为键名。
+
+  ```js
+  const map = new WeakMap();
+  map.set(1, 2)
+  // TypeError: 1 is not an object!
+  map.set(Symbol(), 2)
+  // TypeError: Invalid value used as weak map key
+  map.set(null, 2)
+  // TypeError: Invalid value used as weak map key
+  ```
+
+- `WeakMap`的键名所指向的对象，不计入垃圾回收机制
+
+`WeakMap` 键名所引用的对象都是弱引用，即垃圾回收机制不将该引用考虑在内。因此，只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存
+
+基本上，如果你要往对象上添加数据，又不想干扰垃圾回收机制，就可以使用 `WeakMap`。一个典型应用场景是，在网页的 `DOM` 元素上添加数据，就可以使用`WeakMap`结构。当该 `DOM` 元素被清除，其所对应的`WeakMap`记录就会自动被移除。
+
+```js
+const wm = new WeakMap();
+
+const element = document.getElementById('example');
+
+wm.set(element, 'some information');
+wm.get(element) // "some information"
+```
+
+注意，`WeakMap` 弱引用的只是键名，而不是键值。键值依然是正常引用。
+
+```js
+const wm = new WeakMap();
+let key = {};
+let obj = {foo: 1};
+
+wm.set(key, obj);
+obj = null;
+wm.get(key)
+// Object {foo: 1}
+```
+
+#### WeakMap 的语法
+
+`WeakMap` 与 `Map` 在 `API` 上的区别主要是两个，一是没有遍历操作（即没有`keys()`、`values()`和`entries()`方法），也没有`size`属性, 无法清空，即不支持`clear`方法
+
+`WeakMap`只有四个方法可用：`get()`、`set()`、`has()`、`delete()`
+
+```js
+const wm = new WeakMap();
+
+// size、forEach、clear 方法都不存在
+wm.size // undefined
+wm.forEach // undefined
+wm.clear // undefined
+```
+
+
 
