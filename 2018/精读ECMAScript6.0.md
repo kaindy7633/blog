@@ -137,6 +137,10 @@
     - [WeakMap](#weakmap)
       - [含义](#%E5%90%AB%E4%B9%89-1)
       - [WeakMap 的语法](#weakmap-%E7%9A%84%E8%AF%AD%E6%B3%95)
+  - [Proxy](#proxy)
+    - [概述](#%E6%A6%82%E8%BF%B0)
+    - [Proxy 实例的方法](#proxy-%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%96%B9%E6%B3%95)
+      - [get()](#get)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2233,7 +2237,7 @@ y // 2
 z // { a: 3, b: 4 }
 ```
 
-**注意: 解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，而不是这个值的副本**
+**注意: 解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，而��是这个值的副本**
 
 对象的扩展运算符（`...`）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
 
@@ -3684,6 +3688,75 @@ wm.size // undefined
 wm.forEach // undefined
 wm.clear // undefined
 ```
+
+## Proxy
+
+### 概述
+
+`Proxy` 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。
+
+`Proxy` 可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，因此提供了一种机制，可以对外界的访问进行过滤和改写.
+
+```js
+var obj = new Proxy({}, {
+  get: function (target, propKey, receiver) {
+    console.log(`getting ${propKey}!`);
+    return Reflect.get(target, propKey, receiver);
+  },
+  set: function (target, propKey, value, receiver) {
+    console.log(`setting ${propKey}!`);
+    return Reflect.set(target, propKey, value, receiver);
+  }
+});
+```
+
+`ES6` 原生提供 `Proxy` 构造函数，用来生成 `Proxy` 实例。
+
+```js
+var proxy = new Proxy(target, handler);
+```
+
+`Proxy` 支持的拦截操作一览，一共 13 种。
+
+- `get(target, propKey, receiver)`：拦截对象属性的读取，比如`proxy.foo`和`proxy['foo']`。
+- `set(target, propKey, value, receiver)`：拦截对象属性的设置，比如`proxy.foo = v`或`proxy['foo'] = v`，返回一个布尔值。
+- `has(target, propKey)`：拦截`propKey in proxy`的操作，返回一个布尔值。
+- `deleteProperty(target, propKey)`：拦截d`elete proxy[propKey]`的操作，返回一个布尔值。
+- `ownKeys(target)`：拦截`Object.getOwnPropertyNames(proxy)`、`Object.getOwnPropertySymbols(proxy)`、Object.keys(proxy)、for...in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而`Object.keys()`的返回结果仅包括目标对象自身的可遍历属性。
+- `getOwnPropertyDescriptor(target, propKey)`：拦截`Object.getOwnPropertyDescriptor(proxy, propKey)`，返回属性的描述对象。
+- `defineProperty(target, propKey, propDesc)`：拦截`Object.defineProperty(proxy, propKey, propDesc）`、`Object.defineProperties(proxy, propDescs)`，返回一个布尔值。
+- `preventExtensions(target)`：拦截`Object.preventExtensions(proxy)`，返回一个布尔值。
+- `getPrototypeOf(target)`：拦截`Object.getPrototypeOf(proxy)`，返回一个对象。
+- `isExtensible(target)`：拦截`Object.isExtensible(proxy)`，返回一个布尔值。
+- `setPrototypeOf(target, proto)`：拦截`Object.setPrototypeOf(proxy, proto)`，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
+- `apply(target, object, args)`：拦截 `Proxy` 实例作为函数调用的操作，比如`proxy(...args)`、`proxy.call(object, ...args)`、`proxy.apply(...)`。
+- `construct(target, args)`：拦截 `Proxy` 实例作为构造函数调用的操作，比如`new proxy(...args)`
+
+### Proxy 实例的方法
+
+#### get()
+
+`get`方法用于拦截某个属性的读取操作，可以接受三个参数，依次为目标对象、属性名和 `proxy` 实例本身（严格地说，是操作行为所针对的对象），其中最后一个参数可选。
+
+```js
+var person = {
+  name: "张三"
+};
+
+var proxy = new Proxy(person, {
+  get: function(target, propKey) {
+    if (propKey in target) {
+      return target[propKey];
+    } else {
+      throw new ReferenceError("Prop name \"" + propKey + "\" does not exist.");
+    }
+  }
+});
+
+proxy.name // "张三"
+proxy.age // 抛出一个错误
+```
+
 
 
 
