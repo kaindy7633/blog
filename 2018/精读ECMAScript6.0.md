@@ -141,6 +141,8 @@
     - [概述](#%E6%A6%82%E8%BF%B0)
     - [Proxy 实例的方法](#proxy-%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%96%B9%E6%B3%95)
       - [get()](#get)
+      - [set()](#set)
+      - [apply()](#apply)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -3757,6 +3759,78 @@ proxy.name // "张三"
 proxy.age // 抛出一个错误
 ```
 
+#### set()
+
+`set`方法用来拦截某个属性的赋值操作，可以接受四个参数，依次为目标对象、属性名、属性值和 `Proxy` 实例本身，其中最后一个参数可选
+
+```js
+let validator = {
+  set: function(obj, prop, value) {
+    if (prop === 'age') {
+      if (!Number.isInteger(value)) {
+        throw new TypeError('The age is not an integer');
+      }
+      if (value > 200) {
+        throw new RangeError('The age seems invalid');
+      }
+    }
+
+    // 对于满足条件的 age 属性以及其他属性，直接保存
+    obj[prop] = value;
+  }
+};
+
+let person = new Proxy({}, validator);
+
+person.age = 100;
+
+person.age // 100
+person.age = 'young' // 报错
+person.age = 300 // 报错
+```
+
+#### apply()
+
+`apply`方法拦截函数的调用、`call`和`apply`操作。
+
+`apply`方法可以接受三个参数，分别是目标对象、目标对象的上下文对象（`this`）和目标对象的参数数组。
+
+```js
+var handler = {
+  apply (target, ctx, args) {
+    return Reflect.apply(...arguments);
+  }
+};
+```
+
+```js
+var target = function () { return 'I am the target'; };
+var handler = {
+  apply: function () {
+    return 'I am the proxy';
+  }
+};
+
+var p = new Proxy(target, handler);
+
+p()
+// "I am the proxy"
+```
+
+```js
+var twice = {
+  apply (target, ctx, args) {
+    return Reflect.apply(...arguments) * 2;
+  }
+};
+function sum (left, right) {
+  return left + right;
+};
+var proxy = new Proxy(sum, twice);
+proxy(1, 2) // 6
+proxy.call(null, 5, 6) // 22
+proxy.apply(null, [7, 8]) // 30
+```
 
 
 
