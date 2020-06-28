@@ -6,6 +6,8 @@
   - [建立本地开发项目](#%E5%BB%BA%E7%AB%8B%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E9%A1%B9%E7%9B%AE)
     - [准备](#%E5%87%86%E5%A4%87)
     - [使用 Styleguidist](#%E4%BD%BF%E7%94%A8-styleguidist)
+    - [创建组件](#%E5%88%9B%E5%BB%BA%E7%BB%84%E4%BB%B6)
+    - [添加样式](#%E6%B7%BB%E5%8A%A0%E6%A0%B7%E5%BC%8F)
   - [对代码库进行测试](#%E5%AF%B9%E4%BB%A3%E7%A0%81%E5%BA%93%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95)
   - [发布到 NPM](#%E5%8F%91%E5%B8%83%E5%88%B0-npm)
   - [自动部署与文档](#%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E4%B8%8E%E6%96%87%E6%A1%A3)
@@ -123,6 +125,69 @@ module.exports = {
 输入`http://localhost:6060`，您应该会看到类似以下内容的信息：
 
 ![avatar](../images/use-react_01.png)
+
+### 创建组件
+
+现在代码库是空的，我们创建了项目和开发环境，现在我们需要来创建一些组件
+
+一般我们会将组件放在 `src/components` 目录中
+
+```bash
+src/
+└── components/
+    └── Button.js
+```
+
+让我们先来创建一个非常简单的 `Button` 组件，创建文件： `src/components/Button.js`，然后写入以下代码：
+
+```js
+import React from 'react';
+
+export default function Button({ text }) {
+  return <button>{text}</button>
+}
+```
+
+重启服务后，我们已经可以预览 `Button` 组件了。
+
+![avatar](../images/use-react_02.png)
+
+接着我们可以添加一个 `Button.md` 文件用来描述该组件
+
+```
+一个非常简单的 `Button` 组件
+
+使用：
+
+```jsx
+import Button from './Button';
+
+<Button text="Click Me" />
+
+```
+
+OK! 我们现在创建了第一个组件，并拥有了一个带实时预览的开发环境和可导出的文档。
+
+### 添加样式
+
+现在我们的 `Button` 组件没有任何样式，我们使用 `Emotion` 的 `CSS-in-JS` 功能来编写样式代码
+
+首先我们需要安装 `babel-plugin-emotion` 插件，并添加到 `.babelrc` 中
+
+```bash
+npm install --save-dev babel-plugin-emotion
+```
+
+```json
+// .babelrc
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": ["emotion"]
+}
+```
 
 ## 对代码库进行测试
 
