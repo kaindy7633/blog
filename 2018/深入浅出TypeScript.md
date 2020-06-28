@@ -17,6 +17,13 @@
     - [Null 和 Undefined](#null-%E5%92%8C-undefined)
     - [Symbol](#symbol)
     - [BigInt](#bigint)
+  - [Typescript中的其他类型](#typescript%E4%B8%AD%E7%9A%84%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B)
+    - [any](#any)
+    - [unknown](#unknown)
+    - [never](#never)
+    - [数组](#%E6%95%B0%E7%BB%84)
+    - [元组（Tuple）](#%E5%85%83%E7%BB%84tuple)
+    - [Object](#object)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -266,3 +273,126 @@ foo = bar; // error: Type 'bigint' is not assignable to type 'number'.
 bar = foo; // error: Type 'number' is not assignable to type 'bigint'.
 ```
 
+## Typescript中的其他类型
+
+上面我们认识了 `Typescript` 中的常见类型，在 `Typescript` 中，还有一些其他类型
+
+- 计算机类型系统理论中的顶级类型，如：`any` 和 `unknown`
+- 类型系统中的底部类型，如： `never`
+- 非原始类型，如： `object`、数组和元祖
+
+### any
+
+我们可以在需要的时候使用 `any` 类型来标记一些我们还不确定类型的变量或值，比如不希望类型检查器对这些值进行检查而是直接让它们编译通过
+
+```ts
+let notSure: any = 4;
+notSure = 'manybe a string instead';
+```
+
+`any`类型是多人协作项目的大忌，很可能把`Typescript`变成`AnyScript`，通常在不得已的情况下，不应该首先考虑使用此类型
+
+### unknown
+
+`unknown` 是 `TypeScript 3.0` 引入了新类型,是 `any` 类型对应的安全类型。
+
+`unknown` 和 `any` 的主要区别是 `unknown` 类型会更加严格:在对`unknown`类型的值执行大多数操作之前,我们必须进行某种形式的检查,而在对 `any` 类型的值执行操作之前,我们不必进行任何检查。
+
+`unknown` 与 `any` 的不同之处,虽然它们都可以是任何类型,但是当 `unknown` 类型被确定是某个类型之前,它不能被进行任何操作比如实例化、`getter`、函数执行等等
+
+`unknown` 可以帮我们缩小值的类型范围
+
+```ts
+function getValue(value: unknown): string {
+  // 这里由于把value的类型缩小为Date实例的范围内,所以`value.toISOString()`
+  if (value instanceof Date) { 
+    return value.toISOString();
+  }
+
+  return String(value);
+}
+```
+
+### never
+
+`never` 类型表示的是那些永不存在的值的类型，`never` 类型是任何类型的子类型，也可以赋值给任何类型；然而，没有类型是 `never` 的子类型或可以赋值给 `never` 类型（除了never本身之外）。
+
+即使`any`也不可以赋值给`never`。
+
+两个场景中 `never` 比较常见:
+
+```ts
+// 抛出异常的函数永远不会有返回值
+function error(message: string): never {
+    throw new Error(message);
+}
+
+// 空数组，而且永远是空的
+const empty: never[] = []
+```
+
+### 数组
+
+数组有两种类型定义方式，一种是使用泛型:
+
+```ts
+const list: Array<number> = [1, 2, 3]
+```
+
+另一种使用更加广泛那就是在元素类型后面接上 `[]`:
+
+```ts
+const list: number[] = [1, 2, 3]
+```
+
+### 元组（Tuple）
+
+元组类型与数组类型非常相似，表示一个已知元素数量和类型的数组，它跟数组的区别是各元素的类型不必相同。
+
+比如，你可以定义一对值分别为`string`和`number`类型的元组。
+
+```ts
+let x: [string, number];
+x = ['hello', 10, false] // Error
+x = ['hello'] // Error
+```
+
+元组的类型如果多出或者少于规定的类型是会报错的，必须严格跟事先声明的类型一致，即使是顺序错了，也会导致抛出异常
+
+```ts
+let x: [string, number];
+x = ['hello', 10]; // OK
+x = [10, 'hello']; // Error
+```
+
+我们可以把元组看成严格版的数组，比如`[string, number]`我们可以看成是:
+
+```ts
+interface Tuple extends Array<string | number> {
+  0: string;
+  1: number;
+  length: 2;
+}
+```
+
+元组继承于数组，但是比数组拥有更严格的类型检查。
+
+### Object
+
+`object` 表示非原始类型，也就是除 `number`，`string`，`boolean`，`symbol`，`null` 或 `undefined` 之外的类型。
+
+```ts
+// 这是下一节会提到的枚举类型
+enum Direction {
+    Center = 1
+}
+
+let value: object
+
+value = Direction
+value = [1]
+value = [1, 'hello']
+value = {}
+```
+
+我们看到,普通对象、枚举、数组、元组通通都是 `object` 类型。
