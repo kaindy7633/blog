@@ -143,6 +143,17 @@
       - [get()](#get)
       - [set()](#set)
       - [apply()](#apply)
+      - [has()](#has)
+      - [construct()](#construct)
+      - [deleteProperty()](#deleteproperty)
+      - [defineProperty()](#defineproperty)
+      - [getOwnPropertyDescriptor()](#getownpropertydescriptor)
+      - [getPrototypeOf()](#getprototypeof)
+      - [isExtensible()](#isextensible)
+      - [ownKeys()](#ownkeys)
+      - [preventExtensions()](#preventextensions)
+      - [setPrototypeOf()](#setprototypeof)
+    - [Proxy.revocable()](#proxyrevocable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -3832,5 +3843,246 @@ proxy.call(null, 5, 6) // 22
 proxy.apply(null, [7, 8]) // 30
 ```
 
+#### has()
+
+`has`方法用来拦截`HasProperty`操作，即判断对象是否具有某个属性时，这个方法会生效。典型的操作就是`in`运算符。
+
+`has`方法可以接受两个参数，分别是目标对象、需查询的属性名。
+
+下面的例子使用`has`方法隐藏某些属性，不被in运算符发现
+
+```js
+var handler = {
+  has (target, key) {
+    if (key[0] === '_') {
+      return false;
+    }
+    return key in target;
+  }
+};
+var target = { _prop: 'foo', prop: 'foo' };
+var proxy = new Proxy(target, handler);
+'_prop' in proxy // false
+```
+
+`has`方法拦截的是`HasProperty`操作，而不是`HasOwnProperty`操作，即`has`方法不判断一个属性是对象自身的属性，还是继承的属性
+
+#### construct()
+
+`construct`方法用于拦截`new`命令，下面是拦截对象的写法。
+
+```js
+var handler = {
+  construct (target, args, newTarget) {
+    return new target(...args);
+  }
+};
+```
 
 
+`construct`方法可以接受三个参数。
+
+- `target`：目标对象
+- `args`：构造函数的参数对象
+- `newTarget`：创造实例对象时，`new`命令作用的构造函数
+
+```js
+var p = new Proxy(function () {}, {
+  construct: function(target, args) {
+    console.log('called: ' + args.join(', '));
+    return { value: args[0] * 10 };
+  }
+});
+
+(new p(1)).value
+// "called: 1"
+// 10
+```
+
+`construct`方法返回的必须是一个对象，否则会报错
+
+#### deleteProperty()
+
+`deleteProperty`方法用于拦截`delete`操作，如果这个方法抛出错误或者返回`false`，当前属性就无法被`delete`命令删除。
+
+```js
+var handler = {
+  deleteProperty (target, key) {
+    invariant(key, 'delete');
+    delete target[key];
+    return true;
+  }
+};
+function invariant (key, action) {
+  if (key[0] === '_') {
+    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+  }
+}
+
+var target = { _prop: 'foo' };
+var proxy = new Proxy(target, handler);
+delete proxy._prop
+// Error: Invalid attempt to delete private "_prop" property
+```
+
+#### defineProperty()
+
+`defineProperty()`方法拦截了`Object.defineProperty()`操作。
+
+```js
+var handler = {
+  defineProperty (target, key, descriptor) {
+    return false;
+  }
+};
+var target = {};
+var proxy = new Proxy(target, handler);
+proxy.foo = 'bar' // 不会生效
+```
+
+#### getOwnPropertyDescriptor()
+
+`getOwnPropertyDescriptor()`方法拦截`Object.getOwnPropertyDescriptor()`，返回一个属性描述对象或者`undefined`。
+
+```js
+var handler = {
+  getOwnPropertyDescriptor (target, key) {
+    if (key[0] === '_') {
+      return;
+    }
+    return Object.getOwnPropertyDescriptor(target, key);
+  }
+};
+var target = { _foo: 'bar', baz: 'tar' };
+var proxy = new Proxy(target, handler);
+Object.getOwnPropertyDescriptor(proxy, 'wat')
+// undefined
+Object.getOwnPropertyDescriptor(proxy, '_foo')
+// undefined
+Object.getOwnPropertyDescriptor(proxy, 'baz')
+// { value: 'tar', writable: true, enumerable: true, configurable: true }
+```
+
+#### getPrototypeOf()
+
+`getPrototypeOf()`方法主要用来拦截获取对象原型。具体来说，拦截下面这些操作。
+
+- `Object.prototype.__proto__`
+- `Object.prototype.isPrototypeOf()`
+- `Object.getPrototypeOf()`
+- `Reflect.getPrototypeOf()`
+- `instanceof`
+
+下面是一个例子。
+
+```js
+var proto = {};
+var p = new Proxy({}, {
+  getPrototypeOf(target) {
+    return proto;
+  }
+});
+Object.getPrototypeOf(p) === proto // true
+```
+
+#### isExtensible()
+
+`isExtensible()`方法拦截`Object.isExtensible()`操作。
+
+```js
+var p = new Proxy({}, {
+  isExtensible: function(target) {
+    console.log("called");
+    return true;
+  }
+});
+
+Object.isExtensible(p)
+// "called"
+// true
+```
+
+#### ownKeys()
+
+`ownKeys()`方法用来拦截对象自身属性的读取操作。具体来说，拦截以下操作。
+
+- `Object.getOwnPropertyNames()`
+- `Object.getOwnPropertySymbols()`
+- `Object.keys()`
+- `for...in`循环
+
+下面是拦截`Object.keys()`的例子。
+
+```js
+let target = {
+  a: 1,
+  b: 2,
+  c: 3
+};
+
+let handler = {
+  ownKeys(target) {
+    return ['a'];
+  }
+};
+
+let proxy = new Proxy(target, handler);
+
+Object.keys(proxy)
+// [ 'a' ]
+```
+
+#### preventExtensions()
+
+`preventExtensions()`方法拦截`Object.preventExtensions()`。该方法必须返回一个布尔值，否则会被自动转为布尔值。
+
+这个方法有一个限制，只有目标对象不可扩展时（即`Object.isExtensible(proxy)`为`false`），`proxy.preventExtensions`才能返回`true`，否则会报错。
+
+```js
+var proxy = new Proxy({}, {
+  preventExtensions: function(target) {
+    return true;
+  }
+});
+
+Object.preventExtensions(proxy)
+// Uncaught TypeError: 'preventExtensions' on proxy: trap returned truish but the proxy target is extensible
+```
+
+#### setPrototypeOf()
+
+`setPrototypeOf()`方法主要用来拦截`Object.setPrototypeOf()`方法。
+
+下面是一个例子。
+
+```js
+var handler = {
+  setPrototypeOf (target, proto) {
+    throw new Error('Changing the prototype is forbidden');
+  }
+};
+var proto = {};
+var target = function () {};
+var proxy = new Proxy(target, handler);
+Object.setPrototypeOf(proxy, proto);
+// Error: Changing the prototype is forbidden
+```
+
+### Proxy.revocable()
+
+`Proxy.revocable()`方法返回一个可取消的 `Proxy` 实例。
+
+```js
+let target = {};
+let handler = {};
+
+let {proxy, revoke} = Proxy.revocable(target, handler);
+
+proxy.foo = 123;
+proxy.foo // 123
+
+revoke();
+proxy.foo // TypeError: Revoked
+```
+
+`Proxy.revocable()`的一个使用场景是，目标对象不允许直接访问，必须通过代理访问，一旦访问结束，就收回代理权，不允许再次访问
