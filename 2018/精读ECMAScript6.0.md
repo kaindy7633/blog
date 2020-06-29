@@ -154,6 +154,23 @@
       - [preventExtensions()](#preventextensions)
       - [setPrototypeOf()](#setprototypeof)
     - [Proxy.revocable()](#proxyrevocable)
+  - [Reflect](#reflect)
+    - [概述](#%E6%A6%82%E8%BF%B0-1)
+    - [静态方法](#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95)
+      - [Reflect.get(target, name, receiver)](#reflectgettarget-name-receiver)
+      - [Reflect.set(target, name, value, receiver)](#reflectsettarget-name-value-receiver)
+      - [Reflect.has(obj, name)](#reflecthasobj-name)
+      - [Reflect.deleteProperty(obj, name)](#reflectdeletepropertyobj-name)
+      - [Reflect.construct(target, args)](#reflectconstructtarget-args)
+      - [Reflect.getPrototypeOf(obj)](#reflectgetprototypeofobj)
+      - [Reflect.setPrototypeOf(obj, newProto)](#reflectsetprototypeofobj-newproto)
+      - [Reflect.apply(func, thisArg, args)](#reflectapplyfunc-thisarg-args)
+      - [Reflect.defineProperty(target, propertyKey, attributes)](#reflectdefinepropertytarget-propertykey-attributes)
+      - [Reflect.getOwnPropertyDescriptor(target, propertyKey)](#reflectgetownpropertydescriptortarget-propertykey)
+      - [Reflect.isExtensible (target)](#reflectisextensible-target)
+      - [Reflect.preventExtensions(target)](#reflectpreventextensionstarget)
+      - [Reflect.ownKeys (target)](#reflectownkeys-target)
+    - [实例：使用 Proxy 实现观察者模式](#%E5%AE%9E%E4%BE%8B%E4%BD%BF%E7%94%A8-proxy-%E5%AE%9E%E7%8E%B0%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -4086,3 +4103,306 @@ proxy.foo // TypeError: Revoked
 ```
 
 `Proxy.revocable()`的一个使用场景是，目标对象不允许直接访问，必须通过代理访问，一旦访问结束，就收回代理权，不允许再次访问
+
+## Reflect
+
+### 概述
+
+`Reflect`对象与`Proxy`对象一样，也是 `ES6` 为了操作对象而提供的新 `API`
+
+- 将`Object`对象的一些明显属于语言内部的方法（比如`Object.defineProperty`），放到`Reflect`对象上
+- 修改某些`Object`方法的返回结果，让其变得更合理。比如，`Object.defineProperty(obj, name, desc)`在无法定义属性时，会抛出一个错误，而`Reflect.defineProperty(obj, name, desc)`则会返回`false`
+- 让`Object`操作都变成函数行为。某些`Object`操作是命令式，比如`name in obj`和`delete obj[name]`，而`Reflect.has(obj, name)`和`Reflect.deleteProperty(obj, name)`让它们变成了函数行为
+
+  ```js
+  // 老写法
+  'assign' in Object // true
+
+  // 新写法
+  Reflect.has(Object, 'assign') // true
+  ```
+- `Reflect`对象的方法与`Proxy`对象的方法一一对应，只要是`Proxy`对象的方法，就能在`Reflect`对象上找到对应的方法。这就让`Proxy`对象可以方便地调用对应的`Reflect`方法，完成默认行为，作为修改行为的基础。也就是说，不管`Proxy`怎么修改默认行为，你总可以在`Reflect`上获取默认行为
+
+### 静态方法
+
+`Reflect`对象一共有 `13` 个静态方法。
+
+- `Reflect.apply(target, thisArg, args)`
+- `Reflect.construct(target, args)`
+- `Reflect.get(target, name, receiver)`
+- `Reflect.set(target, name, value, receiver)`
+- `Reflect.defineProperty(target, name, desc)`
+- `Reflect.deleteProperty(target, name)`
+- `Reflect.has(target, name)`
+- `Reflect.ownKeys(target)`
+- `Reflect.isExtensible(target)`
+- `Reflect.preventExtensions(target)`
+- `Reflect.getOwnPropertyDescriptor(target, name)`
+- `Reflect.getPrototypeOf(target)`
+- `Reflect.setPrototypeOf(target, prototype)`
+
+#### Reflect.get(target, name, receiver)
+
+`Reflect.get`方法查找并返回`target`对象的`name`属性，如果没有该属性，则返回`undefined`。
+
+```js
+var myObject = {
+  foo: 1,
+  bar: 2,
+  get baz() {
+    return this.foo + this.bar;
+  },
+}
+
+Reflect.get(myObject, 'foo') // 1
+Reflect.get(myObject, 'bar') // 2
+Reflect.get(myObject, 'baz') // 3
+```
+
+#### Reflect.set(target, name, value, receiver)
+
+`Reflect.set`方法设置`target`对象的`name`属性等于`value`。
+
+```js
+var myObject = {
+  foo: 1,
+  set bar(value) {
+    return this.foo = value;
+  },
+}
+
+myObject.foo // 1
+
+Reflect.set(myObject, 'foo', 2);
+myObject.foo // 2
+
+Reflect.set(myObject, 'bar', 3)
+myObject.foo // 3
+```
+
+#### Reflect.has(obj, name)
+
+`Reflect.has`方法对应`name in obj`里面的`in`运算符。
+
+```js
+var myObject = {
+  foo: 1,
+};
+
+// 旧写法
+'foo' in myObject // true
+
+// 新写法
+Reflect.has(myObject, 'foo') // true
+```
+
+#### Reflect.deleteProperty(obj, name)
+
+`Reflect.deleteProperty`方法等同于`delete obj[name]`，用于删除对象的属性。
+
+```js
+const myObj = { foo: 'bar' };
+
+// 旧写法
+delete myObj.foo;
+
+// 新写法
+Reflect.deleteProperty(myObj, 'foo');
+```
+
+该方法返回一个布尔值。如果删除成功，或者被删除的属性不存在，返回`true`；删除失败，被删除的属性依然存在，返回`false`
+
+#### Reflect.construct(target, args)
+
+`Reflect.construct`方法等同于`new target(...args)`，这提供了一种不使用`new`，来调用构造函数的方法。
+
+```js
+function Greeting(name) {
+  this.name = name;
+}
+
+// new 的写法
+const instance = new Greeting('张三');
+
+// Reflect.construct 的写法
+const instance = Reflect.construct(Greeting, ['张三']);
+```
+
+#### Reflect.getPrototypeOf(obj)
+
+`Reflect.getPrototypeOf`方法用于读取对象的`__proto__`属性，对应`Object.getPrototypeOf(obj)`。
+
+```js
+const myObj = new FancyThing();
+
+// 旧写法
+Object.getPrototypeOf(myObj) === FancyThing.prototype;
+
+// 新写法
+Reflect.getPrototypeOf(myObj) === FancyThing.prototype;
+```
+
+#### Reflect.setPrototypeOf(obj, newProto)
+
+`Reflect.setPrototypeOf`方法用于设置目标对象的原型（`prototype`），对应`Object.setPrototypeOf(obj, newProto)`方法。它返回一个布尔值，表示是否设置成功。
+
+```js
+const myObj = {};
+
+// 旧写法
+Object.setPrototypeOf(myObj, Array.prototype);
+
+// 新写法
+Reflect.setPrototypeOf(myObj, Array.prototype);
+
+myObj.length // 0
+```
+
+#### Reflect.apply(func, thisArg, args)
+
+`Reflect.apply`方法等同于`Function.prototype.apply.call(func, thisArg, args)`，用于绑定`this`对象后执行给定函数。
+
+一般来说，如果要绑定一个函数的`this`对象，可以这样写`fn.apply(obj, args)`，但是如果函数定义了自己的`apply`方法，就只能写成`Function.prototype.apply.call(fn, obj, args)`，采用`Reflect`对象可以简化这种操作。
+
+```js
+const ages = [11, 33, 12, 54, 18, 96];
+
+// 旧写法
+const youngest = Math.min.apply(Math, ages);
+const oldest = Math.max.apply(Math, ages);
+const type = Object.prototype.toString.call(youngest);
+
+// 新写法
+const youngest = Reflect.apply(Math.min, Math, ages);
+const oldest = Reflect.apply(Math.max, Math, ages);
+const type = Reflect.apply(Object.prototype.toString, youngest, []);
+```
+
+#### Reflect.defineProperty(target, propertyKey, attributes)
+
+`Reflect.defineProperty`方法基本等同于`Object.defineProperty`，用来为对象定义属性。未来，后者会被逐渐废除，请从现在开始就使用`Reflect.defineProperty`代替它。
+
+```js
+function MyDate() {
+  /*…*/
+}
+
+// 旧写法
+Object.defineProperty(MyDate, 'now', {
+  value: () => Date.now()
+});
+
+// 新写法
+Reflect.defineProperty(MyDate, 'now', {
+  value: () => Date.now()
+});
+```
+
+#### Reflect.getOwnPropertyDescriptor(target, propertyKey)
+
+`Reflect.getOwnPropertyDescriptor`基本等同于`Object.getOwnPropertyDescriptor`，用于得到指定属性的描述对象，将来会替代掉后者。
+
+```js
+var myObject = {};
+Object.defineProperty(myObject, 'hidden', {
+  value: true,
+  enumerable: false,
+});
+
+// 旧写法
+var theDescriptor = Object.getOwnPropertyDescriptor(myObject, 'hidden');
+
+// 新写法
+var theDescriptor = Reflect.getOwnPropertyDescriptor(myObject, 'hidden');
+```
+
+#### Reflect.isExtensible (target)
+
+`Reflect.isExtensible`方法对应`Object.isExtensible`，返回一个布尔值，表示当前对象是否可扩展。
+
+```js
+const myObject = {};
+
+// 旧写法
+Object.isExtensible(myObject) // true
+
+// 新写法
+Reflect.isExtensible(myObject) // true
+```
+
+#### Reflect.preventExtensions(target)
+
+`Reflect.preventExtensions`对应`Object.preventExtensions`方法，用于让一个对象变为不可扩展。它返回一个布尔值，表示是否操作成功。
+
+```js
+var myObject = {};
+
+// 旧写法
+Object.preventExtensions(myObject) // Object {}
+
+// 新写法
+Reflect.preventExtensions(myObject) // true
+```
+
+#### Reflect.ownKeys (target)
+
+`Reflect.ownKeys`方法用于返回对象的所有属性，基本等同于`Object.getOwnPropertyNames`与`Object.getOwnPropertySymbols`之和。
+
+```js
+var myObject = {
+  foo: 1,
+  bar: 2,
+  [Symbol.for('baz')]: 3,
+  [Symbol.for('bing')]: 4,
+};
+
+// 旧写法
+Object.getOwnPropertyNames(myObject)
+// ['foo', 'bar']
+
+Object.getOwnPropertySymbols(myObject)
+//[Symbol(baz), Symbol(bing)]
+
+// 新写法
+Reflect.ownKeys(myObject)
+// ['foo', 'bar', Symbol(baz), Symbol(bing)]
+```
+
+### 实例：使用 Proxy 实现观察者模式
+
+观察者模式（`Observer mode`）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行。
+
+```js
+const person = observable({
+  name: '张三',
+  age: 20
+});
+
+function print() {
+  console.log(`${person.name}, ${person.age}`)
+}
+
+observe(print);
+person.name = '李四';
+// 输出
+// 李四, 20
+```
+
+上面代码中，数据对象`person`是观察目标，函数`print`是观察者。一旦数据对象发生变化，`print`就会自动执行。
+
+下面，使用 `Proxy` 写一个观察者模式的最简单实现，即实现`observable`和`observe`这两个函数。思路是`observable`函数返回一个原始对象的 `Proxy` 代理，拦截赋值操作，触发充当观察者的各个函数。
+
+```js
+const queuedObservers = new Set();
+
+const observe = fn => queuedObservers.add(fn);
+const observable = obj => new Proxy(obj, {set});
+
+function set(target, key, value, receiver) {
+  const result = Reflect.set(target, key, value, receiver);
+  queuedObservers.forEach(observer => observer());
+  return result;
+}
+```
+
+上面代码中，先定义了一个`Set`集合，所有观察者函数都放进这个集合。然后，`observable`函数返回原始对象的代理，拦截赋值操作。拦截函数`set`之中，会自动执行所有观察者。
