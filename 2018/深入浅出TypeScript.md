@@ -24,6 +24,16 @@
     - [数组](#%E6%95%B0%E7%BB%84)
     - [元组（Tuple）](#%E5%85%83%E7%BB%84tuple)
     - [Object](#object)
+  - [枚举类型](#%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B)
+    - [数字枚举](#%E6%95%B0%E5%AD%97%E6%9E%9A%E4%B8%BE)
+    - [字符串枚举](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9E%9A%E4%B8%BE)
+    - [异构枚举](#%E5%BC%82%E6%9E%84%E6%9E%9A%E4%B8%BE)
+    - [反向映射](#%E5%8F%8D%E5%90%91%E6%98%A0%E5%B0%84)
+    - [常量枚举](#%E5%B8%B8%E9%87%8F%E6%9E%9A%E4%B8%BE)
+    - [联合枚举与枚举成员的类型](#%E8%81%94%E5%90%88%E6%9E%9A%E4%B8%BE%E4%B8%8E%E6%9E%9A%E4%B8%BE%E6%88%90%E5%91%98%E7%9A%84%E7%B1%BB%E5%9E%8B)
+    - [联合枚举类型](#%E8%81%94%E5%90%88%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B)
+    - [枚举合并](#%E6%9E%9A%E4%B8%BE%E5%90%88%E5%B9%B6)
+    - [为枚举添加静态方法](#%E4%B8%BA%E6%9E%9A%E4%B8%BE%E6%B7%BB%E5%8A%A0%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -396,3 +406,257 @@ value = {}
 ```
 
 我们看到,普通对象、枚举、数组、元组通通都是 `object` 类型。
+
+## 枚举类型
+
+枚举用于声明一组命名的常数,当一个变量有几种可能的取值时,可以将它定义为枚举类型
+
+### 数字枚举
+
+当我们声明一个枚举类型,它们的值是默认的数字类型,而且默认从`0`开始依次累加:
+
+```ts
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right
+}
+
+console.log(Direction.Up === 0); // true
+console.log(Direction.Down === 1); // true
+console.log(Direction.Left === 2); // true
+console.log(Direction.Right === 3); // true
+```
+
+当我们把第一个值赋值后,后面也会根据第一个值进行累加:
+
+```ts
+enum Direction {
+    Up = 10,
+    Down,
+    Left,
+    Right
+}
+
+console.log(Direction.Up, Direction.Down, Direction.Left, Direction.Right); 
+// 10 11 12 13
+```
+
+### 字符串枚举
+
+枚举类型的值其实也可以是字符串类型：
+
+```ts
+enum Direction {
+    Up = 'Up',
+    Down = 'Down',
+    Left = 'Left',
+    Right = 'Right'
+}
+
+console.log(Direction['Right'], Direction.Up); // Right Up
+```
+
+### 异构枚举
+
+如果字符串枚举和数字枚举混合使用，那么它就是异构枚举
+
+```ts
+enum BooleanLikeHeterogeneousEnum {
+    No = 0,
+    Yes = "YES",
+}
+```
+
+通常情况下我们很少会这样使用枚举，但是从技术的角度来说，它是可行的。
+
+### 反向映射
+
+我们看一个例子：
+
+```ts
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+console.log(Direction.Up === 0); // true
+console.log(Direction.Down === 1); // true
+console.log(Direction.Left === 2); // true
+console.log(Direction.Right === 3); // true
+```
+
+我们可以通过枚举名字获取枚举值，同时我们也可以通过枚举值获取枚举名字
+
+```ts
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+console.log(Direction[0]); // Up
+```
+
+### 常量枚举
+
+枚举其实可以被 `const` 声明为常量的, 我们看以下例子:
+
+```ts
+const enum Direction {
+    Up = 'Up',
+    Down = 'Down',
+    Left = 'Left',
+    Right = 'Right'
+}
+
+const a = Direction.Up;
+```
+
+被编译为 `JavaScript` 后:
+
+```js
+var a = "Up";
+```
+
+这就是常量枚举的作用,因为下面的变量 `a` 已经使用过了枚举类型,之后就没有用了,也没有必要存在与 `JavaScript` 中了, `TypeScript` 在这一步就把 `Direction` 去掉了,我们直接使用 `Direction` 的值即可,这是性能提升的一个方案。
+
+如果你非要 `TypeScript` 保留对象 `Direction` ,那么可以添加编译选项 `--preserveConstEnums`
+
+### 联合枚举与枚举成员的类型
+
+如果枚举的所有成员都是字面量类型的值，那么枚举的每个成员和枚举值本身都可以作为类型来使用，
+
+- 任何字符串字面量,如：
+
+  ```ts
+  const enum Direction {
+      Up = 'Up',
+      Down = 'Down',
+      Left = 'Left',
+      Right = 'Right'
+  }
+  ```
+
+- 任何数字字面量,如：
+
+  ```ts
+  enum Direction {
+      Up,
+      Down,
+      Left,
+      Right
+  }
+  ```
+
+- 应用了一元`-`符号的数字字面量,如:
+
+  ```ts
+  enum Direction {
+      Up = -1,
+      Down = -2,
+      Left = -3,
+      Right = -4,
+  }
+  ```
+
+### 联合枚举类型
+
+```ts
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+declare let a: Direction
+
+enum Animal {
+    Dog,
+    Cat
+}
+
+a = Direction.Up // ok
+a = Animal.Dog // 不能将类型“Animal.Dog”分配给类型“Direction”
+```
+
+我们把 `a` 声明为 `Direction` 类型，可以看成我们声明了一个联合类型 `Direction.Up | Direction.Down | Direction.Left | Direction.Right`，只有这四个类型其中的成员才符合要求
+
+### 枚举合并
+
+我们可以分开声明枚举,他们会自动合并
+
+```ts
+enum Direction {
+    Up = 'Up',
+    Down = 'Down',
+    Left = 'Left',
+    Right = 'Right'
+}
+
+enum Direction {
+    Center = 1
+}
+```
+
+### 为枚举添加静态方法
+
+借助 `namespace` 命名空间，我们可以给枚举添加静态方法。
+
+我们举个简单的例子，假设有十二个月份:
+
+```ts
+enum Month {
+    January,
+    February,
+    March,
+    April,
+    May,
+    June,
+    July,
+    August,
+    September,
+    October,
+    November,
+    December,
+}
+```
+
+我们要编写一个静态方法，这个方法可以帮助我们把夏天的月份找出来:
+
+```ts
+function isSummer(month: Month) {
+    switch (month) {
+        case Month.June:
+        case Month.July:
+        case Month.August:
+            return true;
+        default:
+            return false
+    }
+}
+
+想要把两者结合就需要借助命名空间的力量了:
+
+``
+namespace Month {
+    export function isSummer(month: Month) {
+        switch (month) {
+            case Month.June:
+            case Month.July:
+            case Month.August:
+                return true;
+            default:
+                return false
+        }
+    }
+}
+
+console.log(Month.isSummer(Month.January)) // false
+```
+
