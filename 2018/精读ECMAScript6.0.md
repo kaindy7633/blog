@@ -178,6 +178,14 @@
     - [Promise.prototype.catch()](#promiseprototypecatch)
     - [Promise.prototype.finally()](#promiseprototypefinally)
     - [Promise.all()](#promiseall)
+    - [Promise.race()](#promiserace)
+    - [Promise.allSettled()](#promiseallsettled)
+    - [Promise.any()](#promiseany)
+    - [Promise.resolve()](#promiseresolve)
+      - [Promise.reject()](#promisereject)
+    - [应用](#%E5%BA%94%E7%94%A8)
+      - [加载图片](#%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87)
+      - [Generator 函数与 Promise 的结合](#generator-%E5%87%BD%E6%95%B0%E4%B8%8E-promise-%E7%9A%84%E7%BB%93%E5%90%88)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -4582,4 +4590,222 @@ Promise.all(promises).then(function (posts) {
   // ...
 });
 ```
+
+### Promise.race()
+
+`Promise.race()`方法同样是将多个 `Promise` 实例，包装成一个新的 `Promise` 实例。
+
+```js
+const p = Promise.race([p1, p2, p3]);
+```
+
+上面代码中，只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。那个率先改变的 `Promise` 实例的返回值，就传递给`p`的回调函数。
+
+`Promise.race()`方法的参数与`Promise.all()`方法一样，如果不是 `Promise` 实例，就会先调用下面讲到的`Promise.resolve()`方法，将参数转为 `Promise` 实例，再进一步处理。
+
+### Promise.allSettled()
+
+`Promise.allSettled()`方法接受一组 `Promise` 实例作为参数，包装成一个新的 `Promise` 实例。只有等到所有这些参数实例都返回结果，不管是`fulfilled`还是`rejected`，包装实例才会结束。该方法由 `ES2020` 引入。
+
+```js
+const promises = [
+  fetch('/api-1'),
+  fetch('/api-2'),
+  fetch('/api-3'),
+];
+
+await Promise.allSettled(promises);
+removeLoadingIndicator();
+```
+
+该方法返回的新的 `Promise` 实例，一旦结束，状态总是`fulfilled`，不会变成`rejected`。状态变成`fulfilled`后，`Promise` 的监听函数接收到的参数是一个数组，每个成员对应一个传入`Promise.allSettled()`的 `Promise` 实例
+
+```js
+const resolved = Promise.resolve(42);
+const rejected = Promise.reject(-1);
+
+const allSettledPromise = Promise.allSettled([resolved, rejected]);
+
+allSettledPromise.then(function (results) {
+  console.log(results);
+});
+// [
+//    { status: 'fulfilled', value: 42 },
+//    { status: 'rejected', reason: -1 }
+// ]
+```
+
+```js
+const promises = [ fetch('index.html'), fetch('https://does-not-exist/') ];
+const results = await Promise.allSettled(promises);
+
+// 过滤出成功的请求
+const successfulPromises = results.filter(p => p.status === 'fulfilled');
+
+// 过滤出失败的请求，并输出原因
+const errors = results
+  .filter(p => p.status === 'rejected')
+  .map(p => p.reason);
+```
+
+### Promise.any()
+
+`Promise.any()`方法接受一组 `Promise` 实例作为参数，包装成一个新的 Promise 实例。只要参数实例有一个变成`fulfilled`状态，包装实例就会变成`fulfilled`状态；如果所有参数实例都变成`rejected`状态，包装实例就会变成`rejected`状态。该方法目前是一个第三阶段的提案 。
+
+`Promise.any()`跟`Promise.race()`方法很像，只有一点不同，就是不会因为某个 `Promise` 变成`rejected`状态而结束。
+
+```js
+const promises = [
+  fetch('/endpoint-a').then(() => 'a'),
+  fetch('/endpoint-b').then(() => 'b'),
+  fetch('/endpoint-c').then(() => 'c'),
+];
+try {
+  const first = await Promise.any(promises);
+  console.log(first);
+} catch (error) {
+  console.log(error);
+}
+```
+
+### Promise.resolve()
+
+有时需要将现有对象转为 `Promise` 对象，`Promise.resolve()`方法就起到这个作用。
+
+```js
+const jsPromise = Promise.resolve($.ajax('/whatever.json'));
+```
+
+`Promise.resolve`方法的参数分成四种情况。
+
+（1）参数是一个 `Promise` 实例
+
+如果参数是 `Promise` 实例，那么`Promise.resolve`将不做任何修改、原封不动地返回这个实例。
+
+（2）参数是一个`thenable`对象
+
+`thenable`对象指的是具有then方法的对象，比如下面这个对象。
+
+```js
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+```
+
+`Promise.resolve`方法会将这个对象转为 `Promise` 对象，然后就立即执行`thenable`对象的`then`方法。
+
+```js
+let thenable = {
+  then: function(resolve, reject) {
+    resolve(42);
+  }
+};
+
+let p1 = Promise.resolve(thenable);
+p1.then(function(value) {
+  console.log(value);  // 42
+});
+```
+
+（3）参数不是具有`then`方法的对象，或根本就不是对象
+
+如果参数是一个原始值，或者是一个不具有`then`方法的对象，则`Promise.resolve`方法返回一个新的 `Promise` 对象，状态为`resolved`。
+
+```js
+const p = Promise.resolve('Hello');
+
+p.then(function (s){
+  console.log(s)
+});
+// Hello
+```
+
+（4）不带有任何参数
+
+`Promise.resolve()`方法允许调用时不带参数，直接返回一个`resolved`状态的 `Promise` 对象。
+
+所以，如果希望得到一个 `Promise` 对象，比较方便的方法就是直接调用`Promise.resolve()`方法。
+
+```js
+const p = Promise.resolve();
+
+p.then(function () {
+  // ...
+});
+```
+
+#### Promise.reject()
+
+`Promise.reject(reason)`方法也会返回一个新的 `Promise` 实例，该实例的状态为`rejected`。
+
+```js
+const p = Promise.reject('出错了');
+// 等同于
+const p = new Promise((resolve, reject) => reject('出错了'))
+
+p.then(null, function (s) {
+  console.log(s)
+});
+// 出错了
+```
+
+### 应用
+
+#### 加载图片
+
+我们可以将图片的加载写成一个`Promise`，一旦加载完成，`Promise`的状态就发生变化。
+
+```js
+const preloadImage = function (path) {
+  return new Promise(function (resolve, reject) {
+    const image = new Image();
+    image.onload  = resolve;
+    image.onerror = reject;
+    image.src = path;
+  });
+};
+```
+
+#### Generator 函数与 Promise 的结合
+
+使用 `Generator` 函数管理流程，遇到异步操作的时候，通常返回一个`Promise`对象。
+
+```js
+function getFoo () {
+  return new Promise(function (resolve, reject){
+    resolve('foo');
+  });
+}
+
+const g = function* () {
+  try {
+    const foo = yield getFoo();
+    console.log(foo);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+function run (generator) {
+  const it = generator();
+
+  function go(result) {
+    if (result.done) return result.value;
+
+    return result.value.then(function (value) {
+      return go(it.next(value));
+    }, function (error) {
+      return go(it.throw(error));
+    });
+  }
+
+  go(it.next());
+}
+
+run(g);
+```
+
+上面代码的 `Generator` 函数`g`之中，有一个异步操作`getFoo`，它返回的就是一个`Promise`对象。函数`run`用来处理这个`Promise`对象，并调用下一个`next`方法
 
