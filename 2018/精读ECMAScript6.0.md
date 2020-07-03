@@ -186,6 +186,8 @@
     - [应用](#%E5%BA%94%E7%94%A8)
       - [加载图片](#%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87)
       - [Generator 函数与 Promise 的结合](#generator-%E5%87%BD%E6%95%B0%E4%B8%8E-promise-%E7%9A%84%E7%BB%93%E5%90%88)
+  - [Iterator 和 for...of 循环](#iterator-%E5%92%8C-forof-%E5%BE%AA%E7%8E%AF)
+    - [Iterator（遍历器）的概念](#iterator%E9%81%8D%E5%8E%86%E5%99%A8%E7%9A%84%E6%A6%82%E5%BF%B5)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -4808,4 +4810,18 @@ run(g);
 ```
 
 上面代码的 `Generator` 函数`g`之中，有一个异步操作`getFoo`，它返回的就是一个`Promise`对象。函数`run`用来处理这个`Promise`对象，并调用下一个`next`方法
+
+## Iterator 和 for...of 循环
+
+### Iterator（遍历器）的概念
+
+`JavaScript` 原有的表示“集合”的数据结构，主要是数组（`Array`）和对象（`Object`），`ES6` 又添加了`Map`和`Set`。这样就有了四种数据集合，用户还可以组合使用它们，定义自己的数据结构。这样就需要一种统一的接口机制，来处理所有不同的数据结构。
+
+遍历器（`Iterator`）就是这样一种机制。它是一种接口，为各种不同的数据结构提供统一的访问机制。任何数据结构只要部署 `Iterator` 接口，就可以完成遍历操作（即依次处理该数据结构的所有成员）
+
+`Iterator` 的作用有三个：
+
+- 为各种数据结构，提供一个统一的、简便的访问接口
+- 使得数据结构的成员能够按某种次序排列
+- `ES6` 创造了一种新的遍历命令`for...of`循环，`Iterator` 接口主要供`for...of`消费
 
