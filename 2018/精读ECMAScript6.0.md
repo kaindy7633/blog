@@ -188,6 +188,17 @@
       - [Generator 函数与 Promise 的结合](#generator-%E5%87%BD%E6%95%B0%E4%B8%8E-promise-%E7%9A%84%E7%BB%93%E5%90%88)
   - [Iterator 和 for...of 循环](#iterator-%E5%92%8C-forof-%E5%BE%AA%E7%8E%AF)
     - [Iterator（遍历器）的概念](#iterator%E9%81%8D%E5%8E%86%E5%99%A8%E7%9A%84%E6%A6%82%E5%BF%B5)
+    - [默认 Iterator 接口](#%E9%BB%98%E8%AE%A4-iterator-%E6%8E%A5%E5%8F%A3)
+    - [调用 Iterator 接口的场合](#%E8%B0%83%E7%94%A8-iterator-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%9C%BA%E5%90%88)
+    - [字符串的 Iterator 接口](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84-iterator-%E6%8E%A5%E5%8F%A3)
+    - [Iterator 接口与 Generator 函数](#iterator-%E6%8E%A5%E5%8F%A3%E4%B8%8E-generator-%E5%87%BD%E6%95%B0)
+    - [遍历器对象的 return()，throw()](#%E9%81%8D%E5%8E%86%E5%99%A8%E5%AF%B9%E8%B1%A1%E7%9A%84-returnthrow)
+    - [for...of 循环](#forof-%E5%BE%AA%E7%8E%AF)
+      - [数组](#%E6%95%B0%E7%BB%84)
+      - [Set 和 Map 结构](#set-%E5%92%8C-map-%E7%BB%93%E6%9E%84)
+      - [计算生成的数据结构](#%E8%AE%A1%E7%AE%97%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+      - [类似数组的对象](#%E7%B1%BB%E4%BC%BC%E6%95%B0%E7%BB%84%E7%9A%84%E5%AF%B9%E8%B1%A1)
+      - [对象](#%E5%AF%B9%E8%B1%A1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -4825,3 +4836,410 @@ run(g);
 - 使得数据结构的成员能够按某种次序排列
 - `ES6` 创造了一种新的遍历命令`for...of`循环，`Iterator` 接口主要供`for...of`消费
 
+### 默认 Iterator 接口
+
+`Iterator` 接口的目的，就是为所有数据结构，提供了一种统一的访问机制，即`for...of`循环。当使用`for...of`循环遍历某种数据结构时，该循环会自动去寻找 `Iterator` 接口。
+
+一种数据结构只要部署了 `Iterator` 接口，我们就称这种数据结构是“可遍历的”（`iterable`）
+
+`ES6` 规定，默认的 `Iterator` 接口部署在数据结构的`Symbol.iterator`属性，或者说，一个数据结构只要具有`Symbol.iterator`属性，就可以认为是“可遍历的”（`iterable`）
+
+`Symbol.iterator`属性本身是一个函数，就是当前数据结构默认的遍历器生成函数。执行这个函数，就会返回一个遍历器。至于属性名`Symbol.iterator`，它是一个表达式，返回`Symbol`对象的`iterator`属性，这是一个预定义好的、类型为 `Symbol` 的特殊值，所以要放在方括号内
+
+```js
+const obj = {
+  [Symbol.iterator] : function () {
+    return {
+      next: function () {
+        return {
+          value: 1,
+          done: true
+        };
+      }
+    };
+  }
+};
+```
+
+`ES6` 的有些数据结构原生具备 `Iterator` 接口（比如数组），即不用任何处理，就可以被`for...of`循环遍历, 另外一些数据结构没有（比如对象）
+
+原生具备 `Iterator` 接口的数据结构如下。
+
+- `Array`
+- `Map`
+- `Set`
+- `String`
+- `TypedArray`
+- 函数的 `arguments` 对象
+- `NodeList` 对象
+
+下面的例子是数组的`Symbol.iterator`属性。
+
+```js
+let arr = ['a', 'b', 'c'];
+let iter = arr[Symbol.iterator]();
+
+iter.next() // { value: 'a', done: false }
+iter.next() // { value: 'b', done: false }
+iter.next() // { value: 'c', done: false }
+iter.next() // { value: undefined, done: true }
+```
+
+一个对象如果要具备可被`for...of`循环调用的 `Iterator` 接口，就必须在`Symbol.iterator`的属性上部署遍历器生成方法
+
+```js
+class RangeIterator {
+  constructor(start, stop) {
+    this.value = start;
+    this.stop = stop;
+  }
+
+  [Symbol.iterator]() { return this; }
+
+  next() {
+    var value = this.value;
+    if (value < this.stop) {
+      this.value++;
+      return {done: false, value: value};
+    }
+    return {done: true, value: undefined};
+  }
+}
+
+function range(start, stop) {
+  return new RangeIterator(start, stop);
+}
+
+for (var value of range(0, 3)) {
+  console.log(value); // 0, 1, 2
+}
+```
+
+### 调用 Iterator 接口的场合
+
+有一些场合会默认调用 `Iterator` 接口（即`Symbol.iterator`方法），除了下文会介绍的for...of循环，还有几个别的场合。
+
+- 解构赋值: 对数组和 `Set` 结构进行解构赋值时，会默认调用`Symbol.iterator`方法。
+
+  ```js
+  let set = new Set().add('a').add('b').add('c');
+
+  let [x,y] = set;
+  // x='a'; y='b'
+
+  let [first, ...rest] = set;
+  // first='a'; rest=['b','c'];
+  ```
+
+- 扩展运算符: 扩展运算符（`...`）也会调用默认的 `Iterator` 接口。
+
+  ```js
+  // 例一
+  var str = 'hello';
+  [...str] //  ['h','e','l','l','o']
+
+  // 例二
+  let arr = ['b', 'c'];
+  ['a', ...arr, 'd']
+  // ['a', 'b', 'c', 'd']
+  ```
+
+- `yield*`: `yield*`后面跟的是一个可遍历的结构，它会调用该结构的遍历器接口。
+
+  ```js
+  let generator = function* () {
+    yield 1;
+    yield* [2,3,4];
+    yield 5;
+  };
+
+  var iterator = generator();
+
+  iterator.next() // { value: 1, done: false }
+  iterator.next() // { value: 2, done: false }
+  iterator.next() // { value: 3, done: false }
+  iterator.next() // { value: 4, done: false }
+  iterator.next() // { value: 5, done: false }
+  iterator.next() // { value: undefined, done: true }
+  ```
+
+- 其他场合, 由于数组的遍历会调用遍历器接口，所以任何接受数组作为参数的场合，其实都调用了遍历器接口。下面是一些例子。
+
+  - `for...of`
+  - `Array.from()`
+  - `Map()`, `Set()`, `WeakMap()`, `WeakSet()`（比如new Map([['a',1],['b',2]])）
+  - `Promise.all()`
+  - `Promise.race()`
+
+### 字符串的 Iterator 接口
+
+字符串是一个类似数组的对象，也原生具有 `Iterator` 接口。
+
+```js
+var someString = "hi";
+typeof someString[Symbol.iterator]
+// "function"
+
+var iterator = someString[Symbol.iterator]();
+
+iterator.next()  // { value: "h", done: false }
+iterator.next()  // { value: "i", done: false }
+iterator.next()  // { value: undefined, done: true }
+```
+
+可以覆盖原生的`Symbol.iterator`方法，达到修改遍历器行为的目的。
+
+```js
+var str = new String("hi");
+
+[...str] // ["h", "i"]
+
+str[Symbol.iterator] = function() {
+  return {
+    next: function() {
+      if (this._first) {
+        this._first = false;
+        return { value: "bye", done: false };
+      } else {
+        return { done: true };
+      }
+    },
+    _first: true
+  };
+};
+
+[...str] // ["bye"]
+str // "hi"
+```
+
+### Iterator 接口与 Generator 函数
+
+`Symbol.iterator`方法的最简单实现，就是 `Generator` 函数。
+
+```js
+let myIterable = {
+  [Symbol.iterator]: function* () {
+    yield 1;
+    yield 2;
+    yield 3;
+  }
+}
+[...myIterable] // [1, 2, 3]
+
+// 或者采用下面的简洁写法
+
+let obj = {
+  * [Symbol.iterator]() {
+    yield 'hello';
+    yield 'world';
+  }
+};
+
+for (let x of obj) {
+  console.log(x);
+}
+// "hello"
+// "world"
+```
+
+### 遍历器对象的 return()，throw()
+
+遍历器对象除了具有`next`方法，还可以具有`return`方法和`throw`方法。如果你自己写遍历器对象生成函数，那么`next`方法是必须部署的，`return`方法和`throw`方法是否部署是可选的。
+
+如果一个对象在完成遍历前，需要清理或释放资源，就可以部署`return`方法
+
+```js
+function readLinesSync(file) {
+  return {
+    [Symbol.iterator]() {
+      return {
+        next() {
+          return { done: false };
+        },
+        return() {
+          file.close();
+          return { done: true };
+        }
+      };
+    },
+  };
+}
+```
+
+### for...of 循环
+
+`ES6` 借鉴 `C++`、`Java`、`C#` 和 `Python` 语言，引入了`for...of`循环，作为遍历所有数据结构的统一的方法。
+
+一个数据结构只要部署了`Symbol.iterator`属性，就被视为具有 `iterator` 接口，就可以用`for...of`循环遍历它的成员。也就是说，`for...of`循环内部调用的是数据结构的`Symbol.iterator`方法。
+
+`for...of`循环可以使用的范围包括数组、`Set` 和 `Map` 结构、某些类似数组的对象（比如`arguments`对象、`DOM` `NodeList` 对象）、后文的 `Generator` 对象，以及字符串。
+
+#### 数组
+
+数组原生具备`iterator`接口（即默认部署了`Symbol.iterator`属性），`for...of`循环本质上就是调用这个接口产生的遍历器，可以用下面的代码证明。
+
+```js
+const arr = ['red', 'green', 'blue'];
+
+for(let v of arr) {
+  console.log(v); // red green blue
+}
+
+const obj = {};
+obj[Symbol.iterator] = arr[Symbol.iterator].bind(arr);
+
+for(let v of obj) {
+  console.log(v); // red green blue
+}
+```
+
+`for...of`循环可以代替数组实例的`forEach`方法。
+
+```js
+const arr = ['red', 'green', 'blue'];
+
+arr.forEach(function (element, index) {
+  console.log(element); // red green blue
+  console.log(index);   // 0 1 2
+});
+```
+
+`JavaScript` 原有的`for...in`循环，只能获得对象的键名，不能直接获取键值。`ES6` 提供`for...of`循环，允许遍历获得键值。
+
+```js
+var arr = ['a', 'b', 'c', 'd'];
+
+for (let a in arr) {
+  console.log(a); // 0 1 2 3
+}
+
+for (let a of arr) {
+  console.log(a); // a b c d
+}
+```
+
+#### Set 和 Map 结构
+
+`Set` 和 `Map` 结构也原生具有 `Iterator` 接口，可以直接使用`for...of`循环。
+
+```js
+var engines = new Set(["Gecko", "Trident", "Webkit", "Webkit"]);
+for (var e of engines) {
+  console.log(e);
+}
+// Gecko
+// Trident
+// Webkit
+
+var es6 = new Map();
+es6.set("edition", 6);
+es6.set("committee", "TC39");
+es6.set("standard", "ECMA-262");
+for (var [name, value] of es6) {
+  console.log(name + ": " + value);
+}
+// edition: 6
+// committee: TC39
+// standard: ECMA-262
+```
+
+#### 计算生成的数据结构
+
+有些数据结构是在现有数据结构的基础上，计算生成的。比如，`ES6` 的数组、`Set`、`Map` 都部署了以下三个方法，调用后都返回遍历器对象。
+
+- `entries()` 返回一个遍历器对象，用来遍历[键名, 键值]组成的数组。对于数组，键名就是索引值；对于 `Set`，键名与键值相同。`Map` 结构的 `Iterator` 接口，默认就是调用`entries`方法。
+- `keys()` 返回一个遍历器对象，用来遍历所有的键名。
+- `values()` 返回一个遍历器对象，用来遍历所有的键值。
+
+这三个方法调用后生成的遍历器对象，所遍历的都是计算生成的数据结构。
+
+```js
+let arr = ['a', 'b', 'c'];
+for (let pair of arr.entries()) {
+  console.log(pair);
+}
+// [0, 'a']
+// [1, 'b']
+// [2, 'c']
+```
+
+#### 类似数组的对象
+
+类似数组的对象包括好几类。下面是`for...of`循环用于字符串、`DOM NodeList` 对象、`arguments`对象的例子。
+
+```js
+// 字符串
+let str = "hello";
+
+for (let s of str) {
+  console.log(s); // h e l l o
+}
+
+// DOM NodeList对象
+let paras = document.querySelectorAll("p");
+
+for (let p of paras) {
+  p.classList.add("test");
+}
+
+// arguments对象
+function printArgs() {
+  for (let x of arguments) {
+    console.log(x);
+  }
+}
+printArgs('a', 'b');
+// 'a'
+// 'b'
+```
+
+#### 对象
+
+对于普通的对象，`for...of`结构不能直接使用，会报错，必须部署了 `Iterator` 接口后才能使用。但是，这样情况下，`for...in`循环依然可以用来遍历键名。
+
+```js
+let es6 = {
+  edition: 6,
+  committee: "TC39",
+  standard: "ECMA-262"
+};
+
+for (let e in es6) {
+  console.log(e);
+}
+// edition
+// committee
+// standard
+
+for (let e of es6) {
+  console.log(e);
+}
+// TypeError: es6[Symbol.iterator] is not a function
+```
+
+要获取对象的属性值，有下面两个方法：
+
+- 使用`Object.keys`方法将对象的键名生成一个数组，然后遍历这个数组。
+
+  ```js
+  for (var key of Object.keys(someObject)) {
+    console.log(key + ': ' + someObject[key]);
+  }
+  ```
+
+- 使用 `Generator` 函数将对象重新包装一下。
+
+  ```js
+  function* entries(obj) {
+    for (let key of Object.keys(obj)) {
+      yield [key, obj[key]];
+    }
+  }
+
+  for (let [key, value] of entries(obj)) {
+    console.log(key, '->', value);
+  }
+  // a -> 1
+  // b -> 2
+  // c -> 3
+  ```
