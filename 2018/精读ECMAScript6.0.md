@@ -199,6 +199,13 @@
       - [计算生成的数据结构](#%E8%AE%A1%E7%AE%97%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
       - [类似数组的对象](#%E7%B1%BB%E4%BC%BC%E6%95%B0%E7%BB%84%E7%9A%84%E5%AF%B9%E8%B1%A1)
       - [对象](#%E5%AF%B9%E8%B1%A1)
+  - [Generator 函数的语法](#generator-%E5%87%BD%E6%95%B0%E7%9A%84%E8%AF%AD%E6%B3%95)
+    - [简介](#%E7%AE%80%E4%BB%8B-1)
+      - [基本概念](#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5)
+      - [yield 表达式](#yield-%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+      - [与 Iterator 接口的关系](#%E4%B8%8E-iterator-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%B3%E7%B3%BB)
+    - [next 方法的参数](#next-%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0)
+    - [for...of 循环](#forof-%E5%BE%AA%E7%8E%AF-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -5243,3 +5250,187 @@ for (let e of es6) {
   // b -> 2
   // c -> 3
   ```
+
+## Generator 函数的语法
+
+### 简介
+
+#### 基本概念
+
+`Generator` 函数是 `ES6` 提供的一种异步编程解决方案，语法行为与传统函数完全不同
+
+语法上，首先可以把它理解成一个状态机，封装了多个内部状态。执行 `Generator` 函数会返回一个遍历器对象，也就是说，`Generator` 函数除了是状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 `Generator` 函数内部的每一个状态。
+
+形式上，`Generator` 函数是一个普通函数，但是有两个特征。一是，`function`关键字与函数名之间有一个星号；二是，函数体内部使用`yield`表达式，定义不同的内部状态。
+
+```js
+function* helloWorldGenerator() {
+  yield 'hello';
+  yield 'world';
+  return 'ending';
+}
+
+var hw = helloWorldGenerator();
+```
+
+`Generator` 函数是分段执行的，`yield`表达式是暂停执行的标记，而`next`方法可以恢复执行
+
+```js
+hw.next()
+// { value: 'hello', done: false }
+
+hw.next()
+// { value: 'world', done: false }
+
+hw.next()
+// { value: 'ending', done: true }
+
+hw.next()
+// { value: undefined, done: true }
+```
+
+调用 `Generator` 函数，返回一个遍历器对象，代表 `Generator` 函数的内部指针。以后，每次调用遍历器对象的`next`方法，就会返回一个有着`value`和`done`两个属性的对象。`value`属性表示当前的内部状态的值，是`yield`表达式后面那个表达式的值；`done`属性是一个布尔值，表示是否遍历结束
+
+#### yield 表达式
+
+由于 `Generator` 函数返回的遍历器对象，只有调用`next`方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。`yield`表达式就是暂停标志
+
+`yield`表达式后面的表达式，只有当调用`next`方法、内部指针指向该语句时才会执行，因此等于为 `JavaScript` 提供了手动的“惰性求值”（`Lazy Evaluation`）的语法功能。
+
+#### 与 Iterator 接口的关系
+
+任意一个对象的`Symbol.iterator`方法，等于该对象的遍历器生成函数，调用该函数会返回该对象的一个遍历器对象。
+
+由于 `Generator` 函数就是遍历器生成函数，因此可以把 `Generator` 赋值给对象的`Symbol.iterator`属性，从而使得该对象具有 `Iterator` 接口。
+
+```js
+var myIterable = {};
+myIterable[Symbol.iterator] = function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+};
+
+[...myIterable] // [1, 2, 3]
+```
+
+`Generator` 函数执行后，返回一个遍历器对象。该对象本身也具有`Symbol.iterator`属性，执行后返回自身。
+
+```js
+function* gen(){
+  // some code
+}
+
+var g = gen();
+
+g[Symbol.iterator]() === g
+// true
+```
+
+### next 方法的参数
+
+`yield`表达式本身没有返回值，或者说总是返回`undefined`。`next`方法可以带一个参数，该参数就会被当作上一个`yield`表达式的返回值。
+
+```js
+function* f() {
+  for(var i = 0; true; i++) {
+    var reset = yield i;
+    if(reset) { i = -1; }
+  }
+}
+
+var g = f();
+
+g.next() // { value: 0, done: false }
+g.next() // { value: 1, done: false }
+g.next(true) // { value: 0, done: false }
+```
+
+通过`next`方法的参数，就可以在 `Generator` 函数开始运行之后，向函数体内部注入值。也就是说，可以在 `Generator` 函数运行的不同阶段，从外部向内部注入不同的值，从而调整函数行为
+
+### for...of 循环
+
+`for...of`循环可以自动遍历 `Generator` 函数运行时生成的`Iterator`对象，且此时不再需要调用`next`方法。
+
+```js
+function* foo() {
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  yield 5;
+  return 6;
+}
+
+for (let v of foo()) {
+  console.log(v);
+}
+// 1 2 3 4 5
+```
+
+下面是一个利用 `Generator` 函数和`for...of`循环，实现斐波那契数列的例子。
+
+```js
+function* fibonacci() {
+  let [prev, curr] = [0, 1];
+  for (;;) {
+    yield curr;
+    [prev, curr] = [curr, prev + curr];
+  }
+}
+
+for (let n of fibonacci()) {
+  if (n > 1000) break;
+  console.log(n);
+}
+```
+
+原生的 `JavaScript` 对象没有遍历接口，无法使用`for...of`循环，通过 `Generator` 函数为它加上这个接口，就可以用了。
+
+```js
+function* objectEntries(obj) {
+  let propKeys = Reflect.ownKeys(obj);
+
+  for (let propKey of propKeys) {
+    yield [propKey, obj[propKey]];
+  }
+}
+
+let jane = { first: 'Jane', last: 'Doe' };
+
+for (let [key, value] of objectEntries(jane)) {
+  console.log(`${key}: ${value}`);
+}
+// first: Jane
+// last: Doe
+```
+
+除了`for...of`循环以外，扩展运算符（`...`）、解构赋值和`Array.from`方法内部调用的，都是遍历器接口。这意味着，它们都可以将 `Generator` 函数返回的 `Iterator` 对象，作为参数。
+
+```js
+function* numbers () {
+  yield 1
+  yield 2
+  return 3
+  yield 4
+}
+
+// 扩展运算符
+[...numbers()] // [1, 2]
+
+// Array.from 方法
+Array.from(numbers()) // [1, 2]
+
+// 解构赋值
+let [x, y] = numbers();
+x // 1
+y // 2
+
+// for...of 循环
+for (let n of numbers()) {
+  console.log(n)
+}
+// 1
+// 2
+```
+
