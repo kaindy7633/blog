@@ -34,6 +34,14 @@
     - [联合枚举类型](#%E8%81%94%E5%90%88%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B)
     - [枚举合并](#%E6%9E%9A%E4%B8%BE%E5%90%88%E5%B9%B6)
     - [为枚举添加静态方法](#%E4%B8%BA%E6%9E%9A%E4%B8%BE%E6%B7%BB%E5%8A%A0%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95)
+  - [接口(interface)](#%E6%8E%A5%E5%8F%A3interface)
+    - [接口的使用](#%E6%8E%A5%E5%8F%A3%E7%9A%84%E4%BD%BF%E7%94%A8)
+    - [可选属性](#%E5%8F%AF%E9%80%89%E5%B1%9E%E6%80%A7)
+    - [只读属性](#%E5%8F%AA%E8%AF%BB%E5%B1%9E%E6%80%A7)
+    - [函数类型](#%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B)
+    - [属性检查](#%E5%B1%9E%E6%80%A7%E6%A3%80%E6%9F%A5)
+    - [可索引类型](#%E5%8F%AF%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B)
+    - [继承接口](#%E7%BB%A7%E6%89%BF%E6%8E%A5%E5%8F%A3)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -658,5 +666,179 @@ namespace Month {
 }
 
 console.log(Month.isSummer(Month.January)) // false
+```
+
+## 接口(interface)
+
+`TypeScript` 的核心原则之一是对值所具有的结构进行类型检查,它有时被称做“鸭式辨型法”或“结构性子类型化”。
+
+在`TypeScript`里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。
+
+### 接口的使用
+
+比如我们有一个函数，这个函数接受一个 `User` 对象，然后返回这个 `User` 对象的 `name` 属性:
+
+```ts
+const getUserName = (user) => user.name  // 报错 ，参数 "user" 隐式具有 "any" 类型
+```
+
+我们必须用一种类型描述这个 `user` 参数，但是这个类型又不属于上一节介绍到的各种基本类型。
+
+这个时候我们需要 `interface` 来描述这个类型:
+
+```ts
+interface User {
+    name: string
+    age: number
+    isMale: boolean
+}
+
+const getUserName = (user: User) => user.name
+```
+
+这个接口 `User` 描述了参数 `user` 的结构，当然接口不会去检查属性的顺序，只要相应的属性存在并且类型兼容即可
+
+### 可选属性
+
+当我们定义某个 `interface` 时，其中的属性有可能是可选的，那么我们应该如何用接口描述这种情况呢?
+
+我们可以用可选属性描述这种情况, 即在属性后面加上 `?` 号
+
+```ts
+interface User {
+    name: string
+    age?: number
+    isMale: boolean
+}
+```
+
+当我们看到代码提示的时候，这个属性既可能是后面定义的类型也可能是`undefined`
+
+### 只读属性
+
+我们可以利用 `readonly` 把一个属性变成只读性质，此后我们就无法对他进行修改
+
+```ts
+interface User {
+    name: string
+    age?: number
+    readonly isMale: boolean
+}
+```
+
+一旦我们要修改只读属性，就会出现警告
+
+### 函数类型
+
+如果属性值是一个函数，该怎么描述呢?
+
+一种是直接在 `interface` 内部描述函数:
+
+```ts
+interface User {
+    name: string
+    age?: number
+    readonly isMale: boolean
+    say: (words: string) => string
+}
+```
+
+另一种方法，我们可以先用接口直接描述函数类型:
+
+```ts
+interface Say {
+    (words: string) : string
+}
+```
+
+然后再在其他类型描述中使用：
+
+```ts
+interface User {
+    name: string
+    age?: number
+    readonly isMale: boolean
+    say: Say
+}
+```
+
+### 属性检查
+
+对象字面量当被赋值给变量或作为参数传递的时候，会被特殊对待而且经过“额外属性检查”。 如果一个对象字面量存在任何“目标类型”不包含的属性时，你会得到一个错误
+
+```ts
+interface Config {
+  width?: number;
+}
+
+function  CalculateAreas(config: Config): { area: number} {
+  let square = 100;
+  if (config.width) {
+      square = config.width * config.width;
+  }
+  return {area: square};
+}
+
+let mySquare = CalculateAreas({ widdth: 5 });  // error: 'widdth' not expected in type 'Config'
+```
+
+目前，解决这类问题有三种方式：
+
+- 使用类型断言：
+
+  ```ts
+  let mySquare = CalculateAreas({ widdth: 5 } as Config);
+  ```
+
+- 添加字符串索引签名：
+
+  ```ts
+  interface Config {
+    width?: number;
+    [propName: string]: any;
+  }
+  ```
+
+- 将字面量赋值给另外一个变量：
+
+  ```ts
+  let options: any = { widdth: 5 };
+  let mySquare = CalculateAreas(options);
+  ```
+
+### 可索引类型
+
+当某个属性包含多个不确定类型值的时候，我们可以使用可索引类型表示，可索引类型具有一个索引签名，它描述了对象索引的类型，还有相应的索引返回值类型。
+
+```ts
+interface Phone {
+    [name: string]: string
+}
+
+interface User {
+    name: string
+    age?: number
+    readonly isMale: boolean
+    say: () => string
+    phone: Phone
+}
+```
+
+### 继承接口
+
+`interface` 支持继承
+
+```ts
+interface VIPUser extends User {
+    broadcast: () => void
+}
+```
+
+你甚至可以继承多个接口:
+
+```ts
+interface VIPUser extends User, SupperUser {
+    broadcast: () => void
+}
 ```
 
