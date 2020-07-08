@@ -206,6 +206,29 @@
       - [与 Iterator 接口的关系](#%E4%B8%8E-iterator-%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%85%B3%E7%B3%BB)
     - [next 方法的参数](#next-%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0)
     - [for...of 循环](#forof-%E5%BE%AA%E7%8E%AF-1)
+    - [Generator.prototype.throw()](#generatorprototypethrow)
+    - [Generator.prototype.return()](#generatorprototypereturn)
+    - [next()、throw()、return() 的共同点](#nextthrowreturn-%E7%9A%84%E5%85%B1%E5%90%8C%E7%82%B9)
+    - [yield* 表达式](#yield-%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+  - [Generator 函数的异步应用](#generator-%E5%87%BD%E6%95%B0%E7%9A%84%E5%BC%82%E6%AD%A5%E5%BA%94%E7%94%A8)
+    - [传统方法](#%E4%BC%A0%E7%BB%9F%E6%96%B9%E6%B3%95)
+    - [基本概念](#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1)
+      - [异步](#%E5%BC%82%E6%AD%A5)
+      - [回调函数](#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0)
+      - [Promise](#promise)
+    - [Generator 函数](#generator-%E5%87%BD%E6%95%B0)
+      - [协程](#%E5%8D%8F%E7%A8%8B)
+      - [协程的 Generator 函数实现](#%E5%8D%8F%E7%A8%8B%E7%9A%84-generator-%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0)
+      - [Generator 函数的数据交换和错误处理](#generator-%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BA%A4%E6%8D%A2%E5%92%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
+      - [异步任务的封装](#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%B0%81%E8%A3%85)
+    - [Thunk 函数](#thunk-%E5%87%BD%E6%95%B0)
+      - [参数的求值策略](#%E5%8F%82%E6%95%B0%E7%9A%84%E6%B1%82%E5%80%BC%E7%AD%96%E7%95%A5)
+      - [Thunk 函数的含义](#thunk-%E5%87%BD%E6%95%B0%E7%9A%84%E5%90%AB%E4%B9%89)
+      - [JavaScript 语言的 Thunk 函数](#javascript-%E8%AF%AD%E8%A8%80%E7%9A%84-thunk-%E5%87%BD%E6%95%B0)
+      - [Generator 函数的流程管理](#generator-%E5%87%BD%E6%95%B0%E7%9A%84%E6%B5%81%E7%A8%8B%E7%AE%A1%E7%90%86)
+      - [Thunk 函数的自动流程管理](#thunk-%E5%87%BD%E6%95%B0%E7%9A%84%E8%87%AA%E5%8A%A8%E6%B5%81%E7%A8%8B%E7%AE%A1%E7%90%86)
+    - [co 模块](#co-%E6%A8%A1%E5%9D%97)
+      - [基本用法](#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-2)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -5432,5 +5455,433 @@ for (let n of numbers()) {
 }
 // 1
 // 2
+```
+
+### Generator.prototype.throw()
+
+`Generator` 函数返回的遍历器对象，都有一个`throw`方法，可以在函数体外抛出错误，然后在 `Generator` 函数体内捕获。
+
+```js
+var g = function* () {
+  try {
+    yield;
+  } catch (e) {
+    console.log('内部捕获', e);
+  }
+};
+
+var i = g();
+i.next();
+
+try {
+  i.throw('a');
+  i.throw('b');
+} catch (e) {
+  console.log('外部捕获', e);
+}
+// 内部捕获 a
+// 外部捕获 b
+```
+
+`throw`方法可以接受一个参数，该参数会被`catch`语句接收，建议抛出`Error`对象的实例。
+
+```js
+var g = function* () {
+  try {
+    yield;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+var i = g();
+i.next();
+i.throw(new Error('出错了！'));
+// Error: 出错了！(…)
+```
+
+### Generator.prototype.return()
+
+`Generator` 函数返回的遍历器对象，还有一个`return`方法，可以返回给定的值，并且终结遍历 `Generator` 函数。
+
+```js
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+var g = gen();
+
+g.next()        // { value: 1, done: false }
+g.return('foo') // { value: "foo", done: true }
+g.next()        // { value: undefined, done: true }
+```
+
+### next()、throw()、return() 的共同点
+
+`next()`、`throw()`、`return()`这三个方法本质上是同一件事，可以放在一起理解。它们的作用都是让 `Generator` 函数恢复执行，并且使用不同的语句替换`yield`表达式。
+
+`next()`是将`yield`表达式替换成一个值。
+
+```js
+const g = function* (x, y) {
+  let result = yield x + y;
+  return result;
+};
+
+const gen = g(1, 2);
+gen.next(); // Object {value: 3, done: false}
+
+gen.next(1); // Object {value: 1, done: true}
+// 相当于将 let result = yield x + y
+// 替换成 let result = 1;
+```
+
+### yield* 表达式
+
+如果在 `Generator` 函数内部，调用另一个 `Generator` 函数。需要在前者的函数体内部，自己手动完成遍历。
+
+```js
+function* foo() {
+  yield 'a';
+  yield 'b';
+}
+
+function* bar() {
+  yield 'x';
+  // 手动遍历 foo()
+  for (let i of foo()) {
+    console.log(i);
+  }
+  yield 'y';
+}
+
+for (let v of bar()){
+  console.log(v);
+}
+// x
+// a
+// b
+// y
+```
+
+如果有多个 `Generator` 函数嵌套，写起来就非常麻烦。`ES6` 提供了`yield*`表达式，作为解决办法，用来在一个 `Generator` 函数里面执行另一个 `Generator` 函数
+
+```js
+function* bar() {
+  yield 'x';
+  yield* foo();
+  yield 'y';
+}
+
+// 等同于
+function* bar() {
+  yield 'x';
+  yield 'a';
+  yield 'b';
+  yield 'y';
+}
+
+// 等同于
+function* bar() {
+  yield 'x';
+  for (let v of foo()) {
+    yield v;
+  }
+  yield 'y';
+}
+
+for (let v of bar()){
+  console.log(v);
+}
+// "x"
+// "a"
+// "b"
+// "y"
+```
+
+从语法角度看，如果`yield`表达式后面跟的是一个遍历器对象，需要在`yield`表达式后面加上星号，表明它返回的是一个遍历器对象。这被称为`yield*`表达式
+
+## Generator 函数的异步应用
+
+### 传统方法
+
+`ES6` 诞生以前，异步编程的方法，大概有下面四种。
+
+- 回调函数
+- 事件监听
+- 发布/订阅
+- `Promise` 对象
+
+`Generator` 函数将 `JavaScript` 异步编程带入了一个全新的阶段
+
+### 基本概念
+
+#### 异步
+
+所谓"异步"，简单说就是一个任务不是连续完成的，可以理解成该任务被人为分成两段，先执行第一段，然后转而执行其他任务，等做好了准备，再回过头执行第二段。
+
+比如，有一个任务是读取文件进行处理，任务的第一段是向操作系统发出请求，要求读取文件。然后，程序执行其他任务，等到操作系统返回文件，再接着执行任务的第二段（处理文件）。这种不连续的执行，就叫做异步。
+
+相应地，连续的执行就叫做同步。由于是连续执行，不能插入其他任务，所以操作系统从硬盘读取文件的这段时间，程序只能干等着。
+
+#### 回调函数
+
+`JavaScript` 语言对异步编程的实现，就是回调函数。所谓回调函数，就是把任务的第二段单独写在一个函数里面，等到重新执行这个任务的时候，就直接调用这个函数。回调函数的英语名字`callback`，直译过来就是"重新调用"。
+
+读取文件进行处理，是这样写的。
+
+```js
+fs.readFile('/etc/passwd', 'utf-8', function (err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+```
+
+#### Promise
+
+回调函数的方式会造成回调函数地狱问题，`Promise` 对象就是为了解决这个问题而提出的。它不是新的语法功能，而是一种新的写法，允许将回调函数的嵌套，改成链式调用。采用 `Promise`，连续读取多个文件，写法如下。
+
+```js
+var readFile = require('fs-readfile-promise');
+
+readFile(fileA)
+.then(function (data) {
+  console.log(data.toString());
+})
+.then(function () {
+  return readFile(fileB);
+})
+.then(function (data) {
+  console.log(data.toString());
+})
+.catch(function (err) {
+  console.log(err);
+});
+```
+
+`Promise` 提供`then`方法加载回调函数，`catch`方法捕捉执行过程中抛出的错误
+
+### Generator 函数
+
+#### 协程
+
+传统的编程语言，早有异步编程的解决方案（其实是多任务的解决方案）。其中有一种叫做"协程"（`coroutine`），意思是多个线程互相协作，完成异步任务
+
+```js
+function* asyncJob() {
+  // ...其他代码
+  var f = yield readFile(fileA);
+  // ...其他代码
+}
+```
+
+`asyncJob`是一个协程，它的奥妙就在其中的`yield`命令。它表示执行到此处，执行权将交给其他协程。也就是说，`yield`命令是异步两个阶段的分界线。
+
+#### 协程的 Generator 函数实现
+
+`Generator` 函数是协程在 `ES6` 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。
+
+整个 `Generator` 函数就是一个封装的异步任务，或者说是异步任务的容器。异步操作需要暂停的地方，都用`yield`语句注明。`Generator` 函数的执行方法如下
+
+```js
+function* gen(x) {
+  var y = yield x + 2;
+  return y;
+}
+
+var g = gen(1);
+g.next() // { value: 3, done: false }
+g.next() // { value: undefined, done: true }
+```
+
+#### Generator 函数的数据交换和错误处理
+
+`Generator` 函数可以暂停执行和恢复执行，这是它能封装异步任务的根本原因。除此之外，它还有两个特性，使它可以作为异步编程的完整解决方案：函数体内外的数据交换和错误处理机制。
+
+`next`返回值的 `value` 属性，是 `Generator` 函数向外输出数据；`next`方法还可以接受参数，向 `Generator` 函数体内输入数据。
+
+```js
+function* gen(x){
+  var y = yield x + 2;
+  return y;
+}
+
+var g = gen(1);
+g.next() // { value: 3, done: false }
+g.next(2) // { value: 2, done: true }
+```
+
+`Generator` 函数内部还可以部署错误处理代码，捕获函数体外抛出的错误。
+
+```js
+function* gen(x){
+  try {
+    var y = yield x + 2;
+  } catch (e){
+    console.log(e);
+  }
+  return y;
+}
+
+var g = gen(1);
+g.next();
+g.throw('出错了');
+// 出错了
+```
+
+#### 异步任务的封装
+
+下面看看如何使用 `Generator` 函数，执行一个真实的异步任务。
+
+```js
+var fetch = require('node-fetch');
+
+function* gen(){
+  var url = 'https://api.github.com/users/github';
+  var result = yield fetch(url);
+  console.log(result.bio);
+}
+```
+
+执行这段代码的方法如下。
+
+```js
+var g = gen();
+var result = g.next();
+
+result.value.then(function(data){
+  return data.json();
+}).then(function(data){
+  g.next(data);
+});
+```
+
+### Thunk 函数
+
+`Thunk` 函数是自动执行 `Generator` 函数的一种方法。
+
+#### 参数的求值策略
+
+参数的求值策略有两种，传值调用和传名调用，传值调用比较简单，但是对参数求值的时候，实际上还没用到这个参数，有可能造成性能损失
+
+#### Thunk 函数的含义
+
+编译器的“传名调用”实现，往往是将参数放到一个临时函数之中，再将这个临时函数传入函数体。这个临时函数就叫做 `Thunk` 函数。
+
+```js
+function f(m) {
+  return m * 2;
+}
+
+f(x + 5);
+
+// 等同于
+
+var thunk = function () {
+  return x + 5;
+};
+
+function f(thunk) {
+  return thunk() * 2;
+}
+```
+
+`Thunk` 函数的定义，就是“传名调用”的一种实现策略，用来替换某个表达式。
+
+#### JavaScript 语言的 Thunk 函数
+
+`JavaScript` 语言是传值调用，它的 `Thunk` 函数含义有所不同。在 `JavaScript` 语言中，`Thunk` 函数替换的不是表达式，而是多参数函数，将其替换成一个只接受回调函数作为参数的单参数函数。
+
+```js
+// 正常版本的readFile（多参数版本）
+fs.readFile(fileName, callback);
+
+// Thunk版本的readFile（单参数版本）
+var Thunk = function (fileName) {
+  return function (callback) {
+    return fs.readFile(fileName, callback);
+  };
+};
+
+var readFileThunk = Thunk(fileName);
+readFileThunk(callback);
+```
+
+#### Generator 函数的流程管理
+
+`ES6` 有了 `Generator` 函数，`Thunk` 函数现在可以用于 `Generator` 函数的自动流程管理。
+
+`Generator` 函数可以自动执行。
+
+```js
+function* gen() {
+  // ...
+}
+
+var g = gen();
+var res = g.next();
+
+while(!res.done){
+  console.log(res.value);
+  res = g.next();
+}
+```
+
+#### Thunk 函数的自动流程管理
+
+`Thunk` 函数真正的威力，在于可以自动执行 `Generator` 函数。下面就是一个基于 `Thunk` 函数的 `Generator` 执行器。
+
+```js
+function run(fn) {
+  var gen = fn();
+
+  function next(err, data) {
+    var result = gen.next(data);
+    if (result.done) return;
+    result.value(next);
+  }
+
+  next();
+}
+
+function* g() {
+  // ...
+}
+
+run(g);
+```
+
+### co 模块
+
+#### 基本用法
+
+`co` 模块是著名程序员 `TJ Holowaychuk` 于 2013 年 6 月发布的一个小工具，用于 `Generator` 函数的自动执行。
+
+下面是一个 `Generator` 函数，用于依次读取两个文件。
+
+```js
+var gen = function* () {
+  var f1 = yield readFile('/etc/fstab');
+  var f2 = yield readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+};
+```
+
+co 模块可以让你不用编写 `Generator` 函数的执行器。
+
+```js
+var co = require('co');
+co(gen);
+```
+
+`co`函数返回一个`Promise`对象，因此可以用`then`方法添加回调函数。
+
+```js
+co(gen).then(function (){
+  console.log('Generator 函数执行完成');
+});
 ```
 
