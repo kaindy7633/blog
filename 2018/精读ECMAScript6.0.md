@@ -238,6 +238,21 @@
       - [await 命令](#await-%E5%91%BD%E4%BB%A4)
       - [错误处理](#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
   - [Class 的基本语法](#class-%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95)
+    - [简介](#%E7%AE%80%E4%BB%8B-2)
+      - [类的由来](#%E7%B1%BB%E7%9A%84%E7%94%B1%E6%9D%A5)
+      - [constructor 方法](#constructor-%E6%96%B9%E6%B3%95)
+      - [类的实例](#%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B)
+      - [取值函数（getter）和存值函数（setter）](#%E5%8F%96%E5%80%BC%E5%87%BD%E6%95%B0getter%E5%92%8C%E5%AD%98%E5%80%BC%E5%87%BD%E6%95%B0setter)
+      - [属性表达式](#%E5%B1%9E%E6%80%A7%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+      - [Class 表达式](#class-%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+      - [注意点](#%E6%B3%A8%E6%84%8F%E7%82%B9)
+    - [静态方法](#%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95-1)
+    - [实例属性的新写法](#%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7%E7%9A%84%E6%96%B0%E5%86%99%E6%B3%95)
+    - [静态属性](#%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7)
+    - [私有方法和私有属性](#%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95%E5%92%8C%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7)
+      - [现有的解决方案](#%E7%8E%B0%E6%9C%89%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+      - [私有属性的提案](#%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E7%9A%84%E6%8F%90%E6%A1%88)
+      - [new.target 属性](#newtarget-%E5%B1%9E%E6%80%A7)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -6086,3 +6101,458 @@ async function f() {
 ```
 
 ## Class 的基本语法
+
+### 简介
+
+#### 类的由来
+
+`JavaScript` 语言中，生成实例对象的传统方法是通过构造函数。下面是一个例子。
+
+```js
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+Point.prototype.toString = function () {
+  return '(' + this.x + ', ' + this.y + ')';
+};
+
+var p = new Point(1, 2);
+```
+
+`ES6` 引入了 `Class`（类）这个概念，作为对象的模板。通过`class`关键字，可以定义类。
+
+基本上，`ES6` 的`class`可以看作只是一个语法糖，它的绝大部分功能，`ES5` 都可以做到，新的`class`写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。上面的代码用 `ES6` 的`class`改写，就是下面这样。
+
+```js
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+}
+```
+
+`ES6` 的类，完全可以看作构造函数的另一种写法。
+
+```js
+class Point {
+  // ...
+}
+
+typeof Point // "function"
+Point === Point.prototype.constructor // true
+```
+
+类的数据类型就是函数，类本身就指向构造函数。
+
+使用的时候，也是直接对类使用`new`命令，跟构造函数的用法完全一致。
+
+```js
+class Bar {
+  doStuff() {
+    console.log('stuff');
+  }
+}
+
+var b = new Bar();
+b.doStuff() // "stuff"
+```
+
+#### constructor 方法
+
+`constructor`方法是类的默认方法，通过`new`命令生成对象实例时，自动调用该方法。一个类必须有`constructor`方法，如果没有显式定义，一个空的`constructor`方法会被默认添加。
+
+```js
+class Point {
+}
+
+// 等同于
+class Point {
+  constructor() {}
+}
+```
+
+`constructor`方法默认返回实例对象（即`this`），完全可以指定返回另外一个对象。
+
+```js
+class Foo {
+  constructor() {
+    return Object.create(null);
+  }
+}
+
+new Foo() instanceof Foo
+// false
+```
+
+#### 类的实例
+
+生成类的实例的写法，与 `ES5` 完全一样，也是使用`new`命令
+
+```js
+class Point {
+  // ...
+}
+
+// 报错
+var point = Point(2, 3);
+
+// 正确
+var point = new Point(2, 3);
+```
+
+实例的属性除非显式定义在其本身（即定义在`this`对象上），否则都是定义在原型上（即定义在`class`上）
+
+```js
+//定义类
+class Point {
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+
+}
+
+var point = new Point(2, 3);
+
+point.toString() // (2, 3)
+
+point.hasOwnProperty('x') // true
+point.hasOwnProperty('y') // true
+point.hasOwnProperty('toString') // false
+point.__proto__.hasOwnProperty('toString') // true
+```
+
+#### 取值函数（getter）和存值函数（setter）
+
+与 `ES5` 一样，在“类”的内部可以使用`get`和`set`关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。
+
+```js
+class MyClass {
+  constructor() {
+    // ...
+  }
+  get prop() {
+    return 'getter';
+  }
+  set prop(value) {
+    console.log('setter: '+value);
+  }
+}
+
+let inst = new MyClass();
+
+inst.prop = 123;
+// setter: 123
+
+inst.prop
+// 'getter'
+```
+
+#### 属性表达式
+
+类的属性名，可以采用表达式。
+
+```js
+let methodName = 'getArea';
+
+class Square {
+  constructor(length) {
+    // ...
+  }
+
+  [methodName]() {
+    // ...
+  }
+}
+```
+
+#### Class 表达式
+
+与函数一样，类也可以使用表达式的形式定义。
+
+```js
+const MyClass = class Me {
+  getClassName() {
+    return Me.name;
+  }
+};
+```
+
+#### 注意点
+
+（1）严格模式
+
+类和模块的内部，默认就是严格模式，所以不需要使用`use strict`指定运行模式。
+
+（2）不存在提升, 类不存在变量提升（`hoist`），这一点与 `ES5` 完全不同。
+
+```js
+new Foo(); // ReferenceError
+class Foo {}
+```
+
+（3）name 属性, 由于本质上，`ES6` 的类只是 `ES5` 的构造函数的一层包装，所以函数的许多特性都被`Class`继承，包括`name`属性。
+
+```js
+class Point {}
+Point.name // "Point"
+```
+
+（4）`Generator` 方法, 如果某个方法之前加上星号（`*`）`，就表示该方法是一个 `Generator` 函数。
+
+```js
+class Foo {
+  constructor(...args) {
+    this.args = args;
+  }
+  * [Symbol.iterator]() {
+    for (let arg of this.args) {
+      yield arg;
+    }
+  }
+}
+
+for (let x of new Foo('hello', 'world')) {
+  console.log(x);
+}
+// hello
+// world
+```
+
+（5）`this` 的指向, 类的方法内部如果含有`this`，它默认指向类的实例
+
+```js
+class Logger {
+  printName(name = 'there') {
+    this.print(`Hello ${name}`);
+  }
+
+  print(text) {
+    console.log(text);
+  }
+}
+
+const logger = new Logger();
+const { printName } = logger;
+printName(); // TypeError: Cannot read property 'print' of undefined
+```
+
+### 静态方法
+
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上`static`关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”。
+
+```js
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+Foo.classMethod() // 'hello'
+
+var foo = new Foo();
+foo.classMethod()
+// TypeError: foo.classMethod is not a function
+```
+
+注意，如果静态方法包含`this`关键字，这个`this`指的是类，而不是实例。
+
+```js
+class Foo {
+  static bar() {
+    this.baz();
+  }
+  static baz() {
+    console.log('hello');
+  }
+  baz() {
+    console.log('world');
+  }
+}
+
+Foo.bar() // hello
+```
+
+父类的静态方法，可以被子类继承。
+
+```js
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+class Bar extends Foo {
+}
+
+Bar.classMethod() // 'hello'
+```
+
+### 实例属性的新写法
+
+实例属性除了定义在`constructor()`方法里面的`this`上面，也可以定义在类的最顶层。
+
+```js
+class IncreasingCounter {
+  constructor() {
+    this._count = 0;
+  }
+  get value() {
+    console.log('Getting the current value!');
+    return this._count;
+  }
+  increment() {
+    this._count++;
+  }
+}
+```
+
+另一种写法是，这个属性也可以定义在类的最顶层，其他都不变。
+
+```js
+class IncreasingCounter {
+  _count = 0;
+  get value() {
+    console.log('Getting the current value!');
+    return this._count;
+  }
+  increment() {
+    this._count++;
+  }
+}
+```
+
+### 静态属性
+
+静态属性指的是 `Class` 本身的属性，即`Class.propName`，而不是定义在实例对象（`this`）上的属性。
+
+```js
+class Foo {
+}
+
+Foo.prop = 1;
+Foo.prop // 1
+```
+
+### 私有方法和私有属性
+
+#### 现有的解决方案
+
+私有方法和私有属性，是只能在类的内部访问的方法和属性，外部不能访问。这是常见需求，有利于代码的封装，但 `ES6` 不提供，只能通过变通方法模拟实现。
+
+一种做法是在命名上加以区别。
+
+```js
+class Widget {
+
+  // 公有方法
+  foo (baz) {
+    this._bar(baz);
+  }
+
+  // 私有方法
+  _bar(baz) {
+    return this.snaf = baz;
+  }
+
+  // ...
+}
+```
+
+上面代码中，_bar方法前面的下划线，表示这是一个只限于内部使用的私有方法。但是，这种命名是不保险的
+
+另一种方法就是索性将私有方法移出模块，因为模块内部的所有方法都是对外可见的。
+
+```js
+class Widget {
+  foo (baz) {
+    bar.call(this, baz);
+  }
+
+  // ...
+}
+
+function bar(baz) {
+  return this.snaf = baz;
+}
+```
+
+还有一种方法是利用`Symbol`值的唯一性，将私有方法的名字命名为一个Symbol值。
+
+```js
+const bar = Symbol('bar');
+const snaf = Symbol('snaf');
+
+export default class myClass{
+
+  // 公有方法
+  foo(baz) {
+    this[bar](baz);
+  }
+
+  // 私有方法
+  [bar](baz) {
+    return this[snaf] = baz;
+  }
+
+  // ...
+};
+```
+
+#### 私有属性的提案
+
+目前，有一个提案，为`class`加了私有属性。方法是在属性名之前，使用`#`表示。
+
+```js
+class IncreasingCounter {
+  #count = 0;
+  get value() {
+    console.log('Getting the current value!');
+    return this.#count;
+  }
+  increment() {
+    this.#count++;
+  }
+}
+```
+
+#### new.target 属性
+
+`new`是从构造函数生成实例对象的命令。`ES6` 为`new`命令引入了一个`new.target`属性，该属性一般用在构造函数之中，返回`new`命令作用于的那个构造函数。
+
+如果构造函数不是通过`new`命令或`Reflect.construct()`调用的，`new.target`会返回`undefined`，因此这个属性可以用来确定构造函数是怎么调用的
+
+```js
+function Person(name) {
+  if (new.target !== undefined) {
+    this.name = name;
+  } else {
+    throw new Error('必须使用 new 命令生成实例');
+  }
+}
+
+// 另一种写法
+function Person(name) {
+  if (new.target === Person) {
+    this.name = name;
+  } else {
+    throw new Error('必须使用 new 命令生成实例');
+  }
+}
+
+var person = new Person('张三'); // 正确
+var notAPerson = Person.call(person, '张三');  // 报错
+```
+
