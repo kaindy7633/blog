@@ -49,6 +49,13 @@
       - [private](#private)
       - [protected](#protected)
     - [class 可以作为接口](#class-%E5%8F%AF%E4%BB%A5%E4%BD%9C%E4%B8%BA%E6%8E%A5%E5%8F%A3)
+  - [函数(Function)](#%E5%87%BD%E6%95%B0function)
+    - [定义函数类型](#%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B)
+    - [函数的参数详解](#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3)
+      - [可选参数](#%E5%8F%AF%E9%80%89%E5%8F%82%E6%95%B0)
+      - [默认参数](#%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0)
+      - [剩余参数](#%E5%89%A9%E4%BD%99%E5%8F%82%E6%95%B0)
+    - [重载（Overload）](#%E9%87%8D%E8%BD%BDoverload)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -964,4 +971,85 @@ public static defaultProps = new Props()
 ```
 
 `Props` 的实例就是 `defaultProps` 的初始值，这就是 `class` 作为接口的实际应用，我们用一个 `class` 起到了接口和设置初始值两个作用，方便统一管理，减少了代码量。
+
+## 函数(Function)
+
+函数是 `JavaScript` 应用程序的基础,它帮助你实现抽象层、模拟类、信息隐藏和模块。
+
+在 `TypeScript` 里,虽然已经支持类、命名空间和模块,但函数仍然是主要的定义行为的地方,`TypeScript` 为 `JavaScript` 函数添加了额外的功能，让我们可以更容易地使用。
+
+### 定义函数类型
+
+在 TypeScript 中定义函数:
+
+```ts
+const add = (a: number, b: number) => a + b
+```
+
+实际上我们只定义了函数的两个参数类型，这个时候整个函数虽然没有被显式定义，但是实际上 `TypeScript` 编译器是能『感知』到这个函数的类型的
+
+### 函数的参数详解
+
+#### 可选参数
+
+一个函数的参数可能是不存在的，这就需要我们使用可选参数来定义.
+
+我们只需要在参数后面加上 `?` 即代表参数可能不存在。
+
+```ts
+const add = (a: number, b?: number) => a + (b ? b : 0)
+```
+
+参数`b`有`number`与`undefined`两种可能。
+
+#### 默认参数
+
+默认参数在 `JavaScript` 同样存在，即在参数后赋值即可。
+
+```ts
+const add = (a: number, b = 10) => a + b
+```
+
+#### 剩余参数
+
+剩余参数与`JavaScript`种的语法类似，需要用 `...` 来表示剩余参数，而剩余参数 `rest` 则是一个由`number`组成的数组，在本函数中用 `reduce` 进行了累加求和。
+
+```ts
+const add = (a: number, ...rest: number[]) => rest.reduce(((a, b) => a + b), a)
+```
+
+### 重载（Overload）
+
+```ts
+// 重载
+interface Direction {
+  top: number,
+  bottom?: number,
+  left?: number,
+  right?: number
+}
+function assigned(all: number): Direction
+function assigned(topAndBottom: number, leftAndRight: number): Direction
+function assigned(top: number, right: number, bottom: number, left: number): Direction
+
+function assigned (a: number, b?: number, c?: number, d?: number) {
+  if (b === undefined && c === undefined && d === undefined) {
+    b = c = d = a
+  } else if (c === undefined && d === undefined) {
+    c = a
+    d = b
+  }
+  return {
+    top: a,
+    right: b,
+    bottom: c,
+    left: d
+  }
+}
+
+assigned(1)
+assigned(1,2)
+assigned(1,2,3)
+assigned(1,2,3,4)
+```
 
