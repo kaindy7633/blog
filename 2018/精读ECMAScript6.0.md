@@ -253,6 +253,10 @@
       - [现有的解决方案](#%E7%8E%B0%E6%9C%89%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
       - [私有属性的提案](#%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E7%9A%84%E6%8F%90%E6%A1%88)
       - [new.target 属性](#newtarget-%E5%B1%9E%E6%80%A7)
+  - [Class 的继承](#class-%E7%9A%84%E7%BB%A7%E6%89%BF)
+    - [简介](#%E7%AE%80%E4%BB%8B-3)
+    - [Object.getPrototypeOf()](#objectgetprototypeof-1)
+    - [super 关键字](#super-%E5%85%B3%E9%94%AE%E5%AD%97-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -6554,5 +6558,88 @@ function Person(name) {
 
 var person = new Person('张三'); // 正确
 var notAPerson = Person.call(person, '张三');  // 报错
+```
+
+## Class 的继承
+
+### 简介
+
+`Class` 可以通过`extends`关键字实现继承，这比 `ES5` 的通过修改原型链实现继承，要清晰和方便很多。
+
+```js
+class Point {
+}
+
+class ColorPoint extends Point {
+}
+```
+
+```js
+class ColorPoint extends Point {
+  constructor(x, y, color) {
+    super(x, y); // 调用父类的constructor(x, y)
+    this.color = color;
+  }
+
+  toString() {
+    return this.color + ' ' + super.toString(); // 调用父类的toString()
+  }
+}
+```
+
+`super`关键字表示父类的构造函数，用来新建父类的`this`对象, 在子类的构造函数中，只有调用`super`之后，才可以使用`this`关键字，否则会报错
+
+父类的静态方法，也会被子类继承。
+
+```js
+class A {
+  static hello() {
+    console.log('hello world');
+  }
+}
+
+class B extends A {
+}
+
+B.hello()  // hello world
+```
+
+### Object.getPrototypeOf()
+
+`Object.getPrototypeOf`方法可以用来从子类上获取父类。
+
+```js
+Object.getPrototypeOf(ColorPoint) === Point
+// true
+```
+
+因此，可以使用这个方法判断，一个类是否继承了另一个类
+
+### super 关键字
+
+`super`这个关键字，既可以当作函数使用，也可以当作对象使用。在这两种情况下，它的用法完全不同。
+
+第一种情况，`super`作为函数调用时，代表父类的构造函数。`ES6` 要求，子类的构造函数必须执行一次`super`函数。
+
+```js
+class A {}
+
+class B extends A {
+  constructor() {
+    super();
+  }
+}
+```
+
+作为函数时，`super()`只能用在子类的构造函数之中，用在其他地方就会报错。
+
+```js
+class A {}
+
+class B extends A {
+  m() {
+    super(); // 报错
+  }
+}
 ```
 
