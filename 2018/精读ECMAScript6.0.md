@@ -257,6 +257,17 @@
     - [简介](#%E7%AE%80%E4%BB%8B-3)
     - [Object.getPrototypeOf()](#objectgetprototypeof-1)
     - [super 关键字](#super-%E5%85%B3%E9%94%AE%E5%AD%97-1)
+    - [类的 prototype 属性和__proto__属性](#%E7%B1%BB%E7%9A%84-prototype-%E5%B1%9E%E6%80%A7%E5%92%8C__proto__%E5%B1%9E%E6%80%A7)
+    - [原生构造函数的继承](#%E5%8E%9F%E7%94%9F%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%A7%E6%89%BF)
+    - [Mixin 模式的实现](#mixin-%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0)
+  - [Module 的语法](#module-%E7%9A%84%E8%AF%AD%E6%B3%95)
+    - [概述](#%E6%A6%82%E8%BF%B0-2)
+    - [严格模式](#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F-1)
+    - [export 命令](#export-%E5%91%BD%E4%BB%A4)
+    - [import 命令](#import-%E5%91%BD%E4%BB%A4)
+    - [模块的整体加载](#%E6%A8%A1%E5%9D%97%E7%9A%84%E6%95%B4%E4%BD%93%E5%8A%A0%E8%BD%BD)
+    - [export default 命令](#export-default-%E5%91%BD%E4%BB%A4)
+    - [import()](#import)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -6641,5 +6652,226 @@ class B extends A {
     super(); // 报错
   }
 }
+```
+
+### 类的 prototype 属性和__proto__属性
+
+大多数浏览器的 `ES5` 实现之中，每一个对象都有`__proto__`属性，指向对应的构造函数的`prototype`属性。`Class` 作为构造函数的语法糖，同时有`prototype`属性和`__proto__`属性，因此同时存在两条继承链。
+
+（1）子类的`__proto__`属性，表示构造函数的继承，总是指向父类。
+
+（2）子类`prototype`属性的`__proto__`属性，表示方法的继承，总是指向父类的`prototype`属性。
+
+```js
+class A {
+}
+
+class B extends A {
+}
+
+B.__proto__ === A // true
+B.prototype.__proto__ === A.prototype // true
+```
+
+### 原生构造函数的继承
+
+原生构造函数是指语言内置的构造函数，通常用来生成数据结构。`ECMAScript` 的原生构造函数大致有下面这些。
+
+- `Boolean()`
+- `Number()`
+- `String()`
+- `Array()`
+- `Date()`
+- `Function()`
+- `RegExp()`
+- `Error()`
+- `Object()`
+
+`ES6` 允许继承原生构造函数定义子类，因为 `ES6` 是先新建父类的实例对象`this`，然后再用子类的构造函数修饰`this`，使得父类的所有行为都可以继承。下面是一个继承`Array`的例子。
+
+```js
+class MyArray extends Array {
+  constructor(...args) {
+    super(...args);
+  }
+}
+
+var arr = new MyArray();
+arr[0] = 12;
+arr.length // 1
+
+arr.length = 0;
+arr[0] // undefined
+```
+
+### Mixin 模式的实现
+
+`Mixin` 指的是多个对象合成一个新的对象，新对象具有各个组成成员的接口。它的最简单实现如下。
+
+```js
+const a = {
+  a: 'a'
+};
+const b = {
+  b: 'b'
+};
+const c = {...a, ...b}; // {a: 'a', b: 'b'}
+```
+
+下面是一个更完备的实现，将多个类的接口“混入”（`mix in`）另一个类。
+
+```js
+function mix(...mixins) {
+  class Mix {
+    constructor() {
+      for (let mixin of mixins) {
+        copyProperties(this, new mixin()); // 拷贝实例属性
+      }
+    }
+  }
+
+  for (let mixin of mixins) {
+    copyProperties(Mix, mixin); // 拷贝静态属性
+    copyProperties(Mix.prototype, mixin.prototype); // 拷贝原型属性
+  }
+
+  return Mix;
+}
+
+function copyProperties(target, source) {
+  for (let key of Reflect.ownKeys(source)) {
+    if ( key !== 'constructor'
+      && key !== 'prototype'
+      && key !== 'name'
+    ) {
+      let desc = Object.getOwnPropertyDescriptor(source, key);
+      Object.defineProperty(target, key, desc);
+    }
+  }
+}
+```
+
+## Module 的语法
+
+### 概述
+
+历史上，`JavaScript` 一直没有模块（module）体系，无法将一个大程序拆分成互相依赖的小文件, 在 `ES6` 之前，社区制定了一些模块加载方案，最主要的有 `CommonJS` 和 `AMD` 两种。`ES6` 在语言标准的层面上，实现了模块功能, 成为浏览器和服务器通用的模块解决方案。
+
+`ES6` 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。
+
+`ES6` 模块不是对象，而是通过`export`命令显式指定输出的代码，再通过`import`命令输入。
+
+```js
+// ES6模块
+import { stat, exists, readFile } from 'fs';
+```
+
+### 严格模式
+
+`ES6` 的模块自动采用严格模式，不管你有没有在模块头部加上"use strict";。
+
+严格模式主要有以下限制。
+
+- 变量必须声明后再使用
+- 函数的参数不能有同名属性，否则报错
+- 不能使用`with`语句
+- 不能对只读属性赋值，否则报错
+- 不能使用前缀 `0` 表示八进制数，否则报错
+- 不能删除不可删除的属性，否则报错
+- 不能删除变量`delete prop`，会报错，只能删除属性`delete global[prop]`
+- `eval`不会在它的外层作用域引入变量
+- `eval`和`arguments`不能被重新赋值
+- `arguments`不会自动反映函数参数的变化
+- 不能使用`arguments.callee`
+- 不能使用`arguments.caller`
+- 禁止`this`指向全局对象
+- 不能使用`fn.caller`和`fn.arguments`获取函数调用的堆栈
+- 增加了保留字（比如`protected`、`static`和`interface`）
+
+### export 命令
+
+模块功能主要由两个命令构成：`export`和`import`。`export`命令用于规定模块的对外接口，`import`命令用于输入其他模块提供的功能。
+
+一个模块就是一个独立的文件。该文件内部的所有变量，外部无法获取。如果你希望外部能够读取模块内部的某个变量，就必须使用`export`关键字输出该变量。下面是一个 `JS` 文件，里面使用`export`命令输出变量。
+
+```js
+// profile.js
+export var firstName = 'Michael';
+export var lastName = 'Jackson';
+export var year = 1958;
+```
+
+`export`的写法，除了像上面这样，还有另外一种。
+
+```js
+// profile.js
+var firstName = 'Michael';
+var lastName = 'Jackson';
+var year = 1958;
+
+export { firstName, lastName, year };
+```
+
+### import 命令
+
+使用`export`命令定义了模块的对外接口以后，其他 `JS` 文件就可以通过`import`命令加载这个模块。
+
+```js
+// main.js
+import { firstName, lastName, year } from './profile.js';
+
+function setName(element) {
+  element.textContent = firstName + ' ' + lastName;
+}
+```
+
+如果想为输入的变量重新取一个名字，`import`命令要使用`as`关键字，将输入的变量重命名。
+
+```js
+import { lastName as surname } from './profile.js';
+```
+
+### 模块的整体加载
+
+除了指定加载某个输出值，还可以使用整体加载，即用星号（`*`）指定一个对象，所有输出值都加载在这个对象上面。
+
+```js
+import * as circle from './circle';
+
+console.log('圆面积：' + circle.area(4));
+console.log('圆周长：' + circle.circumference(14));
+```
+
+### export default 命令
+
+`export default`命令，为模块指定默认输出。
+
+```js
+// export-default.js
+export default function () {
+  console.log('foo');
+}
+```
+
+### import()
+
+`ES2020`提案 引入`import()`函数，支持动态加载模块。
+
+```js
+import(specifier)
+```
+
+`import()`返回一个 `Promise` 对象。下面是一个例子。
+
+```js
+const main = document.querySelector('main');
+
+import(`./section-modules/${someVariable}.js`)
+  .then(module => {
+    module.loadPageInto(main);
+  })
+  .catch(err => {
+    main.textContent = err.message;
+  });
 ```
 
