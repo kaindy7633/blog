@@ -280,6 +280,18 @@
     - [Map 结构](#map-%E7%BB%93%E6%9E%84)
     - [Class](#class)
     - [模块](#%E6%A8%A1%E5%9D%97)
+  - [异步遍历器](#%E5%BC%82%E6%AD%A5%E9%81%8D%E5%8E%86%E5%99%A8)
+    - [同步遍历器的问题](#%E5%90%8C%E6%AD%A5%E9%81%8D%E5%8E%86%E5%99%A8%E7%9A%84%E9%97%AE%E9%A2%98)
+    - [异步遍历的接口](#%E5%BC%82%E6%AD%A5%E9%81%8D%E5%8E%86%E7%9A%84%E6%8E%A5%E5%8F%A3)
+    - [for await...of](#for-awaitof)
+    - [异步 Generator 函数](#%E5%BC%82%E6%AD%A5-generator-%E5%87%BD%E6%95%B0)
+    - [yield* 语句](#yield-%E8%AF%AD%E5%8F%A5)
+  - [ArrayBuffer](#arraybuffer)
+    - [ArrayBuffer 对象](#arraybuffer-%E5%AF%B9%E8%B1%A1)
+      - [概述](#%E6%A6%82%E8%BF%B0-3)
+      - [ArrayBuffer.prototype.byteLength](#arraybufferprototypebytelength)
+      - [ArrayBuffer.prototype.slice()](#arraybufferprototypeslice)
+      - [ArrayBuffer.isView()](#arraybufferisview)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -7336,5 +7348,313 @@ const StyleGuide = {
 };
 
 export default StyleGuide;
+```
+
+## 异步遍历器
+
+### 同步遍历器的问题
+
+`Iterator` 接口是一种数据遍历的协议，只要调用遍历器对象的`next`方法，就会得到一个对象，表示当前遍历指针所在的那个位置的信息。`next`方法返回的对象的结构是`{value, done}`，其中value表示当前的数据的值，`done`是一个布尔值，表示遍历是否结束
+
+```js
+function idMaker() {
+  let index = 0;
+
+  return {
+    next: function() {
+      return { value: index++, done: false };
+    }
+  };
+}
+
+const it = idMaker();
+
+it.next().value // 0
+it.next().value // 1
+it.next().value // 2
+// ...
+```
+
+上面的代码中，`it.next()`方法必须是同步的，只要调用就必须立刻返回值。也就是说，一旦执行`it.next()`方法，就必须同步地得到`value`和`done`这两个属性, 如果`next()`方法返回的是一个 `Promise` 对象，这样就不行，不符合 `Iterator` 协议，只要代码里面包含异步操作都不行。也就是说，`Iterator` 协议里面`next()`方法只能包含同步操作。
+
+目前的解决方法是，将异步操作包装成 `Thunk` 函数或者 `Promise` 对象，即`next()`方法返回值的`value`属性是一个 `Thunk` 函数或者 `Promise` 对象，等待以后返回真正的值，而`done`属性则还是同步产生的
+
+```js
+function idMaker() {
+  let index = 0;
+
+  return {
+    next: function() {
+      return {
+        value: new Promise(resolve => setTimeout(() => resolve(index++), 1000)),
+        done: false
+      };
+    }
+  };
+}
+
+const it = idMaker();
+
+it.next().value.then(o => console.log(o)) // 1
+it.next().value.then(o => console.log(o)) // 2
+it.next().value.then(o => console.log(o)) // 3
+// ...
+```
+
+但上面的写法太繁琐，为此`ES2018` 引入了“异步遍历器”（`Async Iterator`），为异步操作提供原生的遍历器接口，即`value`和`done`这两个属性都是异步产生
+
+### 异步遍历的接口
+
+异步遍历器的最大的语法特点，就是调用遍历器的`next`方法，返回的是一个 `Promise` 对象。
+
+```js
+asyncIterator
+  .next()
+  .then(
+    ({ value, done }) => /* ... */
+  );
+```
+
+`asyncIterator`是一个异步遍历器，调用`next`方法以后，返回一个 `Promise` 对象。因此，可以使用`then`方法指定，这个 `Promise` 对象的状态变为`resolve`以后的回调函数。回调函数的参数，则是一个具有`value`和`done`两个属性的对象，这个跟同步遍历器是一样的
+
+一个对象的同步遍历器的接口，部署在`Symbol.iterator`属性上面。同样地，对象的异步遍历器接口，部署在`Symbol.asyncIterator`属性上面
+
+```js
+const asyncIterable = createAsyncIterable(['a', 'b']);
+const asyncIterator = asyncIterable[Symbol.asyncIterator]();
+
+asyncIterator
+.next()
+.then(iterResult1 => {
+  console.log(iterResult1); // { value: 'a', done: false }
+  return asyncIterator.next();
+})
+.then(iterResult2 => {
+  console.log(iterResult2); // { value: 'b', done: false }
+  return asyncIterator.next();
+})
+.then(iterResult3 => {
+  console.log(iterResult3); // { value: undefined, done: true }
+});
+```
+
+由于异步遍历器的`next`方法，返回的是一个 `Promise` 对象。因此，可以把它放在`await`命令后面
+
+```js
+async function f() {
+  const asyncIterable = createAsyncIterable(['a', 'b']);
+  const asyncIterator = asyncIterable[Symbol.asyncIterator]();
+  console.log(await asyncIterator.next());
+  // { value: 'a', done: false }
+  console.log(await asyncIterator.next());
+  // { value: 'b', done: false }
+  console.log(await asyncIterator.next());
+  // { value: undefined, done: true }
+}
+```
+
+### for await...of
+前面介绍过，`for...of`循环用于遍历同步的 `Iterator` 接口。新引入的`for await...of`循环，则是用于遍历异步的 `Iterator` 接口。
+
+```js
+async function f() {
+  for await (const x of createAsyncIterable(['a', 'b'])) {
+    console.log(x);
+  }
+}
+// a
+// b
+```
+
+`for await...of`循环的一个用途，是部署了 `asyncIterable` 操作的异步接口，可以直接放入这个循环。
+
+```js
+let body = '';
+
+async function f() {
+  for await(const data of req) body += data;
+  const parsed = JSON.parse(body);
+  console.log('got', parsed);
+}
+```
+
+注意，`for await...of`循环也可以用于同步遍历器。
+
+```js
+(async function () {
+  for await (const x of ['a', 'b']) {
+    console.log(x);
+  }
+})();
+// a
+// b
+```
+
+### 异步 Generator 函数
+
+就像 `Generator` 函数返回一个同步遍历器对象一样，异步 `Generator` 函数的作用，是返回一个异步遍历器对象。
+
+在语法上，异步 `Generator` 函数就是`async`函数与 `Generator` 函数的结合。
+
+```js
+async function* gen() {
+  yield 'hello';
+}
+const genObj = gen();
+genObj.next().then(x => console.log(x));
+// { value: 'hello', done: false }
+```
+
+异步遍历器的设计目的之一，就是 `Generator` 函数处理同步操作和异步操作时，能够使用同一套接口。
+
+```js
+// 同步 Generator 函数
+function* map(iterable, func) {
+  const iter = iterable[Symbol.iterator]();
+  while (true) {
+    const {value, done} = iter.next();
+    if (done) break;
+    yield func(value);
+  }
+}
+
+// 异步 Generator 函数
+async function* map(iterable, func) {
+  const iter = iterable[Symbol.asyncIterator]();
+  while (true) {
+    const {value, done} = await iter.next();
+    if (done) break;
+    yield func(value);
+  }
+}
+```
+
+### yield* 语句
+
+`yield*`语句也可以跟一个异步遍历器。
+
+```js
+async function* gen1() {
+  yield 'a';
+  yield 'b';
+  return 2;
+}
+
+async function* gen2() {
+  // result 最终会等于 2
+  const result = yield* gen1();
+}
+```
+
+## ArrayBuffer
+
+`ArrayBuffer`对象、`TypedArray`视图和`DataView`视图是 `JavaScript` 操作二进制数据的一个接口，`ES6` 将它们纳入了 `ECMAScript` 规格，并且增加了新的方法。它们都是以数组的语法处理二进制数据，所以统称为二进制数组
+
+二进制数组由三类对象组成。
+
+（1）`ArrayBuffer`对象：代表内存之中的一段二进制数据，可以通过“视图”进行操作。“视图”部署了数组接口，这意味着，可以用数组的方法操作内存。
+
+（2）`TypedArray`视图：共包括 `9` 种类型的视图，比如`Uint8Array`（无符号 `8` 位整数）数组视图, `Int16Array`（`16` 位整数）数组视图, `Float32Array`（`32` 位浮点数）数组视图等等。
+
+（3）`DataView`视图：可以自定义复合格式的视图，比如第一个字节是 `Uint8`（无符号 `8` 位整数）、第二、三个字节是 `Int16`（`16` 位整数）、第四个字节开始是 `Float32`（`32` 位浮点数）等等，此外还可以自定义字节序
+
+简单说，`ArrayBuffer`对象代表原始的二进制数据，`TypedArray`视图用来读写简单类型的二进制数据，`DataView`视图用来读写复杂类型的二进制数据。
+
+`TypedArray`视图支持的数据类型一共有 `9` 种（`DataView`视图支持除`Uint8C`以外的其他 `8` 种）。
+
+| 数据类型 | 字节长度 |	含义 | 对应的 C 语言类型 |
+| ---- | ---- | ---- | ---- |
+| Int8 | 1 | 8位带符号整数 | signed char |
+| Uint8 |	1 |	8位不带符号整数 |	unsigned char |
+| Uint8C | 1 | 8位不带符号整数（自动过滤溢出） | unsigned char |
+| Int16 |	2 |	16位带符号整数 | short |
+| Uint16 | 2 | 16位不带符号整数 |	unsigned short |
+| Int32 | 4 | 32位带符号整数 | int |
+| Uint32 | 4 | 32位不带符号的整数 |	unsigned int |
+| Float32 | 4 | 32位浮点数 | float |
+| Float64 | 8 | 64位浮点数 | double |
+
+很多浏览器操作的 API，用到了二进制数组操作二进制数据，下面是其中的几个。
+
+- `Canvas`
+- `Fetch API`
+- `File API`
+- `WebSockets`
+- `XMLHttpRequest`
+
+### ArrayBuffer 对象
+
+#### 概述
+
+`ArrayBuffer`对象代表储存二进制数据的一段内存，它不能直接读写，只能通过视图（`TypedArray`视图和`DataView`视图)来读写，视图的作用是以指定格式解读二进制数据。
+
+`ArrayBuffer`也是一个构造函数，可以分配一段可以存放数据的连续内存区域。
+
+```js
+const buf = new ArrayBuffer(32);
+```
+
+上面的代码创建了一段可读写内容的内存区域，为了读写这段内容，需要为它指定视图。`DataView`视图的创建，需要提供`ArrayBuffer`对象实例作为参数
+
+```js
+const buf = new ArrayBuffer(32);
+const dataView = new DataView(buf);
+dataView.getUint8(0) // 0
+```
+
+另一种`TypedArray`视图，与`DataView`视图的一个区别是，它不是一个构造函数，而是一组构造函数，代表不同的数据格式。
+
+```js
+const buffer = new ArrayBuffer(12);
+
+const x1 = new Int32Array(buffer);
+x1[0] = 1;
+const x2 = new Uint8Array(buffer);
+x2[0]  = 2;
+
+x1[0] // 2
+```
+
+`TypedArray`视图的构造函数，除了接受`ArrayBuffer`实例作为参数，还可以接受普通数组作为参数，直接分配内存生成底层的`ArrayBuffer`实例，并同时完成对这段内存的赋值。
+
+```js
+const typedArray = new Uint8Array([0,1,2]);
+typedArray.length // 3
+
+typedArray[0] = 5;
+typedArray // [5, 1, 2]
+```
+
+#### ArrayBuffer.prototype.byteLength
+
+`ArrayBuffer`实例的`byteLength`属性，返回所分配的内存区域的字节长度。
+
+```js
+const buffer = new ArrayBuffer(32);
+buffer.byteLength
+// 32
+```
+
+#### ArrayBuffer.prototype.slice()
+
+`ArrayBuffer`实例有一个`slice`方法，允许将内存区域的一部分，拷贝生成一个新的`ArrayBuffer`对象。
+
+```js
+const buffer = new ArrayBuffer(8);
+const newBuffer = buffer.slice(0, 3);
+```
+
+除了`slice`方法，`ArrayBuffer`对象不提供任何直接读写内存的方法，只允许在其上方建立视图，然后通过视图读写
+
+#### ArrayBuffer.isView()
+
+`ArrayBuffer`有一个静态方法`isView`，返回一个布尔值，表示参数是否为`ArrayBuffer`的视图实例。这个方法大致相当于判断参数，是否为`TypedArray`实例或`DataView`实例。
+
+```js
+const buffer = new ArrayBuffer(8);
+ArrayBuffer.isView(buffer) // false
+
+const v = new Int32Array(buffer);
+ArrayBuffer.isView(v) // true
 ```
 
