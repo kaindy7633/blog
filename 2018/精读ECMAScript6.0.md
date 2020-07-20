@@ -292,6 +292,10 @@
       - [ArrayBuffer.prototype.byteLength](#arraybufferprototypebytelength)
       - [ArrayBuffer.prototype.slice()](#arraybufferprototypeslice)
       - [ArrayBuffer.isView()](#arraybufferisview)
+    - [TypedArray 视图](#typedarray-%E8%A7%86%E5%9B%BE)
+      - [概述](#%E6%A6%82%E8%BF%B0-4)
+      - [构造函数](#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+      - [数组方法](#%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -7656,5 +7660,135 @@ ArrayBuffer.isView(buffer) // false
 
 const v = new Int32Array(buffer);
 ArrayBuffer.isView(v) // true
+```
+
+### TypedArray 视图
+
+#### 概述
+
+`ArrayBuffer`对象作为内存区域，可以存放多种类型的数据。同一段内存，不同数据有不同的解读方式，这就叫做“视图”（`view`）。`ArrayBuffer`有两种视图，一种是`TypedArray`视图，另一种是`DataView`视图。前者的数组成员都是同一个数据类型，后者的数组成员可以是不同的数据类型。
+
+目前，`TypedArray`视图一共包括 `9` 种类型，每一种视图都是一种构造函数。
+
+- `Int8Array`：8 位有符号整数，长度 1 个字节。
+- `Uint8Array`：8 位无符号整数，长度 1 个字节。
+- `Uint8ClampedArray`：8 位无符号整数，长度 1 个字节，溢出处理不同。
+- `Int16Array`：16 位有符号整数，长度 2 个字节。
+- `Uint16Array`：16 位无符号整数，长度 2 个字节。
+- `Int32Array`：32 位有符号整数，长度 4 个字节。
+- `Uint32Array`：32 位无符号整数，长度 4 个字节。
+- `Float32Array`：32 位浮点数，长度 4 个字节。
+- `Float64Array`：64 位浮点数，长度 8 个字节。
+
+这 `9` 个构造函数生成的数组，统称为`TypedArray`视图。它们很像普通数组，都有`length`属性，都能用方括号运算符（`[]`）获取单个元素，所有数组的方法，在它们上面都能使用。普通数组与 `TypedArray` 数组的差异主要在以下方面。
+
+- `TypedArray` 数组的所有成员，都是同一种类型。
+- `TypedArray` 数组的成员是连续的，不会有空位。
+- `TypedArray` 数组成员的默认值为 `0`。比如，`new Array(10)`返回一个普通数组，里面没有任何成员，只是 `10` 个空位；`new Uint8Array(10)`返回一个 `TypedArray` 数组，里面 `10` 个成员都是 `0`。
+- `TypedArray` 数组只是一层视图，本身不储存数据，它的数据都储存在底层的`ArrayBuffer`对象之中，要获取底层对象必须使用`buffer`属性
+
+#### 构造函数
+
+`TypedArray` 数组提供 `9` 种构造函数，用来生成相应类型的数组实例。
+
+构造函数有多种用法。
+
+（1）`TypedArray(buffer, byteOffset=0, length?)`
+
+同一个`ArrayBuffer`对象之上，可以根据不同的数据类型，建立多个视图。
+
+```js
+// 创建一个8字节的ArrayBuffer
+const b = new ArrayBuffer(8);
+
+// 创建一个指向b的Int32视图，开始于字节0，直到缓冲区的末尾
+const v1 = new Int32Array(b);
+
+// 创建一个指向b的Uint8视图，开始于字节2，直到缓冲区的末尾
+const v2 = new Uint8Array(b, 2);
+
+// 创建一个指向b的Int16视图，开始于字节2，长度为2
+const v3 = new Int16Array(b, 2, 2);
+```
+
+视图的构造函数可以接受三个参数：
+
+- 第一个参数（必需）：视图对应的底层`ArrayBuffer`对象。
+- 第二个参数（可选）：视图开始的字节序号，默认从 `0` 开始。
+- 第三个参数（可选）：视图包含的数据个数，默认直到本段内存区域结束。
+
+（2）`TypedArray(length)`
+
+视图还可以不通过`ArrayBuffer`对象，直接分配内存而生成。
+
+```js
+const f64a = new Float64Array(8);
+f64a[0] = 10;
+f64a[1] = 20;
+f64a[2] = f64a[0] + f64a[1];
+```
+
+（3）`TypedArray(typedArray)`
+
+`TypedArray` 数组的构造函数，可以接受另一个`TypedArray`实例作为参数。
+
+```js
+const typedArray = new Int8Array(new Uint8Array(4));
+```
+
+（4）`TypedArray(arrayLikeObject)`
+
+构造函数的参数也可以是一个普通数组，然后直接生成`TypedArray`实例。
+
+```js
+const typedArray = new Uint8Array([1, 2, 3, 4]);
+```
+
+#### 数组方法
+
+普通数组的操作方法和属性，对 `TypedArray` 数组完全适用。
+
+- `TypedArray.prototype.copyWithin(target, start[, end = this.length])`
+- `TypedArray.prototype.entries()`
+- `TypedArray.prototype.every(callbackfn, thisArg?)`
+- `TypedArray.prototype.fill(value, start=0, end=this.length)`
+- `TypedArray.prototype.filter(callbackfn, thisArg?)`
+- `TypedArray.prototype.find(predicate, thisArg?)`
+- `TypedArray.prototype.findIndex(predicate, thisArg?)`
+- `TypedArray.prototype.forEach(callbackfn, thisArg?)`
+- `TypedArray.prototype.indexOf(searchElement, fromIndex=0)`
+- `TypedArray.prototype.join(separator)`
+- `TypedArray.prototype.keys()`
+- `TypedArray.prototype.lastIndexOf(searchElement, fromIndex?)`
+- `TypedArray.prototype.map(callbackfn, thisArg?)`
+- `TypedArray.prototype.reduce(callbackfn, initialValue?)`
+- `TypedArray.prototype.reduceRight(callbackfn, initialValue?)`
+- `TypedArray.prototype.reverse()`
+- `TypedArray.prototype.slice(start=0, end=this.length)`
+- `TypedArray.prototype.some(callbackfn, thisArg?)`
+- `TypedArray.prototype.sort(comparefn)`
+- `TypedArray.prototype.toLocaleString(reserved1?, reserved2?)`
+- `TypedArray.prototype.toString()`
+- `TypedArray.prototype.values()`
+
+注意，`TypedArray` 数组没有`concat`方法。如果想要合并多个 `TypedArray` 数组，可以用下面这个函数。
+
+```js
+function concatenate(resultConstructor, ...arrays) {
+  let totalLength = 0;
+  for (let arr of arrays) {
+    totalLength += arr.length;
+  }
+  let result = new resultConstructor(totalLength);
+  let offset = 0;
+  for (let arr of arrays) {
+    result.set(arr, offset);
+    offset += arr.length;
+  }
+  return result;
+}
+
+concatenate(Uint8Array, Uint8Array.of(1, 2), Uint8Array.of(3, 4))
+// Uint8Array [1, 2, 3, 4]
 ```
 
