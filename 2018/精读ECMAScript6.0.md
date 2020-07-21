@@ -296,6 +296,28 @@
       - [概述](#%E6%A6%82%E8%BF%B0-4)
       - [构造函数](#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
       - [数组方法](#%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95)
+      - [字节序](#%E5%AD%97%E8%8A%82%E5%BA%8F)
+      - [BYTES_PER_ELEMENT 属性](#bytes_per_element-%E5%B1%9E%E6%80%A7)
+      - [ArrayBuffer 与字符串的互相转换](#arraybuffer-%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E4%BA%92%E7%9B%B8%E8%BD%AC%E6%8D%A2)
+      - [溢出](#%E6%BA%A2%E5%87%BA)
+      - [TypedArray.prototype.buffer](#typedarrayprototypebuffer)
+      - [TypedArray.prototype.byteLength，TypedArray.prototype.byteOffset](#typedarrayprototypebytelengthtypedarrayprototypebyteoffset)
+      - [TypedArray.prototype.length](#typedarrayprototypelength)
+      - [TypedArray.prototype.set()](#typedarrayprototypeset)
+      - [TypedArray.prototype.subarray()](#typedarrayprototypesubarray)
+      - [TypedArray.prototype.slice()](#typedarrayprototypeslice)
+      - [TypedArray.of()](#typedarrayof)
+      - [TypedArray.from()](#typedarrayfrom)
+    - [复合视图](#%E5%A4%8D%E5%90%88%E8%A7%86%E5%9B%BE)
+    - [DataView 视图](#dataview-%E8%A7%86%E5%9B%BE)
+    - [二进制数组的应用](#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E7%BB%84%E7%9A%84%E5%BA%94%E7%94%A8)
+      - [AJAX](#ajax)
+      - [Canvas](#canvas)
+      - [WebSocket](#websocket)
+      - [Fetch API](#fetch-api)
+      - [File API](#file-api)
+    - [SharedArrayBuffer](#sharedarraybuffer)
+    - [Atomics 对象](#atomics-%E5%AF%B9%E8%B1%A1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -7792,3 +7814,431 @@ concatenate(Uint8Array, Uint8Array.of(1, 2), Uint8Array.of(3, 4))
 // Uint8Array [1, 2, 3, 4]
 ```
 
+另外，`TypedArray` 数组与普通数组一样，部署了 `Iterator` 接口，所以可以被遍历。
+
+```js
+let ui8 = Uint8Array.of(0, 1, 2);
+for (let byte of ui8) {
+  console.log(byte);
+}
+// 0
+// 1
+// 2
+```
+
+#### 字节序
+
+字节序指的是数值在内存中的表示方式。
+
+```js
+const buffer = new ArrayBuffer(16);
+const int32View = new Int32Array(buffer);
+
+for (let i = 0; i < int32View.length; i++) {
+  int32View[i] = i * 2;
+}
+```
+
+#### BYTES_PER_ELEMENT 属性
+
+每一种视图的构造函数，都有一个`BYTES_PER_ELEMENT`属性，表示这种数据类型占据的字节数。
+
+```js
+Int8Array.BYTES_PER_ELEMENT // 1
+Uint8Array.BYTES_PER_ELEMENT // 1
+Uint8ClampedArray.BYTES_PER_ELEMENT // 1
+Int16Array.BYTES_PER_ELEMENT // 2
+Uint16Array.BYTES_PER_ELEMENT // 2
+Int32Array.BYTES_PER_ELEMENT // 4
+Uint32Array.BYTES_PER_ELEMENT // 4
+Float32Array.BYTES_PER_ELEMENT // 4
+Float64Array.BYTES_PER_ELEMENT // 8
+```
+
+这个属性在`TypedArray`实例上也能获取，即有`TypedArray.prototype.BYTES_PER_ELEMENT`
+
+#### ArrayBuffer 与字符串的互相转换
+
+`ArrayBuffer` 和字符串的相互转换，使用原生 `TextEncoder` 和 `TextDecoder` 方法。为了便于说明用法，下面的代码都按照 `TypeScript` 的用法，给出了类型签名。
+
+```ts
+/**
+ * Convert ArrayBuffer/TypedArray to String via TextDecoder
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/TextDecoder
+ */
+function ab2str(
+  input: ArrayBuffer | Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Array | Int32Array,
+  outputEncoding: string = 'utf8',
+): string {
+  const decoder = new TextDecoder(outputEncoding)
+  return decoder.decode(input)
+}
+
+/**
+ * Convert String to ArrayBuffer via TextEncoder
+ *
+ * @see https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoder
+ */
+function str2ab(input: string): ArrayBuffer {
+  const view = str2Uint8Array(input)
+  return view.buffer
+}
+
+/** Convert String to Uint8Array */
+function str2Uint8Array(input: string): Uint8Array {
+  const encoder = new TextEncoder()
+  const view = encoder.encode(input)
+  return view
+}
+```
+
+#### 溢出
+
+不同的视图类型，所能容纳的数值范围是确定的。超出这个范围，就会出现溢出。比如，`8` 位视图只能容纳一个 `8` 位的二进制值，如果放入一个 `9` 位的值，就会溢出。
+
+`TypedArray` 数组的溢出处理规则，简单来说，就是抛弃溢出的位，然后按照视图类型进行解释。
+
+```js
+const uint8 = new Uint8Array(1);
+
+uint8[0] = 256;
+uint8[0] // 0
+
+uint8[0] = -1;
+uint8[0] // 255
+```
+
+#### TypedArray.prototype.buffer
+
+`TypedArray`实例的`buffer`属性，返回整段内存区域对应的`ArrayBuffer`对象。该属性为只读属性。
+
+```js
+const a = new Float32Array(64);
+const b = new Uint8Array(a.buffer);
+```
+
+#### TypedArray.prototype.byteLength，TypedArray.prototype.byteOffset
+
+`byteLength`属性返回 `TypedArray` 数组占据的内存长度，单位为字节。`byteOffset`属性返回 `TypedArray` 数组从底层`ArrayBuffer`对象的哪个字节开始。这两个属性都是只读属性。
+
+```js
+const b = new ArrayBuffer(8);
+
+const v1 = new Int32Array(b);
+const v2 = new Uint8Array(b, 2);
+const v3 = new Int16Array(b, 2, 2);
+
+v1.byteLength // 8
+v2.byteLength // 6
+v3.byteLength // 4
+
+v1.byteOffset // 0
+v2.byteOffset // 2
+v3.byteOffset // 2
+```
+
+#### TypedArray.prototype.length
+
+`length`属性表示 `TypedArray` 数组含有多少个成员。注意将 `length` 属性和 `byteLength` 属性区分，前者是成员长度，后者是字节长度。
+
+```js
+const a = new Int16Array(8);
+
+a.length // 8
+a.byteLength // 16
+```
+
+#### TypedArray.prototype.set()
+
+`TypedArray` 数组的`set`方法用于复制数组（普通数组或 `TypedArray` 数组），也就是将一段内容完全复制到另一段内存。
+
+```js
+const a = new Uint8Array(8);
+const b = new Uint8Array(8);
+
+b.set(a);
+```
+
+`set`方法还可以接受第二个参数，表示从b对象的哪一个成员开始复制a对象。
+
+```js
+const a = new Uint16Array(8);
+const b = new Uint16Array(10);
+
+b.set(a, 2)
+```
+
+#### TypedArray.prototype.subarray()
+
+`subarray`方法是对于 `TypedArray` 数组的一部分，再建立一个新的视图。
+
+```js
+const a = new Uint16Array(8);
+const b = a.subarray(2,3);
+
+a.byteLength // 16
+b.byteLength // 2
+```
+
+#### TypedArray.prototype.slice()
+
+`TypeArray` 实例的`slice`方法，可以返回一个指定位置的新的`TypedArray`实例。
+
+```js
+let ui8 = Uint8Array.of(0, 1, 2);
+ui8.slice(-1)
+// Uint8Array [ 2 ]
+```
+
+#### TypedArray.of()
+
+`TypedArray` 数组的所有构造函数，都有一个静态方法`of`，用于将参数转为一个`TypedArray`实例。
+
+```js
+Float32Array.of(0.151, -8, 3.7)
+// Float32Array [ 0.151, -8, 3.7 ]
+```
+
+#### TypedArray.from()
+
+静态方法`from`接受一个可遍历的数据结构（比如数组）作为参数，返回一个基于这个结构的`TypedArray`实例。
+
+```js
+Uint16Array.from([0, 1, 2])
+// Uint16Array [ 0, 1, 2 ]
+```
+
+### 复合视图
+
+由于视图的构造函数可以指定起始位置和长度，所以在同一段内存之中，可以依次存放不同类型的数据，这叫做“复合视图”。
+
+```js
+const buffer = new ArrayBuffer(24);
+
+const idView = new Uint32Array(buffer, 0, 1);
+const usernameView = new Uint8Array(buffer, 4, 16);
+const amountDueView = new Float32Array(buffer, 20, 1);
+```
+
+### DataView 视图
+
+如果一段数据包括多种类型（比如服务器传来的 `HTTP` 数据），这时除了建立`ArrayBuffer`对象的复合视图以外，还可以通过`DataView`视图进行操作。
+
+`DataView`视图提供更多操作选项，而且支持设定字节序。本来，在设计目的上，`ArrayBuffer`对象的各种`TypedArray`视图，是用来向网卡、声卡之类的本机设备传送数据，所以使用本机的字节序就可以了；而`DataView`视图的设计目的，是用来处理网络设备传来的数据，所以大端字节序或小端字节序是可以自行设定的。
+
+`DataView`视图本身也是构造函数，接受一个`ArrayBuffer`对象作为参数，生成视图。
+
+```js
+new DataView(ArrayBuffer buffer [, 字节起始位置 [, 长度]]);
+```
+
+```js
+const buffer = new ArrayBuffer(24);
+const dv = new DataView(buffer);
+```
+
+`DataView`实例有以下属性，含义与`TypedArray`实例的同名方法相同。
+
+- `DataView.prototype.buffer`：返回对应的 `ArrayBuffer` 对象
+- `DataView.prototype.byteLength`：返回占据的内存字节长度
+- `DataView.prototype.byteOffset`：返回当前视图从对应的 `ArrayBuffer` 对象的哪个字节开始
+
+`DataView`实例提供 `8` 个方法读取内存。
+
+- `getInt8`：读取 1 个字节，返回一个 8 位整数。
+- `getUint8`：读取 1 个字节，返回一个无符号的 8 位整数。
+- `getInt16`：读取 2 个字节，返回一个 16 位整数。
+- `getUint16`：读取 2 个字节，返回一个无符号的 16 位整数。
+- `getInt32`：读取 4 个字节，返回一个 32 位整数。
+- `getUint32`：读取 4 个字节，返回一个无符号的 32 位整数。
+- `getFloat32`：读取 4 个字节，返回一个 32 位浮点数。
+- `getFloat64`：读取 8 个字节，返回一个 64 位浮点数。
+
+`DataView` 视图提供 `8` 个方法写入内存。
+
+- `setInt8`：写入 1 个字节的 8 位整数。
+- `setUint8`：写入 1 个字节的 8 位无符号整数。
+- `setInt16`：写入 2 个字节的 16 位整数。
+- `setUint16`：写入 2 个字节的 16 位无符号整数。
+- `setInt32`：写入 4 个字节的 32 位整数。
+- `setUint32`：写入 4 个字节的 32 位无符号整数。
+- `setFloat32`：写入 4 个字节的 32 位浮点数。
+- `setFloat64`：写入 8 个字节的 64 位浮点数。
+
+### 二进制数组的应用
+
+大量的 `Web API` 用到了`ArrayBuffer`对象和它的视图对象。
+
+#### AJAX
+
+传统上，服务器通过 `AJAX` 操作只能返回文本数据，即`responseType`属性默认为`text`。`XMLHttpRequest`第二版`XHR2`允许服务器返回二进制数据，这时分成两种情况。如果明确知道返回的二进制数据类型，可以把返回类型（`responseType`）设为`arraybuffer`；如果不知道，就设为`blob`。
+
+```js
+let xhr = new XMLHttpRequest();
+xhr.open('GET', someUrl);
+xhr.responseType = 'arraybuffer';
+
+xhr.onload = function () {
+  let arrayBuffer = xhr.response;
+  // ···
+};
+
+xhr.send();
+```
+
+#### Canvas
+
+网页`Canvas`元素输出的二进制像素数据，就是 `TypedArray` 数组。
+
+```js
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+const uint8ClampedArray = imageData.data;
+```
+
+#### WebSocket
+
+`WebSocket`可以通过`ArrayBuffer`，发送或接收二进制数据。
+
+```js
+let socket = new WebSocket('ws://127.0.0.1:8081');
+socket.binaryType = 'arraybuffer';
+
+// Wait until socket is open
+socket.addEventListener('open', function (event) {
+  // Send binary data
+  const typedArray = new Uint8Array(4);
+  socket.send(typedArray.buffer);
+});
+
+// Receive binary data
+socket.addEventListener('message', function (event) {
+  const arrayBuffer = event.data;
+  // ···
+});
+```
+
+#### Fetch API
+
+`Fetch API` 取回的数据，就是`ArrayBuffer`对象。
+
+```js
+fetch(url)
+.then(function(response){
+  return response.arrayBuffer()
+})
+.then(function(arrayBuffer){
+  // ...
+});
+```
+
+#### File API
+
+如果知道一个文件的二进制数据类型，也可以将这个文件读取为`ArrayBuffer`对象。
+
+```js
+const fileInput = document.getElementById('fileInput');
+const file = fileInput.files[0];
+const reader = new FileReader();
+reader.readAsArrayBuffer(file);
+reader.onload = function () {
+  const arrayBuffer = reader.result;
+  // ···
+};
+```
+
+### SharedArrayBuffer
+
+`JavaScript` 是单线程的，`Web worker` 引入了多线程：主线程用来与用户互动，`Worker` 线程用来承担计算任务。每个线程的数据都是隔离的，通过`postMessage()`通信。下面是一个例子。
+
+```js
+// 主线程
+const w = new Worker('myworker.js');
+```
+
+主线程通过`w.postMessage`向 `Worker` 线程发消息，同时通过`message`事件监听 `Worker` 线程的回应。
+
+```js
+// 主线程
+w.postMessage('hi');
+w.onmessage = function (ev) {
+  console.log(ev.data);
+}
+```
+
+`Worker` 线程也是通过监听`message`事件，来获取主线程发来的消息，并作出反应。
+
+```js
+// Worker 线程
+onmessage = function (ev) {
+  console.log(ev.data);
+  postMessage('ho');
+}
+```
+
+`ES2017` 引入`SharedArrayBuffer`，允许 `Worker` 线程与主线程共享同一块内存。`SharedArrayBuffer`的 `API` 与`ArrayBuffer`一模一样，唯一的区别是后者无法共享数据。
+
+```js
+// 主线程
+
+// 新建 1KB 共享内存
+const sharedBuffer = new SharedArrayBuffer(1024);
+
+// 主线程将共享内存的地址发送出去
+w.postMessage(sharedBuffer);
+
+// 在共享内存上建立视图，供写入数据
+const sharedArray = new Int32Array(sharedBuffer);
+```
+
+`Worker` 线程从事件的`data`属性上面取到数据。
+
+```js
+// Worker 线程
+onmessage = function (ev) {
+  // 主线程共享的数据，就是 1KB 的共享内存
+  const sharedBuffer = ev.data;
+
+  // 在共享内存上建立视图，方便读写
+  const sharedArray = new Int32Array(sharedBuffer);
+
+  // ...
+};
+```
+
+`SharedArrayBuffer`与`ArrayBuffer`一样，本身是无法读写的，必须在上面建立视图，然后通过视图读写。
+
+```js
+// 分配 10 万个 32 位整数占据的内存空间
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 100000);
+
+// 建立 32 位整数视图
+const ia = new Int32Array(sab);  // ia.length == 100000
+
+// 新建一个质数生成器
+const primes = new PrimeGenerator();
+
+// 将 10 万个质数，写入这段内存空间
+for ( let i=0 ; i < ia.length ; i++ )
+  ia[i] = primes.next();
+
+// 向 Worker 线程发送这段共享内存
+w.postMessage(ia);
+```
+
+`Worker` 线程收到数据后的处理如下。
+
+```js
+// Worker 线程
+let ia;
+onmessage = function (ev) {
+  ia = ev.data;
+  console.log(ia.length); // 100000
+  console.log(ia[37]); // 输出 163，因为这是第38个质数
+};
+```
+
+### Atomics 对象
