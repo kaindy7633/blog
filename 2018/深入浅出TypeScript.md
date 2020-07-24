@@ -56,6 +56,16 @@
       - [默认参数](#%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0)
       - [剩余参数](#%E5%89%A9%E4%BD%99%E5%8F%82%E6%95%B0)
     - [重载（Overload）](#%E9%87%8D%E8%BD%BDoverload)
+  - [泛型（generic）](#%E6%B3%9B%E5%9E%8Bgeneric)
+    - [初识泛型](#%E5%88%9D%E8%AF%86%E6%B3%9B%E5%9E%8B)
+    - [多个类型参数](#%E5%A4%9A%E4%B8%AA%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0)
+    - [泛型变量](#%E6%B3%9B%E5%9E%8B%E5%8F%98%E9%87%8F)
+    - [泛型接口](#%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3)
+    - [泛型类](#%E6%B3%9B%E5%9E%8B%E7%B1%BB)
+    - [泛型约束](#%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F)
+    - [泛型约束与索引类型](#%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F%E4%B8%8E%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B)
+    - [使用多重类型进行泛型约束](#%E4%BD%BF%E7%94%A8%E5%A4%9A%E9%87%8D%E7%B1%BB%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F)
+    - [泛型与 new](#%E6%B3%9B%E5%9E%8B%E4%B8%8E-new)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1052,4 +1062,235 @@ assigned(1,2)
 assigned(1,2,3)
 assigned(1,2,3,4)
 ```
+
+## 泛型（generic）
+
+### 初识泛型
+
+我们需要一个变量，这个变量代表了传入的类型，然后再返回这个变量，它是一种特殊的变量，只用于表示类型而不是值。
+
+这个类型变量在 `TypeScript` 中就叫做「泛型」。
+
+```ts
+function returnItem<T>(para: T): T {
+    return para
+}
+```
+
+我们在函数名称后面声明泛型变量 `<T>`，它用于捕获开发者传入的参数类型（比如说`string`），然后我们就可以使用`T`(也就是`string`)做参数类型和返回值类型
+
+### 多个类型参数
+
+定义泛型的时候，可以一次定义多个类型参数，比如我们可以同时定义泛型 `T` 和 泛型 `U`：
+
+```js
+function swap<T, U>(tuple: [T, U]): [U, T] {
+    return [tuple[1], tuple[0]];
+}
+
+swap([7, 'seven']); // ['seven', 7]
+```
+
+### 泛型变量
+
+泛型变量 `T` 当做类型的一部分使用，而不是整个类型
+
+```ts
+function getArrayLength<T>(arg: Array<T>) {
+  
+  console.log((arg as Array<any>).length) // ok
+  return arg
+}
+```
+
+### 泛型接口
+
+泛型也可用于接口声明，以上面的函数为例，如果我们将其转化为接口的形式。
+
+```ts
+interface ReturnItemFn<T> {
+    (para: T): T
+}
+```
+
+### 泛型类
+
+泛型除了可以在函数中使用，还可以在类中使用，它既可以作用于类本身，也可以作用与类的成员函数。
+
+```ts
+class Stack<T> {
+    private arr: T[] = []
+
+    public push(item: T) {
+        this.arr.push(item)
+    }
+
+    public pop() {
+        this.arr.pop()
+    }
+}
+```
+
+泛型类看上去与泛型接口差不多， 泛型类使用 <> 括起泛型类型，跟在类名后面。
+
+### 泛型约束
+
+上面的类泛型 `T` 可以是任意类型，如果我们要约束这个类型范围，可以用 `<T extends xx>` 的方式
+
+```ts
+type Params = number | string;
+
+class Stack<T extends Params> {
+  private arr: T[] = [];
+
+  public push(item: T) {
+    this.arr.push(item)
+  }
+
+  public pop() {
+    this.arr.pop();
+  }
+}
+```
+
+### 泛型约束与索引类型
+
+我们先看一个常见的需求，我们要设计一个函数，这个函数接受两个参数，一个参数为对象，另一个参数为对象上的属性，我们通过这两个参数返回这个属性的值，比如：
+
+```ts
+function getValue(obj: object, key: string) {
+  return obj[key] // error
+}
+```
+
+我们会得到一段报错，这是新手 `TypeScript` 开发者常常犯的错误，编译器告诉我们，参数 `obj` 实际上是 `{}`,因此后面的 `key` 是无法在上面取到任何值的。
+
+因为我们给参数 `obj` 定义的类型就是 `object`，在默认情况下它只能是 `{}`，但是我们接受的对象是各种各样的，我们需要一个泛型来表示传入的对象类型，比如 `T extends object`:
+
+```ts
+function getValue<T extends object>(obj: T, key: string) {
+  return obj[key] // error
+}
+```
+
+这依然解决不了问题，因为我们第二个参数 `key` 是不是存在于 `obj` 上是无法确定的，因此我们需要对这个 `key` 也进行约束，我们把它约束为只存在于 `obj` 属性的类型，这个时候需要借助到后面我们会进行学习的索引类型进行实现 `<U extends keyof T>`，我们用索引类型 `keyof T` 把传入的对象的属性类型取出生成一个联合类型，这里的泛型 `U` 被约束在这个联合类型中，这样一来函数就被完整定义了：
+
+```ts
+function getValue<T extends object, U extends keyof T>(obj: T, key: U) {
+  return obj[key] // ok
+}
+```
+
+比如我们传入以下对象：
+
+```ts
+const a = {
+  name: 'xiaomuzhu',
+  id: 1
+}
+```
+
+这个时候 `getValue` 第二个参数 `key` 的类型被约束为一个联合类型 `name | id`,他只可能是这两个之一
+
+### 使用多重类型进行泛型约束
+
+我们刚才学习了通过单一类型对泛型进行约束的方式，那么我们再设想以下场景，如果我们的泛型需要被约束，它只被允许实现以下两个接口的类型呢？
+
+```ts
+interface FirstInterface {
+  doSomething(): number
+}
+
+interface SecondInterface {
+  doSomethingElse(): string
+}
+```
+
+我们或许会在一个类中这样使用：
+
+```ts
+class Demo<T extends FirstInterface, SecondInterface> {
+  private genericProperty: T
+
+  useT() {
+    this.genericProperty.doSomething()
+    this.genericProperty.doSomethingElse() // 类型“T”上不存在属性“doSomethingElse”
+  }
+}
+```
+
+但是只有 `FirstInterface` 约束了泛型 `T`，`SecondInterface` 并没有生效，上面的方法并不能用两个接口同时约束泛型，那么我们这样使用呢：
+
+```ts
+class Demo<T extends FirstInterface, T extends SecondInterface> { // 标识符“T”重复
+  ...
+}
+```
+
+上述的语法就是错误的，那么应该如何用多重类型约束泛型呢?
+
+比如我们就可以将接口 `FirstInterface` 与 `SecondInterface` 作为超接口来解决问题：
+
+```ts
+interface ChildInterface extends FirstInterface, SecondInterface {
+
+}
+```
+
+这个时候 `ChildInterface` 是 `FirstInterface` 与 `SecondInterface` 的子接口，然后我们通过泛型约束就可以达到多类型约束的目的。
+
+```ts
+class Demo<T extends ChildInterface> {
+  private genericProperty: T
+
+  useT() {
+    this.genericProperty.doSomething()
+    this.genericProperty.doSomethingElse()
+  }
+}
+```
+
+我们还可以利用交叉类型来进行多类型约束，如下：
+
+```ts
+interface FirstInterface {
+  doSomething(): number
+}
+
+interface SecondInterface {
+  doSomethingElse(): string
+}
+
+class Demo<T extends FirstInterface & SecondInterface> {
+  private genericProperty: T
+
+  useT() {
+    this.genericProperty.doSomething() // ok
+    this.genericProperty.doSomethingElse() // ok
+  }
+}
+```
+
+以上就是我们在多个类型约束泛型中的使用技巧。
+
+### 泛型与 new
+
+我们假设需要声明一个泛型拥有构造函数，比如：
+
+```ts
+function factory<T>(type: T): T {
+  return new type() // This expression is not constructable.
+}
+```
+
+编译器会告诉我们这个表达式不能构造，因为我们没有声明这个泛型 `T` 是构造函数，这个时候就需要 `new` 的帮助了。
+
+```ts
+function factory<T>(type: {new(): T}): T {
+  return new type() // ok
+}
+```
+
+参数 `type` 的类型 `{new(): T}` 就表示此泛型 `T` 是可被构造的，在被实例化后的类型是泛型 `T`
+
 
