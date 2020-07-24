@@ -8401,3 +8401,4 @@ Atomics.xor(sharedArray, index, value)
 
 - `Atomics.isLockFree(size)`：返回一个布尔值，表示`Atomics`对象是否可以处理某个`size`的内存锁定。如果返回`false`，应用程序就需要自己来实现锁定
 
+> 完结
