@@ -66,6 +66,13 @@
     - [泛型约束与索引类型](#%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F%E4%B8%8E%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B)
     - [使用多重类型进行泛型约束](#%E4%BD%BF%E7%94%A8%E5%A4%9A%E9%87%8D%E7%B1%BB%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F)
     - [泛型与 new](#%E6%B3%9B%E5%9E%8B%E4%B8%8E-new)
+  - [类型断言与类型守卫](#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E4%B8%8E%E7%B1%BB%E5%9E%8B%E5%AE%88%E5%8D%AB)
+    - [类型断言](#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80)
+    - [双重断言](#%E5%8F%8C%E9%87%8D%E6%96%AD%E8%A8%80)
+    - [类型守卫](#%E7%B1%BB%E5%9E%8B%E5%AE%88%E5%8D%AB)
+      - [instanceof](#instanceof)
+      - [in](#in)
+      - [字面量类型守卫](#%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B%E5%AE%88%E5%8D%AB)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1293,4 +1300,146 @@ function factory<T>(type: {new(): T}): T {
 
 参数 `type` 的类型 `{new(): T}` 就表示此泛型 `T` 是可被构造的，在被实例化后的类型是泛型 `T`
 
+## 类型断言与类型守卫
+
+### 类型断言
+
+有些情况下 `TS` 并不能正确或者准确得推断类型,这个时候可能产生不必要的警告或者报错。
+
+比如初学者经常会遇到的一类问题:
+
+```ts
+const person = {};
+
+person.name = 'xiaomuzhu'; // Error: 'name' 属性不存在于 ‘{}’
+person.age = 20; // Error: 'age' 属性不存在于 ‘{}’
+```
+
+这个时候该怎么办？由于类型推断，这个时候 `person` 的类型就是 `{}`，根本不存在后添加的那些属性，虽然这个写法在`js`中完全没问题，但是开发者知道这个 `person` 实际是有属性的，只是一开始没有声明而已，但是 `typescript` 不知道啊，所以就需要类型断言了:
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+}
+
+const person = {} as Person;
+
+person.name = 'xiaomuzhu';
+person.age = 20;
+```
+
+但是类型断言不要滥用,在万不得已的情况下使用要谨慎,因为你强制把某类型断言会造成 `TypeScript` 丧失代码提示的能力。
+
+### 双重断言
+
+虽然类型断言是有强制性的,但并不是万能的,因为一些情况下也会失效:
+
+```ts
+interface Person {
+	name: string;
+	age: number;
+}
+
+const person = 'xiaomuzhu' as Person; // Error
+```
+
+这个时候会报错,很显然不能把 `string` 强制断言为一个接口 `Person `,但是并非没有办法,此时可以使用双重断言:
+
+```ts
+interface Person {
+	name: string;
+	age: number;
+}
+
+const person = 'xiaomuzhu' as any as Person; // ok
+```
+
+先把类型断言为 `any` 再接着断言为你想断言的类型就能实现双重断言，当然上面的例子肯定说不通的，双重断言我们也更不建议滥用，但是在一些少见的场景下也有用武之地，当你遇到事记得有双重断言这个操作即可。
+
+### 类型守卫
+
+类型守卫说白了就是缩小类型的范围，我们看几个例子就容易理解了。
+
+#### instanceof
+
+`instanceof` 类型保护是通过构造函数来细化类型的一种方式.
+
+```ts
+class Person {
+    name = 'xiaomuzhu';
+    age = 20;
+}
+
+class Animal {
+    name = 'petty';
+    color = 'pink';
+}
+
+function getSometing(arg: Person | Animal) {
+    // 类型细化为 Person
+    if (arg instanceof Person) {
+        console.log(arg.color); // Error，因为arg被细化为Person，而Person上不存在 color属性
+        console.log(arg.age); // ok
+    }
+    // 类型细化为 Person
+    if (arg instanceof Animal) {
+        console.log(arg.age); // Error，因为arg被细化为Animal，而Animal上不存在 age 属性
+        console.log(arg.color); // ok
+    }
+}
+```
+
+#### in
+
+跟上面的例子类似，`x in y` 表示 `x` 属性在 `y` 中存在。
+
+```ts
+class Person {
+	name = 'xiaomuzhu';
+	age = 20;
+}
+
+class Animal {
+	name = 'petty';
+	color = 'pink';
+}
+
+function getSometing(arg: Person | Animal) {
+	if ('age' in arg) {
+		console.log(arg.color); // Error
+		console.log(arg.age); // ok
+	}
+	if ('color' in arg) {
+		console.log(arg.age); // Error
+		console.log(arg.color); // ok
+	}
+}
+```
+
+#### 字面量类型守卫
+
+这个功能很重要，在后面的联合辨析类型中会用到此特性，当你在联合类型里使用字面量类型时，它可以帮助检查它们是否有区别:
+
+```ts
+type Foo = {
+  kind: 'foo'; // 字面量类型
+  foo: number;
+};
+
+type Bar = {
+  kind: 'bar'; // 字面量类型
+  bar: number;
+};
+
+function doStuff(arg: Foo | Bar) {
+  if (arg.kind === 'foo') {
+    console.log(arg.foo); // ok
+    console.log(arg.bar); // Error
+  } else {
+    console.log(arg.foo); // Error
+    console.log(arg.bar); // ok
+  }
+}
+```
 
