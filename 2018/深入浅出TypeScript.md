@@ -87,6 +87,9 @@
     - [字面量类型](#%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B)
     - [类型字面量](#%E7%B1%BB%E5%9E%8B%E5%AD%97%E9%9D%A2%E9%87%8F)
     - [可辨识联合类型](#%E5%8F%AF%E8%BE%A8%E8%AF%86%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B-1)
+  - [装饰器](#%E8%A3%85%E9%A5%B0%E5%99%A8)
+    - [类装饰器](#%E7%B1%BB%E8%A3%85%E9%A5%B0%E5%99%A8)
+    - [属性/方法装饰器](#%E5%B1%9E%E6%80%A7%E6%96%B9%E6%B3%95%E8%A3%85%E9%A5%B0%E5%99%A8)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1866,3 +1869,154 @@ const UserReducer = (userAction: UserAction) => {
 - 具有普通的单例类型属性—可辨识的特征,上文中就是 `delete` 与 `create` 两个有唯一性的字符串字面量
 - 一个类型别名包含联合类型
 - 类型守卫的特性,比如我们必须用 `if switch` 来判断 `userAction.action` 是属于哪个类型作用域即 `delete` 与 `create`
+
+## 装饰器
+
+装饰器(`decorator`)最早在 `Python` 中被引入,它的主要作用是给一个已有的方法或类扩展一些新的行为，而不是去直接修改它本身.
+
+在 `ES2015` 进入 `Class` 之后,当我们需要在多个不同的类之间共享或者扩展一些方法或行为的时候，代码会变得错综复杂，极其不优雅，这也就是装饰器被提出的一个很重要的原因.
+
+但是推进比较缓慢,到目前为止也仅仅在 `stage 2` 阶段.
+
+所以在 `JavaScript` 中我们需要 `Babel` 插件 `babel-plugin-transform-decorators-legacy` 来支持 `decorator`,而在 `Typescript` 中我们需要在 `tsconfig.json` 里面开启支持选项 `experimentalDecorators`.
+
+```json
+// tsconfig.json
+"experimentalDecorators": true
+```
+
+我们先明确两个概念:
+
+目前装饰器本质上是一个函数,`@expression` 的形式其实是一个语法糖, `expression` 求值后必须也是一个函数，它会在运行时被调用，被装饰的声明信息做为参数传入, `JavaScript` 中的 `Class` 其实也是一个语法糖
+
+比如在 `JavaScript` 中我们声明一个 `Class`:
+
+```ts
+class Person{
+    say() {
+        console.log('hello')
+    }
+}
+```
+
+上面这个 `Person` 类实际上相当于:
+
+```ts
+function Person() {}
+Object.defineProperty(Person.prototype, 'say', {
+    value: function() { console.log('hello'); },
+    enumerable: false,
+    configurable: true,
+    writable: true
+});
+```
+
+### 类装饰器
+
+比如,我们声明一个函数 `addAge` 去给 `Class` 的属性 `age` 添加年龄.
+
+```ts
+function addAge(constructor: Function) {
+  constructor.prototype.age = 18;
+}
+
+@addAge
+class Person{
+  name: string;
+  age!: number;
+  constructor() {
+    this.name = 'xiaomuzhu';
+  }
+}
+
+let person = new Person();
+
+console.log(person.age); // 18
+```
+
+所以这段代码实际上基本等同于：
+
+```ts
+Person = addAge(function Person() { ... });
+```
+
+当装饰器作为修饰类的时候，会把构造器传递进去。 constructor.prototype.age 就是在每一个实例化对象上面添加一个 age 值 这里我们的 addAge 就添加了一个 age 值.
+
+### 属性/方法装饰器
+
+实际上一个`Class`的属性/方法也可以被装饰,我们分别给 `Person` 类加上 `say` 和 `run` 方法.
+
+```ts
+// 声明装饰器修饰方法/属性
+function method(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+   console.log(target);
+   console.log("prop " + propertyKey);
+   console.log("desc " + JSON.stringify(descriptor) + "\n\n");
+   descriptor.writable = false;
+};
+
+class Person{
+  name: string;
+  constructor() {
+    this.name = 'xiaomuzhu';
+  }
+
+  @method
+  say(){
+    return 'instance method';
+  }
+
+  @method
+  static run(){
+    return 'static method';
+  }
+}
+
+const xmz = new Person();
+
+// 修改实例方法say
+xmz.say = function() {
+  return 'edit'
+}
+
+// 打印结果,检查是否成功修改实例方法
+console.log(xmz.say());
+```
+
+得到的结果如下:
+
+```ts
+Person { say: [Function] }
+prop say
+desc {"writable":true,"enumerable":true,"configurable":true}
+
+
+[Function: Person] { run: [Function] }
+prop run
+desc {"writable":true,"enumerable":true,"configurable":true}
+
+xmz.say = function() {
+       ^
+TypeError: Cannot assign to read only property 'say' of object '#<Person>'
+```
+
+在属性/方法的装饰器定义过程中,与 `class` 的装饰器不同,我们的 `method` 函数中的参数变为了三个 `target`、`propertyKey`、`descriptor`.
+
+对,这三个参数正是源于`Object.defineProperty`,也就是上面提到的 `Class` 本质是语法糖,实际上属性/方法装饰器是借助`Object.defineProperty`修改类的方法和属性的.
+
+上面的方法装饰器代码相当于下面:
+
+```ts
+let descriptor = {
+    value: function() { return 'instance method'},
+    enumerable: false,
+    configurable: true,
+    writable: true
+};
+
+descriptor = readonly(Cat.prototype, "say", descriptor) || descriptor;
+
+Object.defineProperty(Cat.prototype, "say", descriptor);
+```
+
+> 访问器属性getter或者setter同样可以用属性装饰器修饰
