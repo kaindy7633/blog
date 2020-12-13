@@ -1,3 +1,12 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [GoLang极速入门](#golang%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8)
+  - [变量定义](#%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## GoLang极速入门
 
 ### 变量定义
