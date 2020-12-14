@@ -1,3 +1,18 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [GoLang极速入门](#golang%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8)
+  - [变量定义](#%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89)
+    - [第一种 ：一行一个变量，静态语言最基本常用的方式](#%E7%AC%AC%E4%B8%80%E7%A7%8D-%E4%B8%80%E8%A1%8C%E4%B8%80%E4%B8%AA%E5%8F%98%E9%87%8F%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80%E6%9C%80%E5%9F%BA%E6%9C%AC%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E5%BC%8F)
+    - [第二种：多个变量一起声明，声明组](#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E5%A4%9A%E4%B8%AA%E5%8F%98%E9%87%8F%E4%B8%80%E8%B5%B7%E5%A3%B0%E6%98%8E%E5%A3%B0%E6%98%8E%E7%BB%84)
+    - [第三种：短声明，只能在函数内](#%E7%AC%AC%E4%B8%89%E7%A7%8D%E7%9F%AD%E5%A3%B0%E6%98%8E%E5%8F%AA%E8%83%BD%E5%9C%A8%E5%87%BD%E6%95%B0%E5%86%85)
+    - [第四种：一行声明和初始化多个变量](#%E7%AC%AC%E5%9B%9B%E7%A7%8D%E4%B8%80%E8%A1%8C%E5%A3%B0%E6%98%8E%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E5%A4%9A%E4%B8%AA%E5%8F%98%E9%87%8F)
+    - [第五种：通过 new 创建指针变量](#%E7%AC%AC%E4%BA%94%E7%A7%8D%E9%80%9A%E8%BF%87-new-%E5%88%9B%E5%BB%BA%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F)
+    - [第六种：make 函数创建 slice、map 或 chan 类型变量](#%E7%AC%AC%E5%85%AD%E7%A7%8Dmake-%E5%87%BD%E6%95%B0%E5%88%9B%E5%BB%BA-slicemap-%E6%88%96-chan-%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # GoLang极速入门
 ## 变量定义
 
