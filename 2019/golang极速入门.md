@@ -13,6 +13,12 @@
   - [数据类型：整型与浮点型](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%95%B4%E5%9E%8B%E4%B8%8E%E6%B5%AE%E7%82%B9%E5%9E%8B)
     - [整型](#%E6%95%B4%E5%9E%8B)
     - [浮点型](#%E6%B5%AE%E7%82%B9%E5%9E%8B)
+  - [数据类型：byte、rune与string](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8Bbyterune%E4%B8%8Estring)
+    - [byte 与 rune](#byte-%E4%B8%8E-rune)
+    - [字符串](#%E5%AD%97%E7%AC%A6%E4%B8%B2)
+  - [数据类型：数组与切片](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84%E4%B8%8E%E5%88%87%E7%89%87)
+    - [数组](#%E6%95%B0%E7%BB%84)
+    - [切片](#%E5%88%87%E7%89%87)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -399,5 +405,294 @@ func main() {
 // myfloat:  1.00000184e+08
 // myfloat:  1.0000019e+08
 // false
+```
 
 由于精度的问题，就会出现这种很怪异的现象，`myfloat == myfloat +1` 会返回 `true` 。
+
+## 数据类型：byte、rune与string
+
+### byte 与 rune
+
+`byte`，占用1个节字，就 8 个比特位，所以它和 `uint8` 类型本质上没有区别，它表示的是 `ACSII` 表中的一个字符。
+
+如下这段代码，分别定义了 `byte` 类型和 `uint8` 类型的变量 `a` 和 `b`
+
+```go
+import "fmt"
+
+func main() {
+    var a byte = 65 
+    // 8进制写法: var c byte = '\101'     其中 \ 是固定前缀
+    // 16进制写法: var c byte = '\x41'    其中 \x 是固定前缀
+
+    var b uint8 = 66
+    fmt.Printf("a 的值: %c \nb 的值: %c", a, b)
+    // 或者使用 string 函数
+    // fmt.Println("a 的值: ", string(a)," \nb 的值: ", string(b))
+}
+```
+
+在 `ASCII` 表中，由于字母 `A` 的 `ASCII` 的编号为 65 ，字母 `B` 的 `ASCII` 编号为 66，所以上面的代码也可以写成这样
+
+```go
+import "fmt"
+
+func main() {
+    var a byte = 'A'
+    var b uint8 = 'B'
+    fmt.Printf("a 的值: %c \nb 的值: %c", a, b)
+}
+```
+
+他们的输出结果都是一样的。
+
+`rune`，占用4个字节，共32位比特位，所以它和 `uint32` 本质上也没有区别。它表示的是一个 `Unicode` 字符（`Unicode` 是一个可以表示世界范围内的绝大部分字符的编码规范）。
+
+```go
+import (
+    "fmt"
+    "unsafe"
+)
+
+func main() {
+    var a byte = 'A'
+    var b rune = 'B'
+    fmt.Printf("a 占用 %d 个字节数\nb 占用 %d 个字节数", unsafe.Sizeof(a), unsafe.Sizeof(b))
+}
+
+// a 占用 1 个字节数
+// b 占用 4 个字节数
+```
+
+由于 `byte` 类型能表示的值是有限，只有 2^8=256 个。所以如果你想表示中文的话，你只能使用 `rune` 类型。
+
+```go
+var name rune = '中'
+```
+
+或许你已经发现，上面我们在定义字符时，不管是 `byte` 还是 `rune` ，我都是使用单引号，而没使用双引号。
+
+对于从 `Python` 转过来的人，这里一定要注意了，在 `Go` 中单引号与双引号并不是等价的。
+
+单引号用来表示字符，在上面的例子里，如果你使用双引号，就意味着你要定义一个字符串，赋值时与前面声明的前面会不一致，这样在编译的时候就会出错。
+
+```bash
+cannot use "A" (type string) as type byte in assignment
+```
+
+上面我说了，`byte` 和 `uint8` 没有区别，`rune` 和 `uint32` 没有区别，那为什么还要多出 `byte` 和 `rune` 类型呢？多乱呀。
+
+理由很简单，因为 `uint8` 和 `uint32` ，直观上让人以为这是一个数值，但是实际上，它也可以表示一个字符，所以为了消除这种直观错觉，就诞生了 `byte` 和 `rune` 这两个别名类型。
+
+### 字符串
+
+字符串，可以说是大家很熟悉的数据类型之一。定义方法很简单
+
+```go
+var mystr string = "hello"
+```
+
+上面说的 `byte` 和 `rune` 都是字符类型，若多个字符放在一起，就组成了字符串，也就是这里要说的 `string` 类型。
+
+比如 `hello` ，对照 `ASCII` 编码表，每个字母对应的编号是：104,101,108,108,111
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    var mystr01 sting = "hello"
+    var mystr02 [5]byte = [5]byte{104, 101, 108, 108, 111}
+    fmt.Printf("mystr01: %s\n", mystr01)
+    fmt.Printf("mystr02: %s", mystr02)
+}
+```
+
+输出如下，`mystr01` 和 `mystr02` 输出一样，说明了 `string` 的本质，其实是一个 `byte` 数组
+
+```go
+// mystr01: hello
+// mystr02: hello
+```
+
+通过以上学习，我们知道字符分为 `byte` 和 `rune`，占用的大小不同。
+
+这里来考一下大家，hello,中国 占用几个字节？
+
+要回答这个问题，你得知道 `Go` 语言的 `string` 是用 `uft-8` 进行编码的，英文字母占用一个字节，而中文字母占用3个字节，所以 hello,中国 的长度为 5+1+（3＊2)= 12个字节。
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    var country string = "hello,中国"
+    fmt.Println(len(country))
+}
+// 输出 12
+```
+
+## 数据类型：数组与切片
+
+### 数组
+
+数组是一个由固定长度的特定类型元素组成的序列，一个数组可以由零个或多个元素组成。因为数组的长度是固定的，所以在 `Go` 语言中很少直接使用数组。
+
+声明数组，并给该数组里的每个元素赋值（索引值的最小有效值和其他大多数语言一样是 0，不是1）
+
+```go
+// [3] 里的3 表示该数组的元素个数 
+var arr [3]int
+arr[0] = 1
+arr[1] = 2
+arr[2] = 3
+```
+
+声明并直接初始化数组
+
+```go
+// 第一种方法
+var arr [3]int = [3]int{1,2,3}
+
+// 第二种方法
+arr := [3]int{1,2,3}
+```
+
+上面的 3 表示数组的元素个数 ，万一你哪天想往该数组中增加元素，你得对应修改这个数字，为了避免这种硬编码，你可以这样写，使用 `...` 让 `Go` 语言自己根据实际情况来分配空间。
+
+```go
+arr := [...]int{1,2,3}
+```
+
+`[3]int` 和 `[4]int` 虽然都是数组，但他们却是不同的类型，使用 `fmt` 的 `%T` 可以查得，如果使用 `==` 来比较，答案会是 `false`
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    arr01 := [...]int{1, 2, 3}
+    arr02 := [...]int{1, 2, 3, 4}
+    fmt.Printf("%d 的类型是: %T\n", arr01, arr01)
+    fmt.Printf("%d 的类型是: %T", arr02, arr02)
+}
+
+// [1 2 3] 的类型是: [3]int
+// [1 2 3 4] 的类型是: [4]int
+```
+
+如果你觉得每次写 `[3]int` 有点麻烦，你可以为 `[3]int` 定义一个类型字面量，也就是别名类型。
+
+使用 `type` 关键字可以定义一个类型字面量，后面只要你想定义一个容器大小为3，元素类型为 `int` 的数组 ，都可以使用这个别名类型。
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    type arr3 [3]int
+
+    myarr := arr3{1,2,3}
+    fmt.Printf("%d 的类型是: %T", myarr, myarr)
+}
+
+// [1 2 3] 的类型是: main.arr3
+```
+
+### 切片
+
+切片（`Slice`）与数组一样，也是可以容纳若干类型相同的元素的容器。与数组不同的是，无法通过切片类型来确定其值的长度。每个切片值都会将数组作为其底层数据结构。我们也把这样的数组称为切片的底层数组。
+
+切片是对数组的一个连续片段的引用，所以切片是一个引用类型，这个片段可以是整个数组，也可以是由起始和终止索引标识的一些项的子集，需要注意的是，终止索引标识的项不包括在切片内（意思是这是个左闭右开的区间）
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    myarr := [...]int{1, 2, 3}
+    fmt.Printf("%d 的类型是: %T", myarr[0:2], myarr[0:2])
+}
+
+// [1 2] 的类型是: []int
+```
+
+切片的构造，有三种方式
+
+1、对数组进行片段截取（上面例子已经展示：`myarr[0:2]`，0是索引起始值，2是索引终止值，区间左闭右开）
+
+从头声明赋值（例子如下）
+
+```go
+// 声明字符串切片
+var strList []string
+
+// 声明整型切片
+var numList []int
+
+// 声明一个空切片
+var numListEmpty = []int{}
+```
+
+2、使用 `make` 函数构造，`make` 函数的格式：`make( []Type, size, cap )`
+
+这个函数刚好指出了，一个切片具备的三个属性：类型（`Type`），长度（`size`），容量（`cap`）
+
+```go
+import (
+   "fmt"
+)
+
+func main() {
+   a := make([]int, 2)
+   b := make([]int, 2, 10)
+   fmt.Println(a, b)
+   fmt.Println(len(a), len(b))
+   fmt.Println(cap(a), cap(b))
+}
+
+// [0 0] [0 0]
+// 2 2
+// 2 10
+```
+
+由于切片是引用类型，所以你不对它进行赋值的话，它的零值（默认值）是 `nil`
+
+```go
+var myarr []int
+fmt.Println(myarr == nil)
+// true
+```
+
+数组与切片有相同点，它们都是可以容纳若干类型相同的元素的容器
+
+也有不同点，数组的容器大小固定，而切片本身是引用类型，它更像是 `Python` 中的 `list` ，我们可以对它 `append` 进行元素的添加。
+
+```go
+import (
+    "fmt"
+)
+
+func main() {
+    myarr := []int{1}
+    // 追加一个元素
+    myarr = append(myarr, 2)
+    // 追加多个元素
+    myarr = append(myarr, 3, 4)
+    // 追加一个切片, ... 表示解包，不能省略
+    myarr = append(myarr, []int{7, 8}...)
+    // 在第一个位置插入元素
+    myarr = append([]int{0}, myarr...)
+    // 在中间插入一个切片(两个元素)
+    myarr = append(myarr[:5], append([]int{5,6}, myarr[5:]...)...)
+    fmt.Println(myarr)
+}
+
+// [0 1 2 3 4 5 6 7 8]
+```
+
