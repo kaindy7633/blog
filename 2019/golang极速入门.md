@@ -19,6 +19,23 @@
   - [数据类型：数组与切片](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84%E4%B8%8E%E5%88%87%E7%89%87)
     - [数组](#%E6%95%B0%E7%BB%84)
     - [切片](#%E5%88%87%E7%89%87)
+  - [数据类型：字典与布尔类型](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AD%97%E5%85%B8%E4%B8%8E%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B)
+    - [字典](#%E5%AD%97%E5%85%B8)
+    - [声明初始化字典](#%E5%A3%B0%E6%98%8E%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AD%97%E5%85%B8)
+    - [字典的相关操作](#%E5%AD%97%E5%85%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C)
+      - [添加元素](#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0)
+      - [更新元素](#%E6%9B%B4%E6%96%B0%E5%85%83%E7%B4%A0)
+      - [读取元素](#%E8%AF%BB%E5%8F%96%E5%85%83%E7%B4%A0)
+      - [删除元素](#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0)
+      - [判断 `key` 是否存在](#%E5%88%A4%E6%96%AD-key-%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8)
+      - [循环字典](#%E5%BE%AA%E7%8E%AF%E5%AD%97%E5%85%B8)
+    - [布尔类型](#%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B)
+  - [数据类型：指针](#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%8C%87%E9%92%88)
+    - [什么是指针](#%E4%BB%80%E4%B9%88%E6%98%AF%E6%8C%87%E9%92%88)
+    - [指针的创建](#%E6%8C%87%E9%92%88%E7%9A%84%E5%88%9B%E5%BB%BA)
+    - [指针的类型](#%E6%8C%87%E9%92%88%E7%9A%84%E7%B1%BB%E5%9E%8B)
+    - [指针的零值](#%E6%8C%87%E9%92%88%E7%9A%84%E9%9B%B6%E5%80%BC)
+    - [指针与切片](#%E6%8C%87%E9%92%88%E4%B8%8E%E5%88%87%E7%89%87)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -696,3 +713,440 @@ func main() {
 // [0 1 2 3 4 5 6 7 8]
 ```
 
+## 数据类型：字典与布尔类型
+
+### 字典
+
+字典（`Map` 类型），是由若干个 `key:value` 这样的键值对映射组合在一起的数据结构。
+
+它是哈希表的一个实现，这就要求它的每个映射里的`key`，都是唯一的，可以使用 `==` 和 `!=` 来进行判等操作，换句话说就是 `key` 必须是可哈希的。
+
+什么叫可哈希的？简单来说，一个不可变对象，都可以用一个哈希值来唯一表示，这样的不可变对象，比如字符串类型的对象（可以说除了切片、 字典，函数之外的其他内建类型都算）。
+
+意思就是，你的 `key` 不能是切片，不能是字典，不能是函数。
+
+字典由 `key` 和 `value` 组成，它们各自有各自的类型。
+
+在声明字典时，必须指定好你的 `key` 和 `value` 是什么类型的，然后使用 `map` 关键字来告诉 `Go` 这是一个字典。
+
+```go
+map[KEY_TYPE]VALUE_TYPE
+```
+
+### 声明初始化字典
+
+三种声明并初始化字典的方法
+
+```go
+// 第一种方法
+var scores map[string]int = map[string]int{"english": 80, "chinese": 85}
+
+// 第二种方法
+scores := map[string]int{"english": 80, "chinese": 85}
+
+// 第三种方法
+scores := make(map[string]int)
+
+// scores["english"] = 80
+// scores["chinese"] = 85
+```
+
+要注意的是，第一种方法如果拆分成多步（声明、初始化、再赋值），和其他两种有很大的不一样了，相对会比较麻烦（具体请看注释）。
+
+```go
+import "fmt"
+
+func main() {
+    // 声明一个名为 score 的字典
+    var scores map[string]int
+
+    // 未初始化的 score 的零值为nil，无法直接进行赋值
+    if scores == nil {
+        // 需要使用 make 函数先对其初始化
+        scores = make(map[string]int)
+    }
+
+    // 经过初始化后，就可以直接赋值
+    scores["chinese"] = 90
+    fmt.Println(scores)
+}
+```
+
+### 字典的相关操作
+
+#### 添加元素
+
+```go
+scores["math"] = 95
+```
+
+#### 更新元素
+
+若 `key` 已存在，则直接更新 `value`
+
+```go
+scores["math"] = 100
+```
+
+#### 读取元素
+
+直接使用 `[key]` 即可 ，如果 `key` 不存在，也不报错，会返回其 `value-type` 的零值。
+
+```go
+fmt.Println(scores["math"])
+```
+
+#### 删除元素
+
+使用 `delete` 函数，如果 `key` 不存在，`delete` 函数会静默处理，不会报错。
+
+```go
+delete(scores, "math")
+```
+
+当访问一个不存在的 `key` 时，并不会直接报错，而是会返回这个 `value` 的零值，如果 `value` 的类型是 `int`，就返回0。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    scores := make(map[string]int)
+    fmt.Println(scores["english"]) // 输出 0
+}
+```
+
+#### 判断 `key` 是否存在
+
+当 `key` 不存在，会返回 `value-type` 的零值 ，所以你不能通过返回的结果是否是零值来判断对应的 `key` 是否存在，因为 `key` 对应的 `value` 值可能恰好就是零值。
+
+其实字典的下标读取可以返回两个值，使用第二个返回值都表示对应的 `key` 是否存在，若存在 `ok` 为 `true`，若不存在，则 `ok` 为 `false`
+
+```go
+import "fmt"
+
+func main() {
+    scores := map[string]int{"english": 80, "chinese": 85}
+    math, ok := scores["math"]
+    if ok {
+        fmt.Printf("math 的值是: %d", math)
+    } else {
+        fmt.Println("math 不存在")
+    }
+}
+```
+
+我们将上面的代码再优化一下
+
+```go
+import "fmt"
+
+func main() {
+    scores := map[string]int{"english": 80, "chinese": 85}
+    if math, ok := scores["math"]; ok {
+        fmt.Printf("math 的值是: %d", math)
+    } else {
+        fmt.Println("math 不存在")
+    }
+}
+```
+
+#### 循环字典
+
+`Go` 语言中没有提供类似 `Python` 的  `keys()` 和 `values()` 这样方便的函数，想要获取，你得自己循环。
+
+循环还分三种
+
+- 获取 `key` 和 `value`
+
+```go
+import "fmt"
+
+func main() {
+    scores := map[string]int{"english": 80, "chinese": 85}
+
+    for subject, score := range scores {
+        fmt.Printf("key: %s, value: %d\n", subject, scores)
+    }
+}
+```
+
+- 只获取 `key`，这里注意不用占用符。
+
+```go
+import "fmt"
+
+func main() {
+    scores := map[string]int{"english": 80, "chinese": 85}
+
+    for subject := range scores {
+        fmt.Printf("key: %s\n", subject)
+    }
+}
+```
+
+- 只获取 `value`，用一个占位符替代。
+
+```go
+import "fmt"
+
+func main() {
+    scores := map[string]int{"english": 80, "chinese": 85}
+
+    for _, score := range scores {
+        fmt.Printf("value: %d\n", score)
+    }
+}
+```
+
+### 布尔类型
+
+关于布尔值，无非就两个值：`true` 和 `false`。只是这两个值，在不同的语言里可能不同。
+
+在 `Go` 中，真值用 `true` 表示，不但不与 1 相等，并且更加严格，不同类型无法进行比较，而假值用 `false` 表示，同样与 0 无法比较。
+
+`Go` 中确实不如 `Python` 那样灵活，`bool` 与 `int` 不能直接转换，如果要转换，需要你自己实现函数。
+
+`bool` 转 `int`
+
+```go
+func bool2int(b bool) int {
+    if b {
+        return 1
+    }
+    return 0
+}
+```
+
+`int` 转 `bool`
+
+```go
+func int2bool(i int) bool { 
+    return i != 0 
+}
+```
+
+在 `Go` 中使用 `!` 符号取反值
+
+```go
+import "fmt"
+
+var male bool = true
+func main()  {
+    fmt.Println( !male == false)
+    // 或者
+    fmt.Println( male != false)
+}
+
+// output: true
+```
+
+在 `Go` 语言中，则使用 `&&` 表示且，用 `||` 表示或，并且有短路行为（即左边表达式已经可以确认整个表达式的值，那么右边将不会再被求值。
+
+```go
+import "fmt"
+
+var age int = 15
+var gender string = "male"
+func main()  {
+    //  && 两边的表达式都会执行
+    fmt.Println( age > 18 && gender == "male")
+    // gender == "male" 并不会执行
+    fmt.Println( age > 18 || gender == "male")
+}
+
+// output: false
+// output: true
+```
+
+## 数据类型：指针
+
+### 什么是指针
+
+当我们定义一个变量 `name`
+
+```go
+var name string = "Go编程时光"
+```
+
+此时，`name` 是变量名，它只是编程语言中方便程序员编写和理解代码的一个标签。
+
+当我们访问这个标签时，机算机会返回给我们它指向的内存地址里存储的值：`Go编程时光`。
+
+出于某些需要，我们会将这个内存地址赋值给另一个变量名，通常叫做 `ptr`（`pointer` 的简写），而这个变量，我们称之为指针变量。
+
+换句话说，指针变量（一个标签）的值是指针，也就是内存地址。
+
+根据变量指向的值，是否是内存地址，我把变量分为两种：
+
+- 普通变量：存数据值本身
+
+- 指针变量：存值的内存地址
+
+### 指针的创建
+
+指针创建有三种方法
+
+- 第一种方法: 先定义对应的变量，再通过变量取得内存地址，创建指针
+
+```go
+// 定义普通变量
+aint := 1
+// 定义指针变量
+ptr := &aint
+```
+
+- 第二种方法: 先创建指针，分配好内存后，再给指针指向的内存地址写入对应的值。
+
+```go
+// 创建指针
+astr := new(string)
+// 给指针赋值
+*astr = "Go编程时光"
+```
+
+- 第三种方法: 先声明一个指针变量，再从其他变量取得内存地址赋值给它
+
+```go
+aint := 1
+var bint *int  // 声明一个指针
+bint = &aint   // 初始化
+```
+
+上面的三段代码中，指针的操作都离不开这两个符号：
+
+`&` ：从一个普通变量中取得内存地址
+
+`*` ：当 `*` 在赋值操作值的右边，是从一个指针变量中取得变量值，当 `*` 在赋值操作值的左边，是指该指针指向的变量
+
+通过下面这段代码，你可以熟悉这两个符号的用法
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    aint := 1     // 定义普通变量
+    ptr := &aint  // 定义指针变量
+    fmt.Println("普通变量存储的是：", aint)
+    fmt.Println("普通变量存储的是：", *ptr)
+    fmt.Println("指针变量存储的是：", &aint)
+    fmt.Println("指针变量存储的是：", ptr)
+}
+
+// 普通变量存储的是：1
+// 普通变量存储的是：1
+// 指针变量存储的是： 0xc0000100a0
+// 指针变量存储的是： 0xc0000100a0
+```
+
+要想打印指针指向的内存地址，方法有两种
+
+```go
+// 第一种
+fmt.Printf("%p", ptr)
+
+// 第二种
+fmt.Println(ptr)
+```
+
+### 指针的类型
+
+我们知道字符串的类型是 `string`，整型是 `int`，那么指针如何表示呢？
+
+写段代码试验一下就知道了
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    astr := "hello"
+    aint := 1
+    abool := false
+    arune := 'a'
+    afloat := 1.2
+
+    fmt.Printf("astr 指针类型是：%T\n", &astr)
+    fmt.Printf("aint 指针类型是：%T\n", &aint)
+    fmt.Printf("abool 指针类型是：%T\n", &abool)
+    fmt.Printf("arune 指针类型是：%T\n", &arune)
+    fmt.Printf("afloat 指针类型是：%T\n", &afloat)
+}
+
+// astr 指针类型是：*string
+// aint 指针类型是：*int
+// abool 指针类型是：*bool
+// arune 指针类型是：*int32
+// afloat 指针类型是：*float64
+```
+可以发现用 `*+` 所指向变量值的数据类型，就是对应的指针类型。
+
+所以若我们定义一个只接收指针类型的参数的函数，可以这么写
+
+```go
+func mytest(ptr *int)  {
+    fmt.Println(*ptr)
+}
+```
+
+### 指针的零值
+
+当指针声明后，没有进行初始化，其零值是 `nil`。
+
+```go
+func main() {  
+    a := 25
+    var b *int  // 声明一个指针
+
+    if b == nil {
+        fmt.Println(b)
+        b = &a  // 初始化：将a的内存地址给b
+        fmt.Println(b)
+    }
+}
+
+// <nil>
+// 0xc0000100a0
+```
+
+### 指针与切片
+
+切片与指针一样，都是引用类型。
+
+如果我们想通过一个函数改变一个数组的值，有两种方法
+
+- 将这个数组的切片做为参数传给函数
+
+- 将这个数组的指针做为参数传给函数
+
+尽管二者都可以实现我们的目的，但是按照 `Go` 语言的使用习惯，建议使用第一种方法，因为第一种方法，写出来的代码会更加简洁，易读。具体你可以参数下面两种方法的代码实现
+
+```go
+// 使用切片
+func modify(sls []int) {  
+    sls[0] = 90
+}
+
+func main() {  
+    a := [3]int{89, 90, 91}
+    modify(a[:])
+    fmt.Println(a)
+}
+```
+
+```go
+// 使用指针
+func modify(arr *[3]int) {  
+    (*arr)[0] = 90
+}
+
+func main() {  
+    a := [3]int{89, 90, 91}
+    modify(&a)
+    fmt.Println(a)
+}
+```
