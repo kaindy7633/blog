@@ -36,6 +36,21 @@
     - [指针的类型](#%E6%8C%87%E9%92%88%E7%9A%84%E7%B1%BB%E5%9E%8B)
     - [指针的零值](#%E6%8C%87%E9%92%88%E7%9A%84%E9%9B%B6%E5%80%BC)
     - [指针与切片](#%E6%8C%87%E9%92%88%E4%B8%8E%E5%88%87%E7%89%87)
+  - [面向对象编程：结构体与继承](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%8E%E7%BB%A7%E6%89%BF)
+    - [什么是结构体？](#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%93%E6%9E%84%E4%BD%93)
+    - [定义结构体](#%E5%AE%9A%E4%B9%89%E7%BB%93%E6%9E%84%E4%BD%93)
+    - [定义方法](#%E5%AE%9A%E4%B9%89%E6%96%B9%E6%B3%95)
+    - [方法的参数传递方式](#%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E6%96%B9%E5%BC%8F)
+    - [结构体实现 “继承”](#%E7%BB%93%E6%9E%84%E4%BD%93%E5%AE%9E%E7%8E%B0-%E7%BB%A7%E6%89%BF)
+    - [内部方法与外部方法](#%E5%86%85%E9%83%A8%E6%96%B9%E6%B3%95%E4%B8%8E%E5%A4%96%E9%83%A8%E6%96%B9%E6%B3%95)
+  - [理解 Go 里的函数](#%E7%90%86%E8%A7%A3-go-%E9%87%8C%E7%9A%84%E5%87%BD%E6%95%B0)
+    - [关于函数](#%E5%85%B3%E4%BA%8E%E5%87%BD%E6%95%B0)
+    - [函数的声明](#%E5%87%BD%E6%95%B0%E7%9A%84%E5%A3%B0%E6%98%8E)
+    - [函数实现可变参数](#%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0)
+    - [多个可变参数函数传递参数](#%E5%A4%9A%E4%B8%AA%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0)
+    - [函数的返回值](#%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC)
+    - [方法与函数](#%E6%96%B9%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0)
+    - [匿名函数的使用](#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1148,5 +1163,481 @@ func main() {
     a := [3]int{89, 90, 91}
     modify(&a)
     fmt.Println(a)
+}
+```
+
+## 面向对象编程：结构体与继承
+
+### 什么是结构体？
+
+在之前学过的数据类型中，数组与切片，只能存储同一类型的变量。若要存储多个类型的变量，就需要用到结构体，它是将多个容易类型的命令变量组合在一起的聚合数据类型。
+
+每个变量都成为该结构体的成员变量。
+
+可以理解为 `Go` 语言的结构体 `struct` 和其他语言的 `class` 有相等的地位，但是 `Go` 语言放弃大量面向对象的特性，所有的 `Go` 语言类型除了指针类型外，都可以有自己的方法,提高了可扩展性。
+
+在 `Go` 语言中没有 `class` 类的概念，只有 `struct` 结构体的概念，因此也没有继承。
+
+### 定义结构体
+
+声明结构体
+
+```go
+type 结构体名 struct {
+    属性名   属性类型
+    属性名   属性类型
+    ...
+}
+```
+
+比如我要定义一个可以存储个人资料名为 `Profile` 的结构体，可以这么写
+
+```go
+type Profile struct {
+    name   string
+    age    int
+    gender string
+    mother *Profile // 指针
+    father *Profile // 指针
+}
+```
+
+### 定义方法
+
+在 `Go` 语言中，我们无法在结构体内定义方法，那如何给一个结构体定义方法呢，答案是可以使用组合函数的方式来定义结构体方法。它和普通函数的定义方式有些不一样，比如下面这个方法
+
+```go
+func (person Profile) FmtProfile() {
+    fmt.Printf("名字：%s\n", person.name)
+    fmt.Printf("年龄：%d\n", person.age)
+    fmt.Printf("性别：%s\n", person.gender)
+}
+```
+
+其中 `fmt_profile` 是方法名，而(`person Profile`) ：表示将 `fmt_profile` 方法与 `Profile` 的实例绑定。我们把 `Profile` 称为方法的接收者，而 `person` 表示实例本身，在方法内可以使用 `person.属性名` 的方法来访问实例属性。
+
+完整代码如下：
+
+```go
+package main
+
+import "fmt"
+
+// 定义一个名为Profile 的结构体
+type Profile struct {
+    name   string
+    age    int
+    gender string
+    mother *Profile // 指针
+    father *Profile // 指针
+}
+
+// 定义一个与 Profile 的绑定的方法
+func (person Profile) FmtProfile() {
+    fmt.Printf("名字：%s\n", person.name)
+    fmt.Printf("年龄：%d\n", person.age)
+    fmt.Printf("性别：%s\n", person.gender)
+}
+
+func main() {
+    // 实例化
+    myself := Profile{name: "小明", age: 24, gender: "male"}
+    // 调用函数
+    myself.FmtProfile()
+}
+
+// 名字：小明
+// 年龄：24
+// 性别：male
+```
+
+### 方法的参数传递方式
+
+上面定义方法的方式叫当你想要在方法内改变实例的属性的时候，必须使用指针做为方法的接收者。
+
+```go
+package main
+
+import "fmt"
+
+// 声明一个 Profile 的结构体
+type Profile struct {
+    name   string
+    age    int
+    gender string
+    mother *Profile // 指针
+    father *Profile // 指针
+}
+
+// 重点在于这个星号: *
+func (person *Profile) increase_age() {
+    person.age += 1
+}
+
+func main() {
+    myself := Profile{name: "小明", age: 24, gender: "male"}
+    fmt.Printf("当前年龄：%d\n", myself.age)
+    myself.increase_age()
+    fmt.Printf("当前年龄：%d", myself.age)
+}
+
+// 当前年龄：24
+// 当前年龄：25
+```
+
+可以看到在方法内部对 `age` 的修改已经生效。你可以尝试去掉 `*`，使用值做为方法接收者，看看 `age` 是否会发生改变。
+
+至此，我们知道了两种定义方法的方式：
+
+- 以值做为方法接收者
+
+- 以指针做为方法接收者
+
+那我们如何进行选择呢？以下几种情况，应当直接使用指针做为方法的接收者。
+
+- 你需要在方法内部改变结构体内容的时候
+
+- 出于性能的问题，当结构体过大的时候
+
+有些情况下，以值或指针做为接收者都可以，但是考虑到代码一致性，建议都使用**指针做为接收者**。
+
+不管你使用哪种方法定义方法，指针实例对象、值实例对象都可以直接调用，而没有什么约束。这一点 `Go` 语言做得非常好。
+
+### 结构体实现 “继承”
+
+为什么标题的继承，加了双引号，因为 `Go` 语言本身并不支持继承。
+
+但我们可以使用组合的方法，实现类似继承的效果。
+
+在生活中，组合的例子非常多，比如一台电脑，是由机身外壳，主板，CPU，内存等零部件组合在一起，最后才有了我们用的电脑。
+
+同样的，在 `Go` 语言中，把一个结构体嵌入到另一个结构体的方法，称之为组合。
+
+现在这里有一个表示公司（`company`）的结构体，还有一个表示公司职员（`staff`）的结构体。
+
+```go
+type company struct {
+    companyName string
+    companyAddr string
+}
+
+type staff struct {
+    name string
+    age int
+    gender string
+    position string
+}
+```
+
+若要将公司信息与公司职员关联起来，一般都会想到将 `company` 结构体的内容照抄到 `staff` 里。
+
+```go
+type staff struct {
+    name string
+    age int
+    gender string
+    companyName string
+    companyAddr string
+    position string
+}
+```
+
+虽然在实现上并没有什么问题，但在你对同一公司的多个 `staff` 初始化的时候，都得重复初始化相同的公司信息，这做得并不好，借鉴继承的思想，我们可以将公司的属性都“继承”过来。
+
+但是在 `Go` 中没有类的概念，只有组合，你可以将 `company` 这个 结构体嵌入到 `staff` 中，做为 `staff` 的一个匿名字段，`staff` 就直接拥有了 `company` 的所有属性了。
+
+```go
+type staff struct {
+    name string
+    age int
+    gender string
+    position string
+    company   // 匿名字段 
+}
+```
+
+来写个完整的程序验证一下。
+
+```go
+package main
+
+import "fmt"
+
+type company struct {
+    companyName string
+    companyAddr string
+}
+
+type staff struct {
+    name string
+    age int
+    gender string
+    position string
+    company
+}
+
+func main()  {
+    myCom := company{
+        companyName: "Tencent",
+        companyAddr: "深圳市南山区",
+    }
+    staffInfo := staff{
+        name:     "小明",
+        age:      28,
+        gender:   "男",
+        position: "云计算开发工程师",
+        company: myCom,
+    }
+
+    fmt.Printf("%s 在 %s 工作\n", staffInfo.name, staffInfo.companyName)
+    fmt.Printf("%s 在 %s 工作\n", staffInfo.name, staffInfo.company.companyName)
+}
+
+// 小明 在 Tencent 工作
+// 小明 在 Tencent 工作
+```
+
+### 内部方法与外部方法
+
+在 `Go` 语言中，函数名的首字母大小写非常重要，它被来实现控制对方法的访问权限。
+
+当方法的首字母为大写时，这个方法对于所有包都是 `Public`，其他包可以随意调用
+
+当方法的首字母为小写时，这个方法是 `Private`，其他包是无法访问的。
+
+## 理解 Go 里的函数
+
+### 关于函数
+
+函数是基于功能或逻辑进行封装的可复用的代码结构。将一段功能复杂、很长的一段代码封装成多个代码片段（即函数），有助于提高代码可读性和可维护性。
+
+在 `Go` 语言中，函数可以分为两种：
+
+- 带有名字的普通函数
+
+- 没有名字的匿名函数
+
+由于 `Go` 语言是编译型语言，所以函数编写的顺序是无关紧要的，它不像 `Python` 那样，函数在位置上需要定义在调用之前。
+
+### 函数的声明
+
+函数的声明，使用 `func` 关键字，后面依次接 函数名，参数列表，返回值列表，用 `{ }` 包裹的代码逻辑体
+
+```go
+func 函数名(形式参数列表)(返回值列表){
+    函数体
+}
+```
+
+形式参数列表描述了函数的参数名以及参数类型，这些参数作为局部变量，其值由参数调用者提供
+
+返回值列表描述了函数返回值的变量名以及类型，如果函数返回一个无名变量或者没有返回值，返回值列表的括号是可以省略的。
+
+举个例子，定义一个 `sum` 函数，接收两个 `int` 类型的参数，在运行中，将其值分别赋值给 `a`，`b`，并规定必须返回一个 `int` 类型的值 。
+
+```go
+func sum(a int, b int) (int){
+    return a + b
+}
+
+func main() {
+    fmt.Println(sum(1,2))
+}
+```
+
+### 函数实现可变参数
+
+上面举的例子，参数个数都是固定的，这很好理解 ，指定什么类型的参数就传入什么类型的变量，数量上，不能多一个，也不能少一个。（好像没有可选参数）。
+
+可变参数分为几种：
+
+- 多个类型一致的参数
+
+这边定义一个可以对多个数值进行求和的函数，
+
+使用 `...int`，表示一个元素为 `int` 类型的切片，用来接收调用者传入的参数。
+
+```go
+// 使用 ...类型，表示一个元素为int类型的切片
+func sum(args ...int) int {
+    var sum int
+    for _, v := range args {
+        sum += v
+    }
+    return sum
+}
+func main() {
+    fmt.Println(sum(1, 2, 3))
+}
+
+// output: 6
+```
+
+其中 `...` 是 `Go` 语言为了方便程序员写代码而实现的语法糖，如果该函数下会多个类型的函数，这个语法糖必须得是最后一个参数。
+
+同时这个语法糖，只能在定义函数时使用。
+
+- 多个类型不一致的参数
+
+上面那个例子中，我们的参数类型都是 `int`，如果你希望传多个参数且这些参数的类型都不一样，可以指定类型为 `...interface{}`，然后再遍历。
+
+比如下面这段代码，是 `Go` 语言标准库中 `fmt.Printf()` 的函数原型：
+
+```go
+import "fmt"
+
+func MyPrintf(args ...interface{}) {
+    for _, arg := range args {
+        switch arg.(type) {
+            case int:
+                fmt.Println(arg, "is an int value.")
+            case string:
+                fmt.Println(arg, "is a string value.")
+            case int64:
+                fmt.Println(arg, "is an int64 value.")
+            default:
+                fmt.Println(arg, "is an unknown type.")
+        }
+    }
+}
+
+func main() {
+    var v1 int = 1
+    var v2 int64 = 234
+    var v3 string = "hello"
+    var v4 float32 = 1.234
+    MyPrintf(v1, v2, v3, v4)
+}
+```
+
+在某些情况下，我们需要定义一个参数个数可变的函数，具体传入几个参数，由调用者自己决定，但不管传入几个参数，函数都能够处理。
+
+比如这边实现一个累加
+
+```go
+func myfunc(args ...int) {
+    for _, arg := range args {
+        fmt.Println(arg)
+    }
+}
+```
+
+### 多个可变参数函数传递参数
+
+上面提到了可以使用 `...` 来接收多个参数，除此之外，它还有一个用法，就是用来解序列，将函数的可变参数（一个切片）一个一个取出来，传递给另一个可变参数的函数，而不是传递可变参数变量本身。
+
+同样这个用法，也只能在给函数传递参数里使用。
+
+例子如下：
+
+```go
+import "fmt"
+
+func sum(args ...int) int {
+    var result int
+    for _, v := range args {
+        result += v
+    }
+    return result
+}
+
+func Sum(args ...int) int {
+    // 利用 ... 来解序列
+    result := sum(args...)
+    return result
+}
+func main() {
+    fmt.Println(sum(1, 2, 3))
+}
+```
+
+### 函数的返回值
+
+`Go` 语言中的函数，在你定义的时候，就规定了此函数
+
+有没有返回值？
+
+当没有指明返回值的类型时, 函数体可以有 `return`，`Go` 并不像 `Python` 那样没有 `return`，就默认返回 `None`
+
+返回几个值？
+
+`Go` 支持一个函数返回多个值
+
+```go
+func double(a int) (int, int) {
+   b := a * 2
+   return a, b
+}
+func main() {
+   // 接收参数用逗号分隔
+   a, b := double(2)
+   fmt.Println(a, b)
+}
+```
+
+怎么返回值?
+
+`Go` 支持返回带有变量名的值
+
+```go
+func double(a int) (b int) {
+   // 不能使用 := ,因为在返回值哪里已经声明了为int
+   b = a * 2
+   // 不需要指明写回哪个变量,在返回值类型那里已经指定了
+   return
+}
+func main() {
+   fmt.Println(double(2))
+}
+// output: 4
+```
+
+### 方法与函数
+
+方法和函数有什么区别？ 为防有朋友第一次接触面向对象，这里多嘴一句。
+
+方法，是一种特殊的函数。当你一个函数和对象/结构体进行绑定的时候，我们就称这个函数是一个方法。
+
+### 匿名函数的使用
+
+所谓匿名函数，就是没有名字的函数，它只有函数逻辑体，而没有函数名。
+
+定义的格式如下
+
+```go
+func(参数列表)(返回参数列表){
+    函数体
+}
+```
+
+一个名字实际上并没有多大区别，所有使用匿名函数都可以改成普通有名函数，那么什么情况下，会使用匿名函数呢？
+
+定义变量名，是一个不难但是还费脑子的事情，对于那到只使用一次的函数，是没必要拥有姓名的。这才有了匿名函数。
+
+有了这个背景，决定了匿名函数只有拥有短暂的生命，一般都是定义后立即使用。
+
+就像这样，定义后立马执行（这里只是举例，实际代码没有意义）。
+
+```go
+func(data int) {
+    fmt.Println("hello", data)
+}(100)
+```
+
+亦或是做为回调函数使用
+
+```go
+// 第二个参数为函数
+func visit(list []int, f func(int)) {
+    for _, v := range list {
+        // 执行回调函数
+        f(v)
+    }
+}
+func main() {
+    // 使用匿名函数直接做为参数
+    visit([]int{1, 2, 3, 4}, func(v int) {
+        fmt.Println(v)
+    })
 }
 ```
