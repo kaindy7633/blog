@@ -77,6 +77,19 @@
     - [多个defer 反序调用](#%E5%A4%9A%E4%B8%AAdefer-%E5%8F%8D%E5%BA%8F%E8%B0%83%E7%94%A8)
     - [defer 与 return 孰先孰后](#defer-%E4%B8%8E-return-%E5%AD%B0%E5%85%88%E5%AD%B0%E5%90%8E)
     - [为什么要有 defer？](#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-defer)
+  - [面向对象编程：接口与多态](#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81)
+    - [接口是什么？](#%E6%8E%A5%E5%8F%A3%E6%98%AF%E4%BB%80%E4%B9%88)
+      - [如何定义接口](#%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E6%8E%A5%E5%8F%A3)
+      - [如何实现接口](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3)
+      - [接口实现多态](#%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E5%A4%9A%E6%80%81)
+  - [关键字：make 和 new 的区别](#%E5%85%B3%E9%94%AE%E5%AD%97make-%E5%92%8C-new-%E7%9A%84%E5%8C%BA%E5%88%AB)
+    - [`new` 函数](#new-%E5%87%BD%E6%95%B0)
+    - [make 函数](#make-%E5%87%BD%E6%95%B0)
+    - [总结](#%E6%80%BB%E7%BB%93)
+  - [理解 Go 里的语句块与作用域](#%E7%90%86%E8%A7%A3-go-%E9%87%8C%E7%9A%84%E8%AF%AD%E5%8F%A5%E5%9D%97%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F)
+    - [显示语句块与隐式语句块](#%E6%98%BE%E7%A4%BA%E8%AF%AD%E5%8F%A5%E5%9D%97%E4%B8%8E%E9%9A%90%E5%BC%8F%E8%AF%AD%E5%8F%A5%E5%9D%97)
+    - [四种作用域的理解](#%E5%9B%9B%E7%A7%8D%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E7%90%86%E8%A7%A3)
+    - [静态作用域与动态作用域](#%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E5%8A%A8%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2449,3 +2462,466 @@ func f() {
 }
 ```
 
+## 面向对象编程：接口与多态
+
+### 接口是什么？
+
+在面向对象的领域里，接口一般这样定义：接口定义一个对象的行为。接口只指定了对象应该做什么，至于如何实现这个行为（即实现细节），则由对象本身去确定。
+
+在 `Go` 语言中，接口就是方法签名（`Method Signature`）的集合。当一个类型定义了接口中的所有方法，我们称它实现了该接口。这与面向对象编程（`OOP`）的说法很类似。接口指定了一个类型应该具有的方法，并由该类型决定如何实现这些方法。
+
+#### 如何定义接口
+
+使用 `type` 关键字来定义接口。
+
+如下代码，定义了一个电话接口，要求实现 `call` 方法。
+
+```go
+type Phone interface {
+   call()
+}
+```
+
+#### 如何实现接口
+
+如果有一个类型/结构体，实现了一个接口要求的所有方法，这里 `Phone` 接口只有 `call` 方法，所以只要实现了 `call` 方法，我们就可以称它实现了 `Phone` 接口。
+
+意思是如果有一台机器，可以给别人打电话，那么我们就可以把它叫做电话。
+
+这个接口的实现是隐式的，不像 `JAVA` 中要用 `implements` 显示说明。
+
+继续上面电话的例子，我们先定义一个 `Nokia` 的结构体，而它实现了 `call` 的方法，所以它也是一台电话。
+
+```go
+type Nokia struct {
+    name string
+}
+
+// 接收者为 Nokia
+func (phone Nokia) call() {
+    fmt.Println("我是 Nokia，是一台电话")
+}
+```
+
+#### 接口实现多态
+
+鸭子类型（`Duck typing`）的定义是，只要你长得像鸭子，叫起来也像鸭子，那我认为你就是一只鸭子。
+
+举个通俗的例子
+
+什么样子的人可以称做老师呢？
+
+不同的人标准不一，有的人认为必须有一定的学历，有的人认为必须要有老师资格证。
+
+而我认为只要能育人，能给传授给其他人知识的，都可以称之为老师。
+
+而不管你教的什么学科？是体育竞技，还是教人烹饪。
+
+也不管你怎么教？是在教室里手执教教鞭、拿着粉笔，还是追求真实，直接实战演练。
+
+通通不管。
+
+这就一个接口（老师）下，在不同对象（人）上的不同表现。这就是多态。
+
+在 `Go` 语言中，是通过接口来实现的多态。
+
+这里以商品接口来写一段代码演示一下。
+
+先定义一个商品（`Good`）的接口，意思是一个类型或者结构体，只要实现了 `settleAccount()` 和 `orderInfo()` 两个方法，那这个类型/结构体就是一个商品。
+
+```go
+type Good interface {
+    settleAccount() int
+    orderInfo() string
+}
+```
+
+然后我们定义两个结构体，分别是手机和赠品。
+
+```go
+type Phone struct {
+    name string
+    quantity int
+    price int
+}
+
+type FreeGift struct {
+    name string
+    quantity int
+    price int
+}
+```
+
+然后分别为他们实现 `Good` 接口的两个方法
+
+```go
+// Phone
+func (phone Phone) settleAccount() int {
+    return phone.quantity * phone.price
+}
+
+func (phone Phone) orderInfo() string{
+    return "您要购买" + strconv.Itoa(phone.quantity)+ "个" + 
+        phone.name + "计：" + strconv.Itoa(phone.settleAccount()) + "元"
+}
+
+// FreeGift
+func (gift FreeGift) settleAccount() int {
+    return 0
+}
+
+func (gift FreeGift) orderInfo() string{
+    return "您要购买" + strconv.Itoa(gift.quantity)+ "个" + 
+        gift.name + "计：" + strconv.Itoa(gift.settleAccount()) + "元"
+}
+```
+
+实现了 `Good` 接口要求的两个方法后，手机和赠品在 `Go` 语言看来就都是商品（`Good`）类型了。
+
+这里候，我挑选了两件商品（实例化），分别是手机和耳机（赠品，不要钱）
+
+```go
+iPhone := Phone{
+    name:     "iPhone",
+    quantity: 1,
+    price:    8000,
+}
+
+earphones := FreeGift{
+    name:     "耳机",
+    quantity: 1,
+    price:    200,
+}
+```
+
+然后创建一个购物车（也就是类型为 `Good` 的切片），来存放这些商品。
+
+```go
+goods := []Good{iPhone, earphones}
+```
+
+最后，定义一个方法来计算购物车里的订单金额
+
+```go
+func calculateAllPrice(goods []Good) int {
+    var allPrice int
+    for _,good := range goods{
+        fmt.Println(good.orderInfo())
+        allPrice += good.settleAccount()
+    }
+    return allPrice
+}
+```
+
+完整代码如下：
+
+```go
+package main
+
+import (
+    "fmt"
+    "strconv"
+)
+
+// 定义一个接口
+type Good interface {
+    settleAccount() int
+    orderInfo() string
+}
+
+type Phone struct {
+    name string
+    quantity int
+    price int
+}
+
+func (phone Phone) settleAccount() int {
+    return phone.quantity * phone.price
+}
+
+func (phone Phone) orderInfo() string{
+    return "您要购买" + strconv.Itoa(phone.quantity)+ "个" + 
+        phone.name + "计：" + strconv.Itoa(phone.settleAccount()) + "元"
+}
+
+type FreeGift struct {
+    name string
+    quantity int
+    price int
+}
+
+func (gift FreeGift) settleAccount() int {
+    return 0
+}
+
+func (gift FreeGift) orderInfo() string{
+    return "您要购买" + strconv.Itoa(gift.quantity)+ "个" + 
+        gift.name + "计：" + strconv.Itoa(gift.settleAccount()) + "元"
+}
+
+func calculateAllPrice(goods []Good) int {
+    var allPrice int
+    for _,good := range goods{
+        fmt.Println(good.orderInfo())
+        allPrice += good.settleAccount()
+    }
+    return allPrice
+}
+
+func main()  {
+    iPhone := Phone{
+        name:     "iPhone",
+        quantity: 1,
+        price:    8000,
+    }
+    earphones := FreeGift{
+        name:     "耳机",
+        quantity: 1,
+        price:    200,
+    }
+
+    goods := []Good{iPhone, earphones}
+    allPrice := calculateAllPrice(goods)
+    fmt.Printf("该订单总共需要支付 %d 元", allPrice)
+}
+
+// 您要购买1个iPhone计：8000元
+// 您要购买1个耳机计：0元
+```
+
+## 关键字：make 和 new 的区别
+
+### `new` 函数
+
+在官方文档中，`new` 函数的描述如下
+
+> // The new built-in function allocates memory. The first argument is a type,
+> // not a value, and the value returned is a pointer to a newly
+> // allocated zero value of that type.
+
+> func new(Type) *Type
+
+可以看到，`new` 只能传递一个参数，该参数为一个任意类型，可以是 `Go` 语言内建的类型，也可以是你自定义的类型
+
+那么 `new` 函数到底做了哪些事呢：
+
+- 分配内存
+
+- 设置零值
+
+- 返回指针（重要）
+
+举个例子
+
+```go
+import "fmt"
+
+type Student struct {
+   name string
+   age int
+}
+
+func main() {
+    // new 一个内建类型
+    num := new(int)
+    fmt.Println(*num) //打印零值：0
+
+    // new 一个自定义类型
+    s := new(Student)
+    s.name = "wangbm"
+}
+```
+
+### make 函数
+
+在官方文档中，`make` 函数的描述如下
+
+> //The make built-in function allocates and initializes an object
+> //of type slice, map, or chan (only). Like new, the first argument is
+> // a type, not a value. Unlike new, make's return type is the same as
+> // the type of its argument, not a pointer to it.
+
+> func make(t Type, size …IntegerType) Type
+
+内建函数 `make` 用来为 `slice`，`map` 或 `chan` 类型（注意：也只能用在这三种类型上）分配内存和初始化一个对象
+
+`make` 返回类型的本身而不是指针，而返回值也依赖于具体传入的类型，因为这三种类型（`slice`，`map` 和 `chan`）本身就是引用类型，所以就没有必要返回他们的指针了
+
+由于这三种类型都是引用类型，所以必须得初始化（`size` 和 `cap`），但是不是置为零值，这个和 `new` 是不一样的。
+
+举几个例子
+
+```go
+//切片
+a := make([]int, 2, 10)  
+
+// 字典
+b := make(map[string]int)
+
+// 通道
+c := make(chan int, 10)
+```
+
+### 总结
+`new` ：为所有的类型分配内存，并初始化为零值，返回指针。
+
+`make` ：只能为 `slice`，`map`，`chan` 分配内存，并初始化，返回的是类型。
+
+另外，目前来看 `new` 函数并不常用，大家更喜欢使用短语句声明的方式。
+
+```go
+a := new(int)
+a = 1
+// 等价于
+a := 1
+```
+
+但是 `make` 就不一样了，它的地位无可替代，在使用`slice`、`map` 以及 `channel` 的时候，还是要使用 `make` 进行初始化，然后才可以对他们进行操作。
+
+## 理解 Go 里的语句块与作用域
+
+由于 `Go` 使用的是词法作用域，而词法作用域依赖于语句块。所以在讲作用域时，需要先了解一下 `Go` 中的语句块是怎么一回事？
+
+### 显示语句块与隐式语句块
+
+通俗地说，语句块是由花括弧（`{}`）所包含的一系列语句。
+
+语句块内部声明的名字是无法被外部块访问的。这个块决定了内部声明的名字的作用域范围，也就是作用域。
+
+用花括弧包含的语句块，属于显示语句块。
+
+在 `Go` 中还有很多的隐式语句块：
+
+主语句块：包括所有源码，对应内置作用域
+
+包语句块：包括该包中所有的源码（一个包可能会包括一个目录下的多个文件），对应包级作用域
+
+文件语句块：包括该文件中的所有源码，对应文件级作用域
+
+`for` 、`if`、`switch` 等语句本身也在它自身的隐式语句块中，对应局部作用域
+
+前面三点好理解，第四点举几个例子
+
+`for` 循环完后， 不能再使用变量 `i`
+
+```go
+for i := 0; i < 5; i++ {
+    fmt.Println(i)
+}
+```
+
+`if` 语句判断完后，同样不能再使用变量 `i`
+
+```go
+if i := 0; i >= 0 {
+    fmt.Println(i)
+}
+```
+
+`switch` 语句完了后，也是不是再使用变量 `i`
+
+```go
+switch i := 2; i * 4 {
+case 8:
+    fmt.Println(i)
+default:
+    fmt.Println(“default”)
+}
+```
+
+且每个 `switch` 语句的子句都是一个隐式的语句块
+
+```go
+switch i := 2; i * 4 {
+case 8:
+    j := 0
+    fmt.Println(i, j)
+default:
+    // "j" is undefined here
+    fmt.Println(“default”)
+}
+// "j" is undefined here
+```
+
+### 四种作用域的理解
+
+变量的声明，除了声明其类型，其声明的位置也有讲究，不同的位置决定了其拥有不同的作用范围，说白了就是我这个变量，在哪里可用，在哪里不可用。
+
+根据声明位置的不同，作用域可以分为以下四个类型：
+
+- 内置作用域：不需要自己声明，所有的关键字和内置类型、函数都拥有全局作用域
+
+- 包级作用域：必須函数外声明，在该包内的所有文件都可以访问
+
+- 文件级作用域：不需要声明，导入即可。一个文件中通过 `import` 导入的包名，只在该文件内可用
+
+- 局部作用域：在自己的语句块内声明，包括函数，`for`、`if` 等语句块，或自定义的 `{}` 语句块形成的作用域，只在自己的局部作用域内可用
+
+以上的四种作用域，从上往下，范围从大到小，为了表述方便，我这里自己将范围大的作用域称为高层作用域，而范围小的称为低层作用域。
+
+对于作用域，有以下几点总结：
+
+- 低层作用域，可以访问高层作用域
+
+- 同一层级的作用域，是相互隔离的
+
+- 低层作用域里声明的变量，会覆盖高层作用域里声明的变量
+
+在这里要注意一下，不要将作用域和生命周期混为一谈。声明语句的作用域对应的是一个源代码的文本区域；它是一个编译时的属性。
+
+而一个变量的生命周期是指程序运行时变量存在的有效时间段，在此时间区域内它可以被程序的其他部分引用；是一个运行时的概念。
+
+### 静态作用域与动态作用域
+
+根据局部作用域内变量的可见性，是否是静态不变，可以将编程语言分为如下两种：
+
+静态作用域，如 `Go` 语言
+
+动态作用域，如 `Shell` 语言
+
+具体什么是动态作用域，这里用 `Shell` 的代码演示一下，你就知道了
+
+```shell
+#!/bin/bash
+func01() {
+    local value=1
+    func02
+}
+func02() {
+    echo "func02 sees value as ${value}"
+}
+
+# 执行函数
+# func01
+# func02
+```
+
+从代码中，可以看到在 `func01` 函数中定义了个局部变量 `value`，按理说，这个 `value` 变量只在该函数内可用，但由于在 `shell` 中的作用域是动态的，所以在 `func01` 中也可以调用 `func02` 时，`func02` 可以访问到 `value` 变量，此时的 `func02` 作用域可以当成是局部作用域中（`func01`）的局部作用域。
+
+但若脱离了 `func01` 的执行环境，将其放在全局环境下或者其他函数中， `func02` 是访问不了 `value` 变量的。
+
+所以此时的输出结果是
+
+```shell
+func02 sees value as 1
+func02 sees value as 
+```
+
+但在 `Go` 中并不存在这种动态作用域，比如这段代码，在 `func01` 函数中，要想取得 `name` 这个变量，只能从 `func01` 的作用域或者更高层作用域里查找（文件级作用域，包级作用域和内置作用域），而不能从调用它的另一个局部作用域中（因为他们在层级上属于同一级）查找。
+
+```go
+import "fmt"
+
+func func01() {
+    fmt.Println("在 func01 函数中，name：", name)
+}
+
+func main()  {
+    var name string = "Python编程时光"
+    fmt.Println("在 main 函数中，name：", name)
+
+    func01()
+}
+```
+
+因此你在执行这段代码时，会报错，提示在 `func01` 中的 `name` 还未定义。
