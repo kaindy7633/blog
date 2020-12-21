@@ -90,6 +90,21 @@
     - [显示语句块与隐式语句块](#%E6%98%BE%E7%A4%BA%E8%AF%AD%E5%8F%A5%E5%9D%97%E4%B8%8E%E9%9A%90%E5%BC%8F%E8%AF%AD%E5%8F%A5%E5%9D%97)
     - [四种作用域的理解](#%E5%9B%9B%E7%A7%8D%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E7%90%86%E8%A7%A3)
     - [静态作用域与动态作用域](#%E9%9D%99%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E5%8A%A8%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F)
+  - [学习 Go 协程：goroutine](#%E5%AD%A6%E4%B9%A0-go-%E5%8D%8F%E7%A8%8Bgoroutine)
+    - [协程的初步使用](#%E5%8D%8F%E7%A8%8B%E7%9A%84%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8)
+    - [多个协程的效果](#%E5%A4%9A%E4%B8%AA%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%95%88%E6%9E%9C)
+  - [学习 Go 协程：详解信道/通道](#%E5%AD%A6%E4%B9%A0-go-%E5%8D%8F%E7%A8%8B%E8%AF%A6%E8%A7%A3%E4%BF%A1%E9%81%93%E9%80%9A%E9%81%93)
+    - [前言](#%E5%89%8D%E8%A8%80)
+    - [信道的定义与使用](#%E4%BF%A1%E9%81%93%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E4%BD%BF%E7%94%A8)
+    - [信道的容量与长度](#%E4%BF%A1%E9%81%93%E7%9A%84%E5%AE%B9%E9%87%8F%E4%B8%8E%E9%95%BF%E5%BA%A6)
+    - [缓冲信道与无缓冲信道](#%E7%BC%93%E5%86%B2%E4%BF%A1%E9%81%93%E4%B8%8E%E6%97%A0%E7%BC%93%E5%86%B2%E4%BF%A1%E9%81%93)
+    - [双向信道与单向信道](#%E5%8F%8C%E5%90%91%E4%BF%A1%E9%81%93%E4%B8%8E%E5%8D%95%E5%90%91%E4%BF%A1%E9%81%93)
+    - [遍历信道](#%E9%81%8D%E5%8E%86%E4%BF%A1%E9%81%93)
+    - [用信道来做锁](#%E7%94%A8%E4%BF%A1%E9%81%93%E6%9D%A5%E5%81%9A%E9%94%81)
+  - [几个信道死锁经典错误案例详解](#%E5%87%A0%E4%B8%AA%E4%BF%A1%E9%81%93%E6%AD%BB%E9%94%81%E7%BB%8F%E5%85%B8%E9%94%99%E8%AF%AF%E6%A1%88%E4%BE%8B%E8%AF%A6%E8%A7%A3)
+    - [错误示例一](#%E9%94%99%E8%AF%AF%E7%A4%BA%E4%BE%8B%E4%B8%80)
+    - [错误示例二](#%E9%94%99%E8%AF%AF%E7%A4%BA%E4%BE%8B%E4%BA%8C)
+    - [错误示例三](#%E9%94%99%E8%AF%AF%E7%A4%BA%E4%BE%8B%E4%B8%89)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -2925,3 +2940,591 @@ func main()  {
 ```
 
 因此你在执行这段代码时，会报错，提示在 `func01` 中的 `name` 还未定义。
+
+## 学习 Go 协程：goroutine
+
+说到 `Go` 语言，很多没接触过它的人，对它的第一印象，一定是它从语言层面天生支持并发，非常方便，让开发者能快速写出高性能且易于理解的程序。
+
+在其他开发语言里，你需要要学习多进程，多线程，还要掌握各种支持并发的库，同时你还要清楚它们之间的区别及优缺点，懂得在不同的场景选择不同的并发模式。
+
+而 `Golang` 作为一门现代化的编程语言，它不需要你直面这些复杂的问题。在 `Golang` 里，你不需要学习如何创建进程池/线程池，也不需要知道什么情况下使用多线程，什么时候使用多进程。因为你没得选，也不需要选，它原生提供的 `goroutine` （也即协程）已经足够优秀，能够自动帮你处理好所有的事情，而你要做的只是执行它，就这么简单。
+
+一个 `goroutine` 本身就是一个函数，当你直接调用时，它就是一个普通函数，如果你在调用前加一个关键字 `go` ，那你就开启了一个 `goroutine`。
+
+```go
+// 执行一个函数
+func()
+
+// 开启一个协程执行这个函数
+go func()
+```
+
+### 协程的初步使用
+
+一个 `Go` 程序的入口通常是 `main` 函数，程序启动后，`main` 函数最先运行，我们称之为 `main goroutine`。
+
+在 `main` 中或者其下调用的代码中才可以使用 `go + func()` 的方法来启动协程。
+
+`main` 的地位相当于主线程，当 `main` 函数执行完成后，这个线程也就终结了，其下的运行着的所有协程也不管代码是不是还在跑，也得乖乖退出。
+
+因此如下这段代码运行完，只会输出  `hello, world` ，而不会输出 `hello, go` （因为协程的创建需要时间，当 `hello, world` 打印后，协程还没来得及并执行）。
+
+```go
+import "fmt"
+
+func mytest() {
+    fmt.Println("hello, go")
+}
+
+func main() {
+    // 启动一个协程
+    go mytest()
+    fmt.Println("hello, world")
+}
+```
+
+对于刚学习 `Go` 的协程同学来说，可以使用 `time.Sleep` 来使 `main` 阻塞，使其他协程能够有机会运行完全，但你要注意的是，这并不是推荐的方式（后续我们会学习其他更优雅的方式）。
+
+当我在代码中加入一行 `time.Sleep` 输出就符合预期了。
+
+```go
+import (
+    "fmt"
+    "time"
+)
+
+func mytest() {
+    fmt.Println("hello, go")
+}
+
+func main() {
+    go mytest()
+    fmt.Println("hello, world")
+    time.Sleep(time.Second)
+}
+
+// hello, world
+// hello, go
+```
+
+### 多个协程的效果
+
+为了让你看到并发的效果，这里举个最简单的例子
+
+```go
+import (
+    "fmt"
+    "time"
+)
+
+func mygo(name string) {
+    for i := 0; i < 10; i++ {
+        fmt.Printf("In goroutine %s\n", name)
+        // 为了避免第一个协程执行过快，观察不到并发的效果，加个休眠
+        time.Sleep(10 * time.Millisecond) 
+    }
+}
+
+func main() {
+    go mygo("协程1号") // 第一个协程
+    go mygo("协程2号") // 第二个协程
+    time.Sleep(time.Second)
+}
+
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+// In goroutine 协程1号
+// In goroutine 协程2号
+```
+
+可以观察到两个协程就如两个线程一样，并发执行, 通过以上简单的例子，是不是折服于 `Go` 的这种强大的并发特性，将同步代码转为异步代码，真的只要一个关键字就可以了，也不需要使用其他库，简单方便。
+
+本篇只介绍了协程的简单使用，真正的并发程序还是要结合信道（ `channel` ）来实现。关于信道的内容，将在下一篇文章中介绍。
+
+## 学习 Go 协程：详解信道/通道
+
+### 前言
+
+`goroutine` 是 `Go` 语言程序的并发执行的基本单元，多个 `goroutine` 的通信是需要依赖本文的主人公 —— `channel` 。`channel`，中文翻译有叫通道，也有叫信道的。以下为了方便，我统一称之为 信道 。
+
+信道，就是一个管道，连接多个 `goroutine` 程序 ，它是一种队列式的数据结构，遵循先入先出的规则。
+
+### 信道的定义与使用
+
+每个信道都只能传递一种数据类型的数据，所以在你声明的时候，你得指定数据类型（ `string` `int` 等等）
+
+```go
+var 信道实例 chan 信道类型
+```
+
+声明后的信道，其零值是 `nil`，无法直接使用，必须配合 `make` 函进行初始化。
+
+```go
+信道实例 = make(chan 信道类型)
+```
+
+亦或者，上面两行可以合并成一句，以下我都使用这样的方式进行信道的声明
+
+```go
+信道实例 := make(chan 信道类型)
+```
+
+假如我要创建一个可以传输 `int` 类型的信道，可以这样子写。
+
+```go
+// 定义信道
+pipline := make(chan int)
+```
+
+信道的数据操作，无非就两种：发送数据与读取数据
+
+```go
+// 往信道中发送数据
+pipline <- 200
+
+// 从信道中取出数据，并赋值给mydata
+mydata := <- pipline
+```
+
+信道用完了，可以对其进行关闭，避免有人一直在等待。
+
+```go
+close(pipline)
+```
+
+对一个已关闭的信道再关闭，是会报错的。所以我们还要学会，如何判断一个信道是否被关闭？
+
+当从信道中读取数据时，可以有多个返回值，其中第二个可以表示 信道是否被关闭，如果已经被关闭，`ok` 为 `false`，若还没被关闭，`ok` 为 `true`。
+
+```go
+x, ok := <-pipline
+```
+
+### 信道的容量与长度
+
+一般创建信道都是使用 `make` 函数，`make` 函数接收两个参数
+
+- 第一个参数：必填，指定信道类型
+
+- 第二个参数：选填，不填默认为0，指定信道的容量（可缓存多少数据）
+
+对于信道的容量，很重要，这里要多说几点：
+
+- 当容量为0时，说明信道中不能存放数据，在发送数据时，必须要求立马有人接收，否则会报错。此时的信道称之为无缓冲信道。
+
+- 当容量为1时，说明信道只能缓存一个数据，若信道中已有一个数据，此时再往里发送数据，会造成程序阻塞。 利用这点可以利用信道来做锁。
+
+- 当容量大于1时，信道中可以存放多个数据，可以用于多个协程之间的通信管道，共享资源。
+
+至此我们知道，信道就是一个容器。
+
+若将它比做一个纸箱子
+
+它可以装10本书，代表其容量为10
+
+当前只装了1本书，代表其当前长度为1
+
+信道的容量，可以使用 `cap` 函数获取 ，而信道的长度，可以使用 `len` 长度获取。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan int, 10)
+    fmt.Printf("信道可缓冲 %d 个数据\n", cap(pipline))
+    pipline<- 1
+    fmt.Printf("信道中当前有 %d 个数据", len(pipline))
+}
+
+// 信道可缓冲 10 个数据
+// 信道中当前有 1 个数据
+```
+
+### 缓冲信道与无缓冲信道
+
+按照是否可缓冲数据可分为：缓冲信道 与 无缓冲信道
+
+- 缓冲信道
+
+允许信道里存储一个或多个数据，这意味着，设置了缓冲区后，发送端和接收端可以处于异步的状态。
+
+```go
+pipline := make(chan int, 10)
+```
+
+- 无缓冲信道
+
+在信道里无法存储数据，这意味着，接收端必须先于发送端准备好，以确保你发送完数据后，有人立马接收数据，否则发送端就会造成阻塞，原因很简单，信道中无法存储数据。也就是说发送端和接收端是同步运行的。
+
+```go
+pipline := make(chan int)
+
+// 或者
+pipline := make(chan int, 0)
+```
+
+### 双向信道与单向信道
+
+通常情况下，我们定义的信道都是双向通道，可发送数据，也可以接收数据。
+
+但有时候，我们希望对信道的数据流向做一些控制，比如这个信道只能接收数据或者这个信道只能发送数据。
+
+因此，就有了 双向信道 和 单向信道 两种分类。
+
+- 双向信道
+
+默认情况下你定义的信道都是双向的，比如下面代码
+
+```go
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    pipline := make(chan int)
+
+    go func() {
+        fmt.Println("准备发送数据: 100")
+        pipline <- 100
+    }()
+
+    go func() {
+        num := <-pipline
+        fmt.Printf("接收到的数据是: %d", num)
+    }()
+    // 主函数sleep，使得上面两个goroutine有机会执行
+    time.Sleep(1)
+}
+```
+
+- 单向信道
+
+单向信道，可以细分为 只读信道 和 只写信道。
+
+定义只读信道
+
+```go
+var pipline = make(chan int)
+type Receiver = <-chan int // 关键代码：定义别名类型
+var receiver Receiver = pipline
+```
+
+定义只写信道
+
+```go
+var pipline = make(chan int)
+type Sender = chan<- int  // 关键代码：定义别名类型
+var sender Sender = pipline
+```
+
+仔细观察，区别在于 `<-` 符号在关键字 `chan` 的左边还是右边。
+
+`<-chan` 表示这个信道，只能从里发出数据，对于程序来说就是只读
+
+`chan<-` 表示这个信道，只能从外面接收数据，对于程序来说就是只写
+
+有同学可能会问：为什么还要先声明一个双向信道，再定义单向通道呢？比如这样写
+
+```go
+type Sender = chan<- int 
+sender := make(Sender)
+```
+
+代码是没问题，但是你要明白信道的意义是什么？
+
+信道本身就是为了传输数据而存在的，如果只有接收者或者只有发送者，那信道就变成了只入不出或者只出不入了吗，没什么用。所以只读信道和只写信道，唇亡齿寒，缺一不可。
+
+当然了，若你往一个只读信道中写入数据，或者从一个只写信道中读取数据，是必然都会出错的，不多说了。
+
+完整的示例代码如下，供你参考：
+
+```go
+import (
+    "fmt"
+    "time"
+)
+ //定义只写信道类型
+type Sender = chan<- int  
+
+//定义只读信道类型
+type Receiver = <-chan int 
+
+func main() {
+    var pipline = make(chan int)
+
+    go func() {
+        var sender Sender = pipline
+        fmt.Println("准备发送数据: 100")
+        sender <- 100
+    }()
+
+    go func() {
+        var receiver Receiver = pipline
+        num := <-receiver
+        fmt.Printf("接收到的数据是: %d", num)
+    }()
+    // 主函数sleep，使得上面两个goroutine有机会执行
+    time.Sleep(1)
+}
+```
+
+### 遍历信道
+
+遍历信道，可以使用 `for` 搭配 `range` 关键字，在 `range` 时，要确保信道是处于关闭状态，否则循环会阻塞。
+
+```go
+import "fmt"
+
+func fibonacci(mychan chan int) {
+    n := cap(mychan)
+    x, y := 1, 1
+    for i := 0; i < n; i++ {
+        mychan <- x
+        x, y = y, x+y
+    }
+    // 记得 close 信道
+    // 不然主函数中遍历完并不会结束，而是会阻塞。
+    close(mychan)
+}
+
+func main() {
+    pipline := make(chan int, 10)
+
+    go fibonacci(pipline)
+
+    for k := range pipline {
+        fmt.Println(k)
+    }
+}
+```
+
+### 用信道来做锁
+
+当信道里的数据量已经达到设定的容量时，此时再往里发送数据会阻塞整个程序。
+
+利用这个特性，可以用当他来当程序的锁。
+
+示例如下，详情可以看注释
+
+```go
+package main
+
+import {
+    "fmt"
+    "time"
+}
+
+// 由于 x=x+1 不是原子操作
+// 所以应避免多个协程对x进行操作
+// 使用容量为1的信道可以达到锁的效果
+func increment(ch chan bool, x *int) {  
+    ch <- true
+    *x = *x + 1
+    <- ch
+}
+
+func main() {
+    // 注意要设置容量为 1 的缓冲信道
+    pipline := make(chan bool, 1)
+
+    var x int
+    for i := 0; i < 1000; i++ {
+        go increment(pipline, &x)
+    }
+
+    // 确保所有的协程都已完成
+    // 以后会介绍一种更合适的方法（Mutex），这里暂时使用sleep
+    time.Sleep(3)
+    fmt.Println("x 的值：", x)
+} 
+
+// x 的值：1000
+```
+
+如果不加锁，输出会小于1000。
+
+## 几个信道死锁经典错误案例详解
+
+刚接触 `Go` 语言的信道的时候，经常会遇到死锁的错误，而导致这个错误的原因有很多种，这里整理了几种我初学时见到的。
+
+```bash
+fatal error: all goroutines are asleep - deadlock!
+```
+
+### 错误示例一
+
+看下面这段代码
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan string)
+    pipline <- "hello world"
+    fmt.Println(<-pipline)
+}
+```
+
+运行会抛出错误，如下
+
+```bash
+fatal error: all goroutines are asleep - deadlock!
+```
+
+看起来好像没有什么问题？先往信道中存入数据，再从信道中读取数据。
+
+回顾前面的基础，我们知道使用 `make` 创建信道的时候，若不传递第二个参数，则你定义的是无缓冲信道，而对于无缓冲信道，在接收者未准备好之前，发送操作是阻塞的.
+
+因此，对于解决此问题有两种方法：
+
+- 使接收者代码在发送者之前执行
+
+- 使用缓冲信道，而不使用无缓冲信道
+
+第一种方法：
+
+若要程序正常执行，需要保证接收者程序在发送数据到信道前就进行阻塞状态，修改代码如下
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan string)
+    fmt.Println(<-pipline)
+    pipline <- "hello world"
+}
+```
+
+运行的时候还是报同样的错误。问题出在哪里呢？
+
+原来我们将发送者和接收者写在了同一协程中，虽然保证了接收者代码在发送者之前执行，但是由于前面接收者一直在等待数据 而处于阻塞状态，所以无法执行到后面的发送数据。还是一样造成了死锁。
+
+有了前面的经验，我们将接收者代码写在另一个协程里，并保证在发送者之前执行，就像这样的代码
+
+```go
+package main
+
+func hello(pipline chan string)  {
+    <-pipline
+}
+
+func main()  {
+    pipline := make(chan string)
+    go hello(pipline)
+    pipline <- "hello world"
+}
+```
+
+运行之后 ，一切正常。
+
+第二种方法：
+
+接收者代码必须在发送者代码之前 执行，这是针对无缓冲信道才有的约束。
+
+既然这样，我们改使用可缓冲信道不就OK了吗？
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan string, 1)
+    pipline <- "hello world"
+    fmt.Println(<-pipline)
+} 
+```
+
+运行之后，一切正常。
+
+### 错误示例二
+
+每个缓冲信道，都有容量，当信道里的数据量等于信道的容量后，此时再往信道里发送数据，就失造成阻塞，必须等到有人从信道中消费数据后，程序才会往下进行。
+
+比如这段代码，信道容量为 1，但是往信道中写入两条数据，对于一个协程来说就会造成死锁。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    ch1 := make(chan string, 1)
+
+    ch1 <- "hello world"
+    ch1 <- "hello China"
+
+    fmt.Println(<-ch1)
+}
+```
+
+### 错误示例三
+
+当程序一直在等待从信道里读取数据，而此时并没有人会往信道中写入数据。此时程序就会陷入死循环，造成死锁。
+
+比如这段代码，`for` 循环接收了两次消息（"hello world"和“hello China”）后，再也没有人发送数据了，接收者就会处于一个等待永远接收不到数据的囧境。陷入死循环，造成死锁。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan string)
+    go func() {
+        pipline <- "hello world"
+        pipline <- "hello China"
+    }()
+    for data := range pipline{
+        fmt.Println(data)
+    }
+}
+```
+
+包子铺里的包子已经卖完了，可还有人在排队等着买，如果不再做包子，就要告诉排队的人：不用等了，今天的包子已经卖完了，明日请早呀。
+
+不能让人家死等呀，不跟客人说明一下，人家还以为你们店后面还在蒸包子呢。
+
+所以这个问题，解决方法很简单，只要在发送完数据后，手动关闭信道，告诉 `range` 信道已经关闭，无需等待就行。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    pipline := make(chan string)
+    go func() {
+        pipline <- "hello world"
+        pipline <- "hello China"
+        close(pipline)
+    }()
+    for data := range pipline{
+        fmt.Println(data)
+    }
+}
+```
+
