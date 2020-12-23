@@ -20,6 +20,7 @@
 
 ### 2019年
 
+- [Go经典入门：介绍、安装和Hello World](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8B%E7%BB%8D%E3%80%81%E5%AE%89%E8%A3%85%E5%92%8CHelloWorld.md)
 - [超详细解读 Go Modules 前世今生及入门使用](https://github.com/kaindy7633/blog/blob/master/2019/%E8%B6%85%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BB%20Go%20Modules%20%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8.md)
 - [前端工程师面试题合集](https://github.com/kaindy7633/blog/blob/master/2019/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E5%90%88%E9%9B%86.md)
 - [golang极速入门](https://github.com/kaindy7633/blog/blob/master/2019/golang%E6%9E%81%E9%80%9F%E5%85%A5%E9%97%A8.md)

@@ -1,4 +1,4 @@
-# Go经典入门：介绍、安装和HelloWorld
+# Go经典入门：介绍、安装和Hello World
 
 ## Golang 是什么
 
