@@ -234,4 +234,4 @@ replace（
 
 如果是刚开始学习 `Golang` ，那么 `GOPATH` 和 `go vendor` 可以做适当了解，不必深入研究，除非你要接手的项目由于一些历史原因仍然在使用 `go vender` 械管理，除此之外，任何 `Gopher` 应该从此刻就投入` go modules` 的怀抱。
 
-参考： ![学习 Go Modules 这一篇就够：终极入门](https://mp.weixin.qq.com/s?__biz=MzAxMTA4Njc0OQ==&mid=2651439006&idx=2&sn=08dc3836e0bc473c9cdd2347dd829497&chksm=80bb616cb7cce87ac010ac91043a057aff5c61aa46acd6f2a14e4dc2e26f3a04d752e9d218de&scene=21#wechat_redirect)
+参考： [学习 Go Modules 这一篇就够：终极入门](https://mp.weixin.qq.com/s?__biz=MzAxMTA4Njc0OQ==&mid=2651439006&idx=2&sn=08dc3836e0bc473c9cdd2347dd829497&chksm=80bb616cb7cce87ac010ac91043a057aff5c61aa46acd6f2a14e4dc2e26f3a04d752e9d218de&scene=21#wechat_redirect)
