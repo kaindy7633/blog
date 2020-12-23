@@ -233,3 +233,5 @@ replace（
 `GOPATH` 做为 `Golang` 的第一个包管理模式，只能保证你能用，但不保证好用，而 `go vendor` 解决了 `GOPATH` 忽视包版的本管理，保证好用，但是还不够好用，直到 `go mod` 的推出后，才使 `Golang` 包的依赖管理有了一个能让 `Gopher` 都统一比较满意的方案，达到了能用且好用的标准。
 
 如果是刚开始学习 `Golang` ，那么 `GOPATH` 和 `go vendor` 可以做适当了解，不必深入研究，除非你要接手的项目由于一些历史原因仍然在使用 `go vender` 械管理，除此之外，任何 `Gopher` 应该从此刻就投入` go modules` 的怀抱。
+
+参考： ![学习 Go Modules 这一篇就够：终极入门](https://mp.weixin.qq.com/s?__biz=MzAxMTA4Njc0OQ==&mid=2651439006&idx=2&sn=08dc3836e0bc473c9cdd2347dd829497&chksm=80bb616cb7cce87ac010ac91043a057aff5c61aa46acd6f2a14e4dc2e26f3a04d752e9d218de&scene=21#wechat_redirect)
