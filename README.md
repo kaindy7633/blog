@@ -20,6 +20,7 @@
 
 ### 2019年
 
+- [Go经典入门：变量](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E5%8F%98%E9%87%8F.md)
 - [Go语言中关于包导入必学的8个知识点](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%8C%85%E5%AF%BC%E5%85%A5%E5%BF%85%E5%AD%A6%E7%9A%848%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9.md)
 - [Go经典入门：介绍、安装和Hello World](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8B%E7%BB%8D%E3%80%81%E5%AE%89%E8%A3%85%E5%92%8CHelloWorld.md)
 - [超详细解读 Go Modules 前世今生及入门使用](https://github.com/kaindy7633/blog/blob/master/2019/%E8%B6%85%E8%AF%A6%E7%BB%86%E8%A7%A3%E8%AF%BB%20Go%20Modules%20%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%E5%8F%8A%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8.md)
