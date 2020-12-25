@@ -20,6 +20,7 @@
 
 ### 2019年
 
+- [如何发布Go公共模块](https://github.com/kaindy7633/blog/blob/master/2019/%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83Go%E5%85%AC%E5%85%B1%E6%A8%A1%E5%9D%97.md)
 - [Go经典入门：变量](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E5%8F%98%E9%87%8F.md)
 - [Go语言中关于包导入必学的8个知识点](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%8C%85%E5%AF%BC%E5%85%A5%E5%BF%85%E5%AD%A6%E7%9A%848%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9.md)
 - [Go经典入门：介绍、安装和Hello World](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BB%8B%E7%BB%8D%E3%80%81%E5%AE%89%E8%A3%85%E5%92%8CHelloWorld.md)
