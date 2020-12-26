@@ -20,6 +20,7 @@
 
 ### 2019年
 
+- [Go语言里的空接口](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E9%87%8C%E7%9A%84%E7%A9%BA%E6%8E%A5%E5%8F%A3.md)
 - [Go语言中的编码规范](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83.md)
 - [Go经典入门：类型](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%EF%BC%9A%E7%B1%BB%E5%9E%8B.md)
 - [理解Go语言的select用法](https://github.com/kaindy7633/blog/blob/master/2019/%E7%90%86%E8%A7%A3Go%E8%AF%AD%E8%A8%80%E7%9A%84select%E7%94%A8%E6%B3%95.md)
