@@ -58,6 +58,7 @@ src
 └── main.ts
 ```
 
+| 文件 | 描述 |
 | --- | --- |
 | `app.controller.spec.ts` | app控制器的单元测试文件 |
 | `app.controller.ts` |	带有单个路由的基本控制器示例。 |
