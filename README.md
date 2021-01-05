@@ -20,6 +20,8 @@
 
 ### 2020年
 
+- [Go经典入门9：循环](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A89%EF%BC%9A%E5%BE%AA%E7%8E%AF.md)
+
 ### 2019年
 
 - [Go经典入门8：if-else语句](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A88%EF%BC%9Aif-else%E8%AF%AD%E5%8F%A5.md)
