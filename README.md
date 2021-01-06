@@ -4,6 +4,7 @@
 
 - [我的技术日志博客](#%E6%88%91%E7%9A%84%E6%8A%80%E6%9C%AF%E6%97%A5%E5%BF%97%E5%8D%9A%E5%AE%A2)
   - [目录](#%E7%9B%AE%E5%BD%95)
+    - [2020年](#2020%E5%B9%B4)
     - [2019年](#2019%E5%B9%B4)
     - [2018年](#2018%E5%B9%B4)
     - [2017年](#2017%E5%B9%B4)
@@ -20,7 +21,7 @@
 
 ### 2020年
 
-- [Go经典入门9：循环](https://github.com/kaindy7633/blog/blob/master/2019/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A89%EF%BC%9A%E5%BE%AA%E7%8E%AF.md)
+- [Go经典入门9：循环](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A89%EF%BC%9A%E5%BE%AA%E7%8E%AF.md)
 
 ### 2019年
 
