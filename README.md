@@ -21,6 +21,8 @@
 
 ### 2020年
 
+- [Go经典入门15：指针](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A815%EF%BC%9A%E6%8C%87%E9%92%88.md)
+- [Go经典入门14：字符串](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A814%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2.md)
 - [Go经典入门13：Maps](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A813%EF%BC%9AMaps.md)
 - [Go经典入门12：可变参数函数](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A812%EF%BC%9A%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0.md)
 - [Go经典入门11：数组和切片](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A811%EF%BC%9A%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87.md)
