@@ -21,6 +21,8 @@
 
 ### 2020年
 
+- [Go经典入门18：接口（一）](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A818%EF%BC%9A%E6%8E%A5%E5%8F%A3%EF%BC%88%E4%B8%80%EF%BC%89.md)
+- [Go经典入门17：方法](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A817%EF%BC%9A%E6%96%B9%E6%B3%95.md)
 - [Go经典入门16：结构体](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A816%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93.md)
 - [Go经典入门15：指针](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A815%EF%BC%9A%E6%8C%87%E9%92%88.md)
 - [Go经典入门14：字符串](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A814%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2.md)
