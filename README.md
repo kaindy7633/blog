@@ -21,6 +21,8 @@
 
 ### 2020年
 
+- [Go经典入门27：组合取代继承](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A827%EF%BC%9A%E7%BB%84%E5%90%88%E5%8F%96%E4%BB%A3%E7%BB%A7%E6%89%BF.md)
+- [Go经典入门26：结构体取代类](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A826%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%96%E4%BB%A3%E7%B1%BB.md)
 - [Go经典入门25：Mutex](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A825%EF%BC%9AMutex.md)
 - [Go经典入门24：Select](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A824%EF%BC%9ASelect.md)
 - [Go经典入门23：缓冲信道和工作池](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A823%EF%BC%9A%E7%BC%93%E5%86%B2%E4%BF%A1%E9%81%93%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B1%A0.md)
