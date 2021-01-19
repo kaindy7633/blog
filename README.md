@@ -20,7 +20,7 @@
 ## 目录
 
 ### 2020年
-
+- [Go经典入门30：错误处理](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A830%EF%BC%9A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86.md)
 - [Go经典入门29：Defer](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A829%EF%BC%9ADefer.md)
 - [Go经典入门28：多态](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A828%EF%BC%9A%E5%A4%9A%E6%80%81.md)
 - [Go经典入门27：组合取代继承](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A827%EF%BC%9A%E7%BB%84%E5%90%88%E5%8F%96%E4%BB%A3%E7%BB%A7%E6%89%BF.md)
