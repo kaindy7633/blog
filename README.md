@@ -22,6 +22,8 @@
 
 ### 2020 年
 
+- [Go经典入门36：写入文件](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A836%EF%BC%9A%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6.md)
+- [Go经典入门35：读取文件](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A835%EF%BC%9A%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6.md)
 - [Go经典入门34：反射](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A834%EF%BC%9A%E5%8F%8D%E5%B0%84.md)
 - [Go经典入门33：函数是一等公民（头等函数）](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A833%EF%BC%9A%E5%87%BD%E6%95%B0%E6%98%AF%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91%EF%BC%88%E5%A4%B4%E7%AD%89%E5%87%BD%E6%95%B0%EF%BC%89.md)
 - [Go经典入门32：panic 和 recover](https://github.com/kaindy7633/blog/blob/master/2020/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A832%EF%BC%9Apanic%20%E5%92%8C%20recover.md)
