@@ -1,30 +1,16 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-**Table of Contents** _generated with [DocToc](https://github.com/thlorenz/doctoc)_
-
-- [我的技术日志博客](#%E6%88%91%E7%9A%84%E6%8A%80%E6%9C%AF%E6%97%A5%E5%BF%97%E5%8D%9A%E5%AE%A2)
-  - [目录](#%E7%9B%AE%E5%BD%95)
-    - [2020 年](#2020%E5%B9%B4)
-    - [2019 年](#2019%E5%B9%B4)
-    - [2018 年](#2018%E5%B9%B4)
-    - [2017 年](#2017%E5%B9%B4)
-    - [2016 年](#2016%E5%B9%B4)
-    - [2015 年](#2015%E5%B9%B4)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# 我的技术日志博客
+# 阿振的技术日志博客
 
 > todever.com 不再维护，但保留域名，期间的个人技术积累将移植到 Github 上来
 
 ## 目录
 
-### 2020 年
+### Java
+
+- [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3)
 
 ### 2019 年
 
-- [Golang经典入门系列](https://github.com/kaindy7633/blog/blob/master/2019/Golang%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A81%EF%BC%9A%E7%9B%AE%E5%BD%95.md)
+- [Golang 经典入门系列](https://github.com/kaindy7633/blog/blob/master/2019/Golang%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8%E7%B3%BB%E5%88%97/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A81%EF%BC%9A%E7%9B%AE%E5%BD%95.md)
 - [Go 语言里的空接口](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E9%87%8C%E7%9A%84%E7%A9%BA%E6%8E%A5%E5%8F%A3.md)
 - [Go 语言中的编码规范](https://github.com/kaindy7633/blog/blob/master/2019/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83.md)
 - [理解 Go 语言的 select 用法](https://github.com/kaindy7633/blog/blob/master/2019/%E7%90%86%E8%A7%A3Go%E8%AF%AD%E8%A8%80%E7%9A%84select%E7%94%A8%E6%B3%95.md)
