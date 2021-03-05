@@ -4,20 +4,54 @@
 
 ## 目录
 
+### 前端相关
+
+- [9 张思维导图学习 Javascript](https://github.com/kaindy7633/blog/issues/39)
+- [AngularJS 入门](https://github.com/kaindy7633/blog/issues/38)
+- [CSS3 简明教程](https://github.com/kaindy7633/blog/issues/37)
+- [JavaScript 事件绑定的方式](https://github.com/kaindy7633/blog/issues/31)
+- [JavaScript 设计模式系列之：this、call 和 apply](https://github.com/kaindy7633/blog/issues/30)
+- [JavaScript 设计模式系列之：面向对象的 JavaScript](https://github.com/kaindy7633/blog/issues/29)
+- [Javascript 面向对象编程](https://github.com/kaindy7633/blog/issues/28)
+- [angular 的开发、调试与测试](https://github.com/kaindy7633/blog/issues/27)
+- [常使用的 10 个 jQuery 代码片段](https://github.com/kaindy7633/blog/issues/23)
+- [快速了解 ES6](https://github.com/kaindy7633/blog/issues/22)
+- [移动 web 开发小结](https://github.com/kaindy7633/blog/issues/19)
+- [纯 CSS3 制作 3D 导航栏](https://github.com/kaindy7633/blog/issues/18)
+- [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/issues/17)
+- [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/issues/16)
 ### Java
 
-- [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3)
-- [Java 基础之运算符](https://github.com/kaindy7633/blog/issues/4)
-- [Java 基础之流程控制](https://github.com/kaindy7633/blog/issues/5)
-- [Java 基础之循环流程控制](https://github.com/kaindy7633/blog/issues/6)
-- [Java 基础之方法和数组](https://github.com/kaindy7633/blog/issues/7)
-- [Java 基础之面向对象 - 封装](https://github.com/kaindy7633/blog/issues/8)
-- [Java 基础之面向对象 – 继承](https://github.com/kaindy7633/blog/issues/9)
-- [Java 基础之面向对象 – 多态](https://github.com/kaindy7633/blog/issues/10)
-- [Java 基础之常用工具 - 集合](https://github.com/kaindy7633/blog/issues/11)
-- [Java 基础之常用工具 - IO 流](https://github.com/kaindy7633/blog/issues/12)
-- [Java 基础之常用工具 - API](https://github.com/kaindy7633/blog/issues/13)
 - [Java 基础之反射](https://github.com/kaindy7633/blog/issues/14)
+- [Java 基础之常用工具 - API](https://github.com/kaindy7633/blog/issues/13)
+- [Java 基础之常用工具 - IO 流](https://github.com/kaindy7633/blog/issues/12)
+- [Java 基础之常用工具 - 集合](https://github.com/kaindy7633/blog/issues/11)
+- [Java 基础之面向对象 – 多态](https://github.com/kaindy7633/blog/issues/10)
+- [Java 基础之面向对象 – 继承](https://github.com/kaindy7633/blog/issues/9)
+- [Java 基础之面向对象 - 封装](https://github.com/kaindy7633/blog/issues/8)
+- [Java 基础之方法和数组](https://github.com/kaindy7633/blog/issues/7)
+- [Java 基础之循环流程控制](https://github.com/kaindy7633/blog/issues/6)
+- [Java 基础之流程控制](https://github.com/kaindy7633/blog/issues/5)
+- [Java 基础之运算符](https://github.com/kaindy7633/blog/issues/4)
+- [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3)
+
+### Golang
+
+### Linux
+
+- [CentOS 中使用 wget 下载远程 ftp 文件](https://github.com/kaindy7633/blog/issues/36)
+- [在 Ubuntu 15.04 版本下安装 shadowsocks，以实现科学上网](https://github.com/kaindy7633/blog/issues/24)
+### 其他
+
+- [Git 的分支管理](https://github.com/kaindy7633/blog/issues/35)
+- [Git 的标签管理](https://github.com/kaindy7633/blog/issues/34)
+- [Git 的远程仓库](https://github.com/kaindy7633/blog/issues/33)
+- [Grunt 安装与入门](https://github.com/kaindy7633/blog/issues/32)
+- [git 的简介及基本配置](https://github.com/kaindy7633/blog/issues/26)
+- [利用 Gulp 搭建本地服务器并实现 Ajax 模拟](https://github.com/kaindy7633/blog/issues/25)
+- [用 Git 创建自己的版本库](https://github.com/kaindy7633/blog/issues/21)
+- [用 Gulp 来实现 web 服务器](https://github.com/kaindy7633/blog/issues/20)
+- [雅虎 34 条军规](https://github.com/kaindy7633/blog/issues/15)
 
 ### 2019 年
 
@@ -112,30 +146,28 @@
 - [来聊聊尾调用优化和尾递归](https://github.com/kaindy7633/blog/blob/master/2017/%E6%9D%A5%E8%81%8A%E8%81%8A%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96%E5%92%8C%E5%B0%BE%E9%80%92%E5%BD%92.md)
 - [深入理解 Angular 中的 apply 以及 digest](https://github.com/kaindy7633/blog/blob/master/2017/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Angular%E4%B8%AD%E7%9A%84apply%E4%BB%A5%E5%8F%8Adigest.md)
 
-### 2016 年
 
-- [9 张思维导图学习 Javascript](https://github.com/kaindy7633/blog/blob/master/2016/9%E5%BC%A0%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E5%AD%A6%E4%B9%A0Javascript.md)
-- [AngularJS 入门](https://github.com/kaindy7633/blog/blob/master/2016/AngularJS%E5%85%A5%E9%97%A8.md)
-- [CSS3 简明教程](https://github.com/kaindy7633/blog/blob/master/2016/CSS3%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.md)
-- [CentOS 中使用 wget 下载远程 ftp 文件](https://github.com/kaindy7633/blog/blob/master/2016/CentOS%E4%B8%AD%E4%BD%BF%E7%94%A8wget%E4%B8%8B%E8%BD%BD%E8%BF%9C%E7%A8%8Bftp%E6%96%87%E4%BB%B6.md)
-- [Git 的分支管理](https://github.com/kaindy7633/blog/blob/master/2016/Git%E7%9A%84%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86.md)
-- [Git 的标签管理](https://github.com/kaindy7633/blog/blob/master/2016/Git%E7%9A%84%E6%A0%87%E7%AD%BE%E7%AE%A1%E7%90%86.md)
-- [Git 的远程仓库](https://github.com/kaindy7633/blog/blob/master/2016/Git%E7%9A%84%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93.md)
-- [Grunt 安装与入门](https://github.com/kaindy7633/blog/blob/master/2016/Grunt%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8.md)
-- [JavaScript 事件绑定的方式](https://github.com/kaindy7633/blog/blob/master/2016/JavaScript%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A%E7%9A%84%E6%96%B9%E5%BC%8F.md)
-- [JavaScript 设计模式系列之：this、call 和 apply](https://github.com/kaindy7633/blog/blob/master/2016/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%E4%B9%8B%EF%BC%9Athis%E3%80%81call%E5%92%8Capply.md)
-- [JavaScript 设计模式系列之：面向对象的 JavaScript](https://github.com/kaindy7633/blog/blob/master/2016/JavaScript%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%B3%BB%E5%88%97%E4%B9%8B%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84JavaScript.md)
-- [Javascript 面向对象编程](https://github.com/kaindy7633/blog/blob/master/2016/Javascript%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.md)
-- [angular 的开发、调试与测试](https://github.com/kaindy7633/blog/blob/master/2016/angular%E7%9A%84%E5%BC%80%E5%8F%91%E3%80%81%E8%B0%83%E8%AF%95%E4%B8%8E%E6%B5%8B%E8%AF%95.md)
-- [git 的简介及基本配置](https://github.com/kaindy7633/blog/blob/master/2016/git%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE.md)
-- [利用 Gulp 搭建本地服务器并实现 Ajax 模拟](https://github.com/kaindy7633/blog/blob/master/2016/%E5%88%A9%E7%94%A8Gulp%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%B9%B6%E5%AE%9E%E7%8E%B0Ajax%E6%A8%A1%E6%8B%9F.md)
-- [在 Ubuntu 15.04 版本下安装 shadowsocks，以实现科学上网](https://github.com/kaindy7633/blog/blob/master/2016/%E5%9C%A8Ubuntu%2015.04%E7%89%88%E6%9C%AC%E4%B8%8B%E5%AE%89%E8%A3%85shadowsocks%EF%BC%8C%E4%BB%A5%E5%AE%9E%E7%8E%B0%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91.md)
-- [常使用的 10 个 jQuery 代码片段](https://github.com/kaindy7633/blog/blob/master/2016/%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9A%8410%E4%B8%AAjQuery%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5.md)
-- [快速了解 ES6](https://github.com/kaindy7633/blog/blob/master/2016/%E5%BF%AB%E9%80%9F%E4%BA%86%E8%A7%A3ES6.md)
-- [用 Git 创建自己的版本库](https://github.com/kaindy7633/blog/blob/master/2016/%E7%94%A8Git%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E7%89%88%E6%9C%AC%E5%BA%93.md)
-- [用 Gulp 来实现 web 服务器](https://github.com/kaindy7633/blog/blob/master/2016/%E7%94%A8Gulp%E6%9D%A5%E5%AE%9E%E7%8E%B0web%E6%9C%8D%E5%8A%A1%E5%99%A8.md)
-- [移动 web 开发小结](https://github.com/kaindy7633/blog/blob/master/2016/%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91%E5%B0%8F%E7%BB%93.md)
-- [纯 CSS3 制作 3D 导航栏](https://github.com/kaindy7633/blog/blob/master/2016/%E7%BA%AFCSS3%E5%88%B6%E4%BD%9C3D%E5%AF%BC%E8%88%AA%E6%A0%8F.md)
-- [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/blob/master/2016/%E7%BA%AFCSS3%E5%88%B6%E4%BD%9C%E6%89%8B%E9%A3%8E%E7%90%B4%E6%95%88%E6%9E%9C.md)
-- [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/blob/master/2016/%E9%97%B2%E8%81%8AJavaScript%E4%B8%AD%E7%9A%84apply.md)
-- [雅虎 34 条军规](https://github.com/kaindy7633/blog/blob/master/2016/%E9%9B%85%E8%99%8E34%E6%9D%A1%E5%86%9B%E8%A7%84.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
