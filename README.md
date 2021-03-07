@@ -6,52 +6,54 @@
 
 ### 前端相关
 
-- [9 张思维导图学习 Javascript](https://github.com/kaindy7633/blog/issues/39)
-- [AngularJS 入门](https://github.com/kaindy7633/blog/issues/38)
-- [CSS3 简明教程](https://github.com/kaindy7633/blog/issues/37)
-- [JavaScript 事件绑定的方式](https://github.com/kaindy7633/blog/issues/31)
-- [JavaScript 设计模式系列之：this、call 和 apply](https://github.com/kaindy7633/blog/issues/30)
-- [JavaScript 设计模式系列之：面向对象的 JavaScript](https://github.com/kaindy7633/blog/issues/29)
-- [Javascript 面向对象编程](https://github.com/kaindy7633/blog/issues/28)
-- [angular 的开发、调试与测试](https://github.com/kaindy7633/blog/issues/27)
-- [常使用的 10 个 jQuery 代码片段](https://github.com/kaindy7633/blog/issues/23)
-- [快速了解 ES6](https://github.com/kaindy7633/blog/issues/22)
-- [移动 web 开发小结](https://github.com/kaindy7633/blog/issues/19)
-- [纯 CSS3 制作 3D 导航栏](https://github.com/kaindy7633/blog/issues/18)
-- [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/issues/17)
-- [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/issues/16)
+- [9 张思维导图学习 Javascript](https://github.com/kaindy7633/blog/issues/39){target="\_blank"}
+- [AngularJS 入门](https://github.com/kaindy7633/blog/issues/38){target="\_blank"}
+- [CSS3 简明教程](https://github.com/kaindy7633/blog/issues/37){target="\_blank"}
+- [JavaScript 事件绑定的方式](https://github.com/kaindy7633/blog/issues/31){target="\_blank"}
+- [JavaScript 设计模式系列之：this、call 和 apply](https://github.com/kaindy7633/blog/issues/30){target="\_blank"}
+- [JavaScript 设计模式系列之：面向对象的 JavaScript](https://github.com/kaindy7633/blog/issues/29){target="\_blank"}
+- [Javascript 面向对象编程](https://github.com/kaindy7633/blog/issues/28){target="\_blank"}
+- [angular 的开发、调试与测试](https://github.com/kaindy7633/blog/issues/27){target="\_blank"}
+- [常使用的 10 个 jQuery 代码片段](https://github.com/kaindy7633/blog/issues/23){target="\_blank"}
+- [快速了解 ES6](https://github.com/kaindy7633/blog/issues/22){target="\_blank"}
+- [移动 web 开发小结](https://github.com/kaindy7633/blog/issues/19){target="\_blank"}
+- [纯 CSS3 制作 3D 导航栏](https://github.com/kaindy7633/blog/issues/18){target="\_blank"}
+- [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/issues/17){target="\_blank"}
+- [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/issues/16){target="\_blank"}
+
 ### Java
 
-- [Java 基础之反射](https://github.com/kaindy7633/blog/issues/14)
-- [Java 基础之常用工具 - API](https://github.com/kaindy7633/blog/issues/13)
-- [Java 基础之常用工具 - IO 流](https://github.com/kaindy7633/blog/issues/12)
-- [Java 基础之常用工具 - 集合](https://github.com/kaindy7633/blog/issues/11)
-- [Java 基础之面向对象 – 多态](https://github.com/kaindy7633/blog/issues/10)
-- [Java 基础之面向对象 – 继承](https://github.com/kaindy7633/blog/issues/9)
-- [Java 基础之面向对象 - 封装](https://github.com/kaindy7633/blog/issues/8)
-- [Java 基础之方法和数组](https://github.com/kaindy7633/blog/issues/7)
-- [Java 基础之循环流程控制](https://github.com/kaindy7633/blog/issues/6)
-- [Java 基础之流程控制](https://github.com/kaindy7633/blog/issues/5)
-- [Java 基础之运算符](https://github.com/kaindy7633/blog/issues/4)
-- [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3)
+- [Java 基础之反射](https://github.com/kaindy7633/blog/issues/14){target="\_blank"}
+- [Java 基础之常用工具 - API](https://github.com/kaindy7633/blog/issues/13){target="\_blank"}
+- [Java 基础之常用工具 - IO 流](https://github.com/kaindy7633/blog/issues/12){target="\_blank"}
+- [Java 基础之常用工具 - 集合](https://github.com/kaindy7633/blog/issues/11){target="\_blank"}
+- [Java 基础之面向对象 – 多态](https://github.com/kaindy7633/blog/issues/10){target="\_blank"}
+- [Java 基础之面向对象 – 继承](https://github.com/kaindy7633/blog/issues/9){target="\_blank"}
+- [Java 基础之面向对象 - 封装](https://github.com/kaindy7633/blog/issues/8){target="\_blank"}
+- [Java 基础之方法和数组](https://github.com/kaindy7633/blog/issues/7){target="\_blank"}
+- [Java 基础之循环流程控制](https://github.com/kaindy7633/blog/issues/6){target="\_blank"}
+- [Java 基础之流程控制](https://github.com/kaindy7633/blog/issues/5){target="\_blank"}
+- [Java 基础之运算符](https://github.com/kaindy7633/blog/issues/4){target="\_blank"}
+- [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3){target="\_blank"}
 
 ### Golang
 
 ### Linux
 
-- [CentOS 中使用 wget 下载远程 ftp 文件](https://github.com/kaindy7633/blog/issues/36)
-- [在 Ubuntu 15.04 版本下安装 shadowsocks，以实现科学上网](https://github.com/kaindy7633/blog/issues/24)
+- [CentOS 中使用 wget 下载远程 ftp 文件](https://github.com/kaindy7633/blog/issues/36){target="\_blank"}
+- [在 Ubuntu 15.04 版本下安装 shadowsocks，以实现科学上网](https://github.com/kaindy7633/blog/issues/24){target="\_blank"}
+
 ### 其他
 
-- [Git 的分支管理](https://github.com/kaindy7633/blog/issues/35)
-- [Git 的标签管理](https://github.com/kaindy7633/blog/issues/34)
-- [Git 的远程仓库](https://github.com/kaindy7633/blog/issues/33)
-- [Grunt 安装与入门](https://github.com/kaindy7633/blog/issues/32)
-- [git 的简介及基本配置](https://github.com/kaindy7633/blog/issues/26)
-- [利用 Gulp 搭建本地服务器并实现 Ajax 模拟](https://github.com/kaindy7633/blog/issues/25)
-- [用 Git 创建自己的版本库](https://github.com/kaindy7633/blog/issues/21)
-- [用 Gulp 来实现 web 服务器](https://github.com/kaindy7633/blog/issues/20)
-- [雅虎 34 条军规](https://github.com/kaindy7633/blog/issues/15)
+- [Git 的分支管理](https://github.com/kaindy7633/blog/issues/35){target="\_blank"}
+- [Git 的标签管理](https://github.com/kaindy7633/blog/issues/34){target="\_blank"}
+- [Git 的远程仓库](https://github.com/kaindy7633/blog/issues/33){target="\_blank"}
+- [Grunt 安装与入门](https://github.com/kaindy7633/blog/issues/32){target="\_blank"}
+- [git 的简介及基本配置](https://github.com/kaindy7633/blog/issues/26){target="\_blank"}
+- [利用 Gulp 搭建本地服务器并实现 Ajax 模拟](https://github.com/kaindy7633/blog/issues/25){target="\_blank"}
+- [用 Git 创建自己的版本库](https://github.com/kaindy7633/blog/issues/21){target="\_blank"}
+- [用 Gulp 来实现 web 服务器](https://github.com/kaindy7633/blog/issues/20){target="\_blank"}
+- [雅虎 34 条军规](https://github.com/kaindy7633/blog/issues/15){target="\_blank"}
 
 ### 2019 年
 
@@ -145,29 +147,3 @@
 - [常见中高级前端工程师面试题汇总](https://github.com/kaindy7633/blog/blob/master/2017/%E5%B8%B8%E8%A7%81%E4%B8%AD%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB.md)
 - [来聊聊尾调用优化和尾递归](https://github.com/kaindy7633/blog/blob/master/2017/%E6%9D%A5%E8%81%8A%E8%81%8A%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96%E5%92%8C%E5%B0%BE%E9%80%92%E5%BD%92.md)
 - [深入理解 Angular 中的 apply 以及 digest](https://github.com/kaindy7633/blog/blob/master/2017/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Angular%E4%B8%AD%E7%9A%84apply%E4%BB%A5%E5%8F%8Adigest.md)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
