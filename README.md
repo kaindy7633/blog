@@ -30,6 +30,8 @@
 - [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/issues/17)
 - [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/issues/16)
 
+
+### Golang
 ### Java
 
 - [Java 基础之反射](https://github.com/kaindy7633/blog/issues/14)
@@ -45,8 +47,20 @@
 - [Java 基础之运算符](https://github.com/kaindy7633/blog/issues/4)
 - [Java 基础之变量、常量和数据类型](https://github.com/kaindy7633/blog/issues/3)
 
-### Golang
 
+### Python
+
+- [Python 从入门到入坑 - Python 简介](https://github.com/kaindy7633/blog/issues/64)
+- [Python 从入门到入坑之：IO 编程](https://github.com/kaindy7633/blog/issues/63)
+- [Python 从入门到入坑之：函数](https://github.com/kaindy7633/blog/issues/62)
+- [Python 从入门到入坑之：函数式编程](https://github.com/kaindy7633/blog/issues/61)
+- [Python 从入门到入坑之：模块](https://github.com/kaindy7633/blog/issues/60)
+- [Python 从入门到入坑之：正则表达式](https://github.com/kaindy7633/blog/issues/59)
+- [Python 从入门到入坑之：进程和线程](https://github.com/kaindy7633/blog/issues/58)
+- [Python 从入门到入坑之：错误、调试和测试](https://github.com/kaindy7633/blog/issues/57)
+- [Python 从入门到入坑之：面向对象编程](https://github.com/kaindy7633/blog/issues/56)
+- [Python 从入门到入坑之：面向对象高级编程](https://github.com/kaindy7633/blog/issues/55)
+- [Python 从入门到入坑之：高级特性](https://github.com/kaindy7633/blog/issues/54)
 ### Linux
 
 - [CentOS 中使用 wget 下载远程 ftp 文件](https://github.com/kaindy7633/blog/issues/36)
@@ -137,14 +151,14 @@
 - [Python 之旅：第三章-使用字符串](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2.md)
 - [Python 之旅：第二章-列表和元组](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84.md)
 - [Python 之旅：第一章-快速上手](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B.md)
-- [Python 从入门到入坑 - Python 简介](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%20-%20Python%E7%AE%80%E4%BB%8B.md)
-- [Python 从入门到入坑之：IO 编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9AIO%E7%BC%96%E7%A8%8B.md)
-- [Python 从入门到入坑之：函数](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E5%87%BD%E6%95%B0.md)
-- [Python 从入门到入坑之：函数式编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B.md)
-- [Python 从入门到入坑之：模块](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E6%A8%A1%E5%9D%97.md)
-- [Python 从入门到入坑之：正则表达式](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.md)
-- [Python 从入门到入坑之：进程和线程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B.md)
-- [Python 从入门到入坑之：错误、调试和测试](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%94%99%E8%AF%AF%E3%80%81%E8%B0%83%E8%AF%95%E5%92%8C%E6%B5%8B%E8%AF%95.md)
-- [Python 从入门到入坑之：面向对象编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.md)
-- [Python 从入门到入坑之：面向对象高级编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B.md)
-- [Python 从入门到入坑之：高级特性](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%85%A5%E5%9D%91%E4%B9%8B%EF%BC%9A%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7.md)
+
+
+
+
+
+
+
+
+
+
+
