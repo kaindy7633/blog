@@ -50,6 +50,20 @@
 
 ### Python
 
+- [Python 之旅：第一章-快速上手](https://github.com/kaindy7633/blog/issues/78)
+- [Python 之旅：第二章-列表和元组](https://github.com/kaindy7633/blog/issues/77)
+- [Python 之旅：第三章-使用字符串](https://github.com/kaindy7633/blog/issues/76)
+- [Python 之旅：第四章-当索引行不通时：使用字典](https://github.com/kaindy7633/blog/issues/75)
+- [Python 之旅：第五章-条件、循环及其他语句](https://github.com/kaindy7633/blog/issues/74)
+- [Python 之旅：第六章-抽象](https://github.com/kaindy7633/blog/issues/73)
+- [Python 之旅：第七章-再谈抽象-面向对象编程](https://github.com/kaindy7633/blog/issues/72)
+- [Python 之旅：第八章-异常](https://github.com/kaindy7633/blog/issues/71)
+- [Python 之旅：第九章-魔法方法、特性和迭代器](https://github.com/kaindy7633/blog/issues/70)
+- [Python 之旅：第十章-开箱即用-标准库模块](https://github.com/kaindy7633/blog/issues/69)
+- [Python 之旅：第十一章-文件](https://github.com/kaindy7633/blog/issues/68)
+- [Python 之旅：第十二章-图形用户界面](https://github.com/kaindy7633/blog/issues/67)
+- [Python 之旅：第十三章-数据库支持](https://github.com/kaindy7633/blog/issues/66)
+- [Python 之旅：第十四章-网络编程](https://github.com/kaindy7633/blog/issues/65)
 - [Python 从入门到入坑 - Python 简介](https://github.com/kaindy7633/blog/issues/64)
 - [Python 从入门到入坑之：IO 编程](https://github.com/kaindy7633/blog/issues/63)
 - [Python 从入门到入坑之：函数](https://github.com/kaindy7633/blog/issues/62)
@@ -137,20 +151,23 @@
 - [JavaScript 装 x 指南](https://github.com/kaindy7633/blog/blob/master/2017/JavaScript%E8%A3%85x%E6%8C%87%E5%8D%97.md)
 - [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/blob/master/2017/Nodejs%E7%B2%BE%E7%AE%80%E7%AC%94%E8%AE%B0%E6%95%99%E7%A8%8B.md)
 - [PWA-来了解一下](https://github.com/kaindy7633/blog/blob/master/2017/PWA-%E6%9D%A5%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B.md)
-- [Python 之旅：第十四章-网络编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B.md)
-- [Python 之旅：第十三章-数据库支持](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%AF%E6%8C%81.md)
-- [Python 之旅：第十二章-图形用户界面](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%9B%BE%E5%BD%A2%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2.md)
-- [Python 之旅：第十一章-文件](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%96%87%E4%BB%B6.md)
-- [Python 之旅：第十章-开箱即用-标准库模块](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%8D%81%E7%AB%A0-%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8-%E6%A0%87%E5%87%86%E5%BA%93%E6%A8%A1%E5%9D%97.md)
-- [Python 之旅：第九章-魔法方法、特性和迭代器](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E9%AD%94%E6%B3%95%E6%96%B9%E6%B3%95%E3%80%81%E7%89%B9%E6%80%A7%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8.md)
-- [Python 之旅：第八章-异常](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%85%AB%E7%AB%A0-%E5%BC%82%E5%B8%B8.md)
-- [Python 之旅：第七章-再谈抽象-面向对象编程](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%83%E7%AB%A0-%E5%86%8D%E8%B0%88%E6%8A%BD%E8%B1%A1-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B.md)
-- [Python 之旅：第六章-抽象](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%8A%BD%E8%B1%A1.md)
-- [Python 之旅：第五章-条件、循环及其他语句](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%9D%A1%E4%BB%B6%E3%80%81%E5%BE%AA%E7%8E%AF%E5%8F%8A%E5%85%B6%E4%BB%96%E8%AF%AD%E5%8F%A5.md)
-- [Python 之旅：第四章-当索引行不通时：使用字典](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%BD%93%E7%B4%A2%E5%BC%95%E8%A1%8C%E4%B8%8D%E9%80%9A%E6%97%B6%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%AD%97%E5%85%B8.md)
-- [Python 之旅：第三章-使用字符串](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2.md)
-- [Python 之旅：第二章-列表和元组](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%97%E8%A1%A8%E5%92%8C%E5%85%83%E7%BB%84.md)
-- [Python 之旅：第一章-快速上手](https://github.com/kaindy7633/blog/blob/master/2017/Python%E4%B9%8B%E6%97%85%EF%BC%9A%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
