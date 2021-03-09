@@ -6,6 +6,15 @@
 
 ### 前端相关
 
+- [40 条常见的移动端 Web 页面问题解决方案](https://github.com/kaindy7633/blog/issues/88)
+- [AngularJS 实战笔记](https://github.com/kaindy7633/blog/issues/87)
+- [Angular 中的 ngRepeat 使用心得](https://github.com/kaindy7633/blog/issues/86)
+- [CSSHACK](https://github.com/kaindy7633/blog/issues/85)
+- [ES6 简明教程](https://github.com/kaindy7633/blog/issues/84)
+- [JavaScript 中的 AJAX](https://github.com/kaindy7633/blog/issues/82)
+- [JavaScript 装 x 指南](https://github.com/kaindy7633/blog/issues/81)
+- [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/issues/80)
+- [PWA-来了解一下](https://github.com/kaindy7633/blog/issues/79)
 - [TypeScript 简明指南](https://github.com/kaindy7633/blog/issues/53)
 - [Web 性能优化-关键渲染路径及其优化策略](https://github.com/kaindy7633/blog/issues/52)
 - [一个 AngularJS 的小栗子-todoList](https://github.com/kaindy7633/blog/issues/50)
@@ -82,6 +91,7 @@
 
 ### 其他
 
+- [Git 的其他应用](https://github.com/kaindy7633/blog/issues/83)
 - [atom 使用全局配置 ESLint](https://github.com/kaindy7633/blog/issues/51)
 - [团队开发中 ESLint 的使用及其相关规范介绍](https://github.com/kaindy7633/blog/issues/46)
 - [如何为自己的个人站点添加 https 访问](https://github.com/kaindy7633/blog/issues/45)
@@ -137,20 +147,15 @@
 - [补充几个中高级前端的面试题](https://github.com/kaindy7633/blog/blob/master/2018/%E8%A1%A5%E5%85%85%E5%87%A0%E4%B8%AA%E4%B8%AD%E9%AB%98%E7%BA%A7%E5%89%8D%E7%AB%AF%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98.md)
 - [软件版本各名称的含义](https://github.com/kaindy7633/blog/blob/master/2018/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%90%84%E5%90%8D%E7%A7%B0%E7%9A%84%E5%90%AB%E4%B9%89.md)
 
-### 2017 年
 
-- [40 条常见的移动端 Web 页面问题解决方案](https://github.com/kaindy7633/blog/blob/master/2017/40%E6%9D%A1%E5%B8%B8%E8%A7%81%E7%9A%84%E7%A7%BB%E5%8A%A8%E7%AB%AFWeb%E9%A1%B5%E9%9D%A2%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.md)
 
-- [AngularJS 实战笔记](https://github.com/kaindy7633/blog/blob/master/2017/AngularJS%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0.md)
-- [Angular 中的 ngRepeat 使用心得](https://github.com/kaindy7633/blog/blob/master/2017/Angular%E4%B8%AD%E7%9A%84ngRepeat%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97.md)
-- [BULMA 中文文档](https://github.com/kaindy7633/blog/blob/master/2017/BULMA%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3.md)
-- [CSSHACK](https://github.com/kaindy7633/blog/blob/master/2017/CSSHACK.md)
-- [ES6 简明教程](https://github.com/kaindy7633/blog/blob/master/2017/ES6%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B.md)
-- [Git 的其他应用](https://github.com/kaindy7633/blog/blob/master/2017/Git%E7%9A%84%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8.md)
-- [JavaScript 中的 AJAX](https://github.com/kaindy7633/blog/blob/master/2017/JavaScript%E4%B8%AD%E7%9A%84AJAX.md)
-- [JavaScript 装 x 指南](https://github.com/kaindy7633/blog/blob/master/2017/JavaScript%E8%A3%85x%E6%8C%87%E5%8D%97.md)
-- [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/blob/master/2017/Nodejs%E7%B2%BE%E7%AE%80%E7%AC%94%E8%AE%B0%E6%95%99%E7%A8%8B.md)
-- [PWA-来了解一下](https://github.com/kaindy7633/blog/blob/master/2017/PWA-%E6%9D%A5%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B.md)
+
+
+
+
+
+
+
 
 
 
