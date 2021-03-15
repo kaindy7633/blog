@@ -1,4 +1,4 @@
-# Go经典入门29：Defer
+# Go 经典入门 28：Defer
 
 ## 什么是 defer？
 
@@ -26,7 +26,7 @@ func largest(nums []int) {
             max = v
         }
     }
-    
+
     fmt.Println("Largest number in", nums, "is", max)
 }
 
@@ -172,7 +172,7 @@ func (r rect) area(wg *sync.WaitGroup) {
         wg.Done()
         return
     }
-    
+
     if r.width < 0 {
         fmt.Printf("rect %v's width should be greater than zero\n", r)
         wg.Done()
@@ -221,7 +221,7 @@ type rect struct {
 
 func (r rect) area(wg *sync.WaitGroup) {
     defer wg.Done()
-    
+
     if r.length < 0 {
         fmt.Printf("rect %v's length should be greater than zero\n", r)
         return

@@ -1,4 +1,4 @@
-# Go经典入门22：Channel
+# Go 经典入门 21：Channel
 
 前面我们探讨了如何使用 `Go` 协程（`Goroutine`）来实现并发。接下来我们学习信道（`Channel`），看看如何通过信道来实现 `Go` 协程间的通信。
 
@@ -240,7 +240,7 @@ func main() {
 
 ```go
 // fatal error: all goroutines are asleep - deadlock!
-// 
+//
 // goroutine 1 [chan send]:
 // main.main()
 //  /tmp/sandbox249677995/main.go:6 +0x80

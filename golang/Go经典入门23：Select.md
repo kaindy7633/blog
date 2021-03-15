@@ -1,4 +1,4 @@
-# Go经典入门24：Select
+# Go 经典入门 23：Select
 
 ## 什么是 select？
 
@@ -124,7 +124,7 @@ func main() {
 
 ```go
 // fatal error: all goroutines are asleep - deadlock!
-// 
+//
 // goroutine 1 [chan receive]:
 // main.main()
 //     /tmp/sandbox416567824/main.go:6 +0x80
@@ -232,7 +232,7 @@ func main() {
 
 ```go
 // fatal error: all goroutines are asleep - deadlock!
-// 
+//
 // goroutine 1 [select (no cases)]:
 // main.main()
 //     /tmp/sandbox299546399/main.go:4 +0x20
