@@ -166,6 +166,7 @@
 
 ### 其他
 
+- [RESTful接口规范概要](https://github.com/kaindy7633/blog/issues/158)
 - [软件版本各名称的含义](https://github.com/kaindy7633/blog/issues/89)
 - [Git 的其他应用](https://github.com/kaindy7633/blog/issues/83)
 - [atom 使用全局配置 ESLint](https://github.com/kaindy7633/blog/issues/51)
