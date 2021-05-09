@@ -6,7 +6,7 @@
 
 ### 前端相关
 
-- [解决 css in js 中遇到的找不到 css 类型的问题](https://github.com/kaindy7633/blog/issues/159)
+- [解决 css in js 中遇到的找不到 css 类型的问题](https://github.com/kaindy7633/blog/blob/main/front-end/%E8%A7%A3%E5%86%B3css%20in%20js%20%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E6%89%BE%E4%B8%8D%E5%88%B0css%E7%B1%BB%E5%9E%8B%E7%9A%84%E9%97%AE%E9%A2%98.md)
 - [前端工程师面试题合集](https://github.com/kaindy7633/blog/issues/114)
 - [使用 React-Styleguidist 生成文档](https://github.com/kaindy7633/blog/issues/112)
 - [使用 React 构建自己的代码库](https://github.com/kaindy7633/blog/issues/111)
