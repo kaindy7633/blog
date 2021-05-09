@@ -6,6 +6,7 @@
 
 ### 前端相关
 
+- [解决 css in js 中遇到的找不到 css 类型的问题](https://github.com/kaindy7633/blog/issues/159)
 - [前端工程师面试题合集](https://github.com/kaindy7633/blog/issues/114)
 - [使用 React-Styleguidist 生成文档](https://github.com/kaindy7633/blog/issues/112)
 - [使用 React 构建自己的代码库](https://github.com/kaindy7633/blog/issues/111)
@@ -166,7 +167,7 @@
 
 ### 其他
 
-- [RESTful接口规范概要](https://github.com/kaindy7633/blog/issues/158)
+- [RESTful 接口规范概要](https://github.com/kaindy7633/blog/issues/158)
 - [软件版本各名称的含义](https://github.com/kaindy7633/blog/issues/89)
 - [Git 的其他应用](https://github.com/kaindy7633/blog/issues/83)
 - [atom 使用全局配置 ESLint](https://github.com/kaindy7633/blog/issues/51)
