@@ -31,7 +31,7 @@ declare module "\*.css" {
 
 现在有个问题是，当我们使用对象形式访问 `css` 样式时，并没有任何提示，我们来解决这个问题
 
-我们需要安装一个开发时依赖：typescript-plugin-css-modules，它可以解析 css 样式对象，并提供相应的提示
+我们需要安装一个开发时依赖：`typescript-plugin-css-modules`，它可以解析 `css` 样式对象，并提供相应的提示
 
 先安装它
 
