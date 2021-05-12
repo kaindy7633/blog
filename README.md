@@ -113,6 +113,10 @@
 - [超详细解读 Go Modules 前世今生及入门使用](https://github.com/kaindy7633/blog/issues/115)
 - [golang 极速入门](https://github.com/kaindy7633/blog/issues/113)
 
+### Rust
+
+- [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
+
 ### Flutter
 
 - [一文入门 Dart](https://github.com/kaindy7633/blog/issues/99)
