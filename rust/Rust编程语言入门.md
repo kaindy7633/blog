@@ -28,6 +28,19 @@
         - [数组的用处](#%E6%95%B0%E7%BB%84%E7%9A%84%E7%94%A8%E5%A4%84)
         - [数组的类型](#%E6%95%B0%E7%BB%84%E7%9A%84%E7%B1%BB%E5%9E%8B)
         - [访问数组的元素](#%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84%E7%9A%84%E5%85%83%E7%B4%A0)
+    - [函数](#%E5%87%BD%E6%95%B0)
+      - [函数的参数](#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0)
+      - [函数体重的语句与表达式](#%E5%87%BD%E6%95%B0%E4%BD%93%E9%87%8D%E7%9A%84%E8%AF%AD%E5%8F%A5%E4%B8%8E%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+      - [函数的返回值](#%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC)
+    - [注释](#%E6%B3%A8%E9%87%8A)
+    - [控制流](#%E6%8E%A7%E5%88%B6%E6%B5%81)
+      - [if 表达式](#if-%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+        - [在 let 语句中使用 if](#%E5%9C%A8-let-%E8%AF%AD%E5%8F%A5%E4%B8%AD%E4%BD%BF%E7%94%A8-if)
+      - [循环](#%E5%BE%AA%E7%8E%AF)
+        - [loop](#loop)
+        - [while 条件循环](#while-%E6%9D%A1%E4%BB%B6%E5%BE%AA%E7%8E%AF)
+        - [使用 for 循环遍历集合](#%E4%BD%BF%E7%94%A8-for-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E9%9B%86%E5%90%88)
+        - [Range](#range)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -314,3 +327,221 @@ let c2 = colors[1];
 
 - 编译会通过
 - 运行会报错（`runtime` 时会 `panic`）
+
+### 函数
+
+声明函数使用 fn 关键字，依照惯例，针对函数和变量名，Rust 使用 snake case 命名规范：所有的字母都是小写，单词之间使用下划线分开
+
+```rust
+fn main() {
+    println!("Hello World");
+    another_function()
+}
+
+fn another_function() {
+    // ...
+}
+```
+
+#### 函数的参数
+
+函数的参数分为两个部分，即 `parameters`（形参）和 `arguments`（实参），需要注意的是，函数的参数里，必须声明每个参数的类型
+
+```rust
+fn main() {
+    another_function(5);  // arguments
+}
+
+fn another_function(x: i32) {
+    println!("the value of x is: {}", x);
+}
+```
+
+#### 函数体重的语句与表达式
+
+函数体由一系列语句组成，可选的由一个表达式结束
+
+`Rust` 是一个基于表达式的语言，语句是执行一些动作的指令，表达式会计算产生一个值
+
+函数的定义也是语句，语句不返回值，所以不可以使用 let 将一个语句负值给一个变量
+
+#### 函数的返回值
+
+在 `->` 符号后边声明函数返回值的类型，但是不可以为返回值命名。
+
+在 `Rust` 中，返回值就是函数体里面最后一个表达式的值，若想提前返回，需要使用 `return` 关键字，并指定一个值，大多数函数都是默认使用最后一个表达式作为返回值
+
+```rust
+fn five() -> i32 {
+    5  // 5是一个表达式，表示 five 函数的返回值，不能加上分号
+}
+
+fn main() {
+    let x = five();
+    println!("The value of x is {}", x);
+}
+```
+
+```rust
+// 函数也可以加上参数
+fn plus_five(x: i32) -> i32 {
+    x + 5
+}
+
+fn main() {
+    let x = five(6);
+    println!("The value of x is {}", x);
+}
+```
+
+### 注释
+
+Rust 的注释和其他语言基本相同
+
+```rust
+// This is a function
+fn five(x: i32) -> i32 {
+    x + 5
+}
+
+/**
+ * 我是多行注释中的第一行
+ * 我是第二行
+ */
+// 也可以使用多个单行注释
+// The entry point
+fn main() {
+    // ...
+}
+```
+
+### 控制流
+
+#### if 表达式
+
+`if` 表达式允许你根据条件来执行不同的代码分支，这个条件必须是 `bool` 类型
+
+`if` 表达式中，与条件相关联的代码块叫做分支（`arm`），可选的，在后边加上一个 `else` 表达式
+
+```rust
+fn main() {
+    let number = 3;
+
+    if number < 5 {
+        println!("condition was true");
+    } else {
+        println!("condition was false");
+    }
+}
+```
+
+除此之外，`Rust` 里也可以使用 `else if` 语句来处理多重条件
+
+但如果使用了多于一个 `else if`，那么最好使用 `match` 来重构代码
+
+##### 在 let 语句中使用 if
+
+因为 `if` 是一个表达式，所以可以将它放在 let 语句中等号的右边
+
+```rust
+let condition = true;
+
+let number = if condition { 5 } else { 6 };
+
+println!("The value of number is: {}", number);
+```
+
+#### 循环
+
+`Rust` 提供了 3 种循环： `loop`、`while` 和 `for`
+
+##### loop
+
+`loop` 关键字告诉 `Rust` 需要反复的执行一块代码，直到你喊停为止
+
+```rust
+fn main() {
+    loop {
+        println!("again")
+    }
+}
+```
+
+上面的代码实际是一段死循环，我们可以在 `loop` 循环中使用 `break` 关键字来告诉程序何时停止
+
+```rust
+fn main() {
+  let mut counter = 0;
+
+  let result = loop {
+      counter += 1;
+
+      if counter == 10 {
+          break counter * 2 // 停止循环，并将当前结果乘以2，没有加分号，直接返回结果给result
+      }
+  };
+
+  println!("The result is: {}", result);
+}
+```
+
+##### while 条件循环
+
+另外一种常见的循环模式是每次执行循环体之前都判断一次条件，`while` 条件循环就是位这种模式而生的。
+
+```rust
+fn main() {
+    let mut number = 3;
+
+    while number != 0 {
+        println!("{}!", number);
+        number -= 1;
+    };
+
+    println!("LIFTOFF!!");
+}
+```
+
+##### 使用 for 循环遍历集合
+
+我们可以使用 `while` 或 `loop` 来遍历集合，但是易错且低效
+
+```rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    while index < 5 {  // 此处的索引范围容易出错，数组越界会造成panic
+        println!("the value is: {}", a[index]);
+        index += 1;
+    }
+}
+```
+
+使用 `for` 循环会更加的简洁紧凑，它可以针对集合中的每个元素来执行一些代码
+
+```rust
+fn main() {
+    let a = [10, 20, 30, 40, 50];
+    for element in a.iter() {
+        println!("The value is: {}", element);
+    }
+}
+```
+
+由于 `for` 循环的安全、简洁性，所以它在 `Rust` 里用的最多
+
+##### Range
+
+`Range` 是由标准库提供的，它指定一个开始数字和一个结束数字，`Range` 可以生成它们之间的数字（不含结束），此外，还有一个 `rev` 方法，它可以反转 `Range`
+
+```rust
+// 使用 for 来实现上面倒计时的例子
+fn main() {
+    for number in (1..4).rev() {
+        println!("{}!", number);
+    }
+
+    println!("LIFEOFF!!");
+}
+```
