@@ -68,6 +68,7 @@
 
 ### Golang
 
+- [在 AWS 中部署 Golang 应用程序](https://github.com/kaindy7633/blog/blob/main/golang/%E5%9C%A8AWS%E4%B8%AD%E9%83%A8%E7%BD%B2Golang%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
 - [Go 经典入门 35：写入文件](https://github.com/kaindy7633/blog/issues/157)
 - [Go 经典入门 34：读取文件](https://github.com/kaindy7633/blog/issues/156)
 - [Go 经典入门 33：反射](https://github.com/kaindy7633/blog/issues/155)
