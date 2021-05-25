@@ -59,6 +59,10 @@
       - [复制](#%E5%A4%8D%E5%88%B6)
     - [所有权与函数](#%E6%89%80%E6%9C%89%E6%9D%83%E4%B8%8E%E5%87%BD%E6%95%B0)
       - [返回值与作用域](#%E8%BF%94%E5%9B%9E%E5%80%BC%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F)
+    - [引用和借用](#%E5%BC%95%E7%94%A8%E5%92%8C%E5%80%9F%E7%94%A8)
+      - [悬空引用 Dangling References](#%E6%82%AC%E7%A9%BA%E5%BC%95%E7%94%A8-dangling-references)
+      - [引用的规则](#%E5%BC%95%E7%94%A8%E7%9A%84%E8%A7%84%E5%88%99)
+    - [切片](#%E5%88%87%E7%89%87)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -813,3 +817,226 @@ fn takes_and_gives_back(a_string: String) -> String {
 
 - 把一个值赋给其他变量时就会发生移动
 - 当一个包含 `Heap` 数据的变量离开作用域时，它的值就会被 `drop` 函数清理，除非数据的所有权移动到另一个变量上
+
+### 引用和借用
+
+先来看下面的例子：
+
+```rust
+fn main() {
+    let s1 = String::from("Hello");
+    let len = calculate_length(&s1);  // 参数传递引用
+
+    println!("The length of '{}' is {}.", s1, len);
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+```
+
+上面的列子中，`calculate_length` 函数接收的是一个引用，类型是 `&String`，而不是 `String`，`&`符号表示引用，它允许你引用某些值而无需取得其所有权
+
+![](../images/20210525210448.png)
+
+除了引用，还有一个解引用，其他语言都是用的 `*`，`Rust` 中也使用这个
+
+我们把引用作为函数参数的这种行为叫做借用。
+
+并且不可以修改借用的变量，和变量一样，引用默认也是不可变的
+
+```rust
+s.push_str(", World");  // Error
+```
+
+我们知道，如果给变量加上 mut 关键字，它就是可变的，那引用可以使用 mut 吗？ 答案是可以的
+
+```rust
+fn main() {
+    let mut s1 = String::from("Hello");    // 加上mut关键字，使变量可变
+    let len = calculate_length(&mut s1);  // 引用变量s1，加上mut关键字
+
+    println!("The length of '{}' is {}.", s1, len);
+}
+
+fn calculate_length(s: &mut String) -> usize {  // 函数参数也要加上mut关键字
+    s.len()
+}
+```
+
+对于这种可变引用，有一个重要的限制，在特定作用域内，对某一块数据，只能有一个可变的引用。
+
+```rust
+fn main() {
+    let mut s = String::from("Hello");
+    let s1 = &mut s;
+    let s2 = &mut s;  // Error
+
+    println!("The length of '{}' is {}.", s1, s2);
+}
+```
+
+`Rust` 这样设计的好处在于，可以在编译时防止数据竞争，以下三种行为下会发生数据竞争：
+
+- 两个或多个指针同时访问同一个数据
+- 至少有一个指针用于写入数据
+- 没有使用任何机制来同步对数据的访问
+
+同时，我们也可以通过创建新的作用域，来允许非同时的创建多个可变引用
+
+```rust
+fn main() {
+    let mut s = String::from("Hello");
+
+    {
+        let s1 = &mut s;
+    }
+
+    let s2 = &mut s;
+}
+```
+
+实际上还有另外一个限制，在 `Rust` 中，不可以同时拥有一个可变引用和一个不变引用，多个不可变引用是允许的。
+
+```rust
+fn main() {
+    let mut s = String::from("Hello");
+    let r1 = &s;
+    let r2 = &s;
+    let s1 = &mut s;    // Error
+
+    println!("{}, {}, {}", r1, r2, s1);
+}
+```
+
+#### 悬空引用 Dangling References
+
+悬空指针（`Dangling Pointer`）：一个指针引用了内存中的某个地址，而这块内存可能已经释放并分配给其他变量使用了。
+
+在 `Rust` 中，编译器可以保证引用永远都不是悬空引用，如果你引用了某些数据，编译器将保证在引用离开作用域之前数据不会离开作用域。
+
+```rust
+fn main() {
+    let r = dangle();
+}
+
+fn dangle() -> &String {
+    let s = String::from("Hello");
+    &s
+}
+// 编译就会报错，悬空指针
+```
+
+#### 引用的规则
+
+- 在任何给定的时刻，只能满足以下条件之一：
+  - 一个可变的引用
+  - 任意数量不可变的引用
+- 引用必须一直有效
+
+### 切片
+
+在 `Rust` 中，还有一种不持有所有权的数据类型：切片（`Slice`）
+
+我们先从一到题目开始，编写一个函数，它具备以下功能：
+
+- 它接收字符串作为参数
+- 返回它在这个字符串里找到的第一个单词
+- 如果函数没有找到任何空格，那么整个字符串就被返回
+
+```rust
+fn main() {
+    let mut s = String::from("Hello World");
+    let wordIndex = first_word(&s);
+
+    println!("{}", wordIndex);
+}
+
+fn first_word(s: &String) -> usize {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return i;
+        }
+    }
+    s.len()
+}
+```
+
+好像上面的代码没有什么问题，但如果我们在 `main` 函数中调用 `s.clear()`，那么获取其长度就没有任何意义了，并且如果想要使用索引获取第一个单词，就会引发 `BUG`
+
+为了解决这个问题，`Rust` 引入了字符串切片（`Slice`），它是指向字符串中一部分内容的引用
+
+```rust
+fn main() {
+    let s = String::from("Hello World");
+
+    let hello = &s[0..5];   // 字符串切片，索引从0-4，不包含最后的5
+    let world = &s[6..11];  // 字符串切片，索引从6-10，不包含最后的11
+}
+```
+
+切片的表示形式：[开始索引..结束索引]，开始索引就是切片起始位置的索引值，结束索引是切片终止位置的下一个索引值
+
+![](../images/20210525221431.png)
+
+切片的写法与 Golang 中是基本一致的，而且我们可以使用省略的语法糖
+
+```rust
+...
+let hello = &s[..5];  // 表示从第一个字符开始
+let world = &s[6..];  // 表示结束的字符是最后一个
+...
+```
+
+同样的，我们也可以使用语法糖来表示整个字符串
+
+```rust
+let whole = &s[0..s.len()];  // 这是第一种写法
+let whole2 = &s[..];  // 这是第二种
+```
+
+注意点：
+
+- 字符串切片的范围索引必须发生在有效的 `UTF-8` 字符边界内。
+- 如果尝试从一个多字节的字符中创建字符串切片，程序就会报错并退出
+
+OK，现在我们使用字符串切片来重写最开始的那个函数
+
+```rust
+fn first_word(s: &String) -> &str {   // &str 表示返回一个字符串切片
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[..i];
+        }
+    }
+    &s[..]
+}
+```
+
+其实，字符串字面值就是切片，字符串字面值被直接存储在二进制程序中。
+
+如：`let s = "Hello World"`;
+
+变量 `s` 的类型是 `&str`，它是一个指向二进制程序特定位置的切片，`&str` 是不可变引用，所以字符串字面值也是不可变的。
+
+那么，我们如何将字符串切片作为参数传递呢?
+
+```rust
+fn first_word(s: &String) -> &str {    // 参数使用 &String
+    // ...
+}
+```
+
+其实，函数 `first_word` 的参数也可以是字符串切片，采用 `&str` 作为参数类型，这样，参数就可以同时接收 `String` 类型和 `&str` 类型的参数了
+
+```rust
+fn first_word(s: &str) -> &str {    // 参数使用 &str
+    // ...
+}
+```
+
+使用字符串切片，可以直接调用该函数，如果使用 `String`，可以创建一个完整的 `String` 切片来调用该函数。定义函数时使用字符串切片来代替字符串引用会使我们的 `API` 更加通用，且不会损失任何功能。
