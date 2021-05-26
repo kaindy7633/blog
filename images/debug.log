@@ -2,3 +2,4 @@
 [0513/230455:ERROR:browser_gpu_channel_host_factory.cc(119)] Failed to launch GPU process.
 [0523/214539:INFO:http_cache_transaction.cc(72)] IgnoreZeroCacheError: 0
 [0523/224020:WARNING:url_request_job_manager.cc(89)] Failed to map: weixin://resourceid/blank
+[0526/002235:ERROR:browser_gpu_channel_host_factory.cc(119)] Failed to launch GPU process.

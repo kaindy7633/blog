@@ -1040,3 +1040,331 @@ fn first_word(s: &str) -> &str {    // 参数使用 &str
 ```
 
 使用字符串切片，可以直接调用该函数，如果使用 `String`，可以创建一个完整的 `String` 切片来调用该函数。定义函数时使用字符串切片来代替字符串引用会使我们的 `API` 更加通用，且不会损失任何功能。
+
+## struct
+
+`struct` 数据结构是结构体的意思，这个在 `C`、`C++`和 `Golang` 中都有
+
+### 定义和实例化 struct
+
+#### 什么是 struct
+
+`struct` 就是结构体，它是 一种自定义的数据类型，它允许我们为相关联的值命名，打包，然后输出一个有意义的组合
+
+#### 定义 struct
+
+定义结构体使用 `struct` 关键字，并为整个 `struct` 命名，后面跟上花括号，并在其中为所有字段（`Field`）定义名称和类型，如：
+
+```rust
+struct User {
+    uername: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+```
+
+#### 实例化 struct
+
+想要使用 `struct`，我们需要创建 `struct` 的实例，并为每个字段制定具体值，这时无需按声明的顺序进行指定，如实例化上面的例子：
+
+```rust
+let user1 = User {
+    email: String::from("someone@example.com"),
+    uesrname: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+}
+```
+
+注意：实例化某个 `struct` 时，必须为所有定义的字段指定值，否则将会报错
+
+#### 在 struct 中取值
+
+与其他语言一样，我们可以使用点标记法，来访问 `struct` 中的字段值
+
+```rust
+let mut user1 = User {
+    email: String::from("someone@example.com"),
+    uesrname: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+}
+
+user1.email = String::from("anotheremail@example.com");  // 为email附上其他的值，实例必须是可变的
+```
+
+注意：一旦 `struct` 的实例被定义为可变的，那么实例中的所有字段都是可变的
+
+#### struct 作为函数返回值
+
+`struct` 是可以作为函数的返回值的
+
+```rust
+fn build_user(email: String, username: String) -> User {
+    User {
+        email: String::from("someone@example.com"),
+        uesrname: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    }
+}
+```
+
+#### 字段名简写
+
+当字段名与字段值赌赢的变量名相同时，我们就可以使用字段初始化简写的方式：
+
+```rust
+fn build_user(email: String, username: String) -> User {
+    User {
+        email,        // 简写
+        username,     // 简写
+        active: true,
+        sign_in_count: 1,
+    }
+}
+```
+
+#### struct 的更新语法
+
+当你想基于某个 `struct` 的实例来创建一个新的实例的时候，可以使用 `struct` 的更新语法，如我们要创建一个新的 `user2` 实例
+
+```rust
+let user2 = User {
+    email: String::from("another@example.com"),   // email发生改变
+    uesrname: String::from("someusername567"),    // username发生改变
+    active: true,                                 // 未发生改变
+    sign_in_count: 1,                             // 未发生改变
+}
+```
+
+如果使用更新语法，可以这样写：
+
+```rust
+let user2 = User {
+    email: String::from("another@example.com"),   // email发生改变
+    uesrname: String::from("someusername567"),    // username发生改变
+    ..user1
+}
+```
+
+#### Tuple struct
+
+在 `Rust` 中，我们可以定义类似 `tuple` 的 `struct`，叫做 `tuple struct`，这个 `tuple struct` 整体是有名称的，但里面的元素没有名称，这个结构适用于想给整个 `tuple` 起一个名字，且并不同于其他的 `tuple`，而且又不需要给每个元素起名
+
+如何定义 `tuple struct`， 使用 `struct` 关键字，后面是名字，以及里面元素的类型
+
+```rust
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+let black = Color(0, 0, 0);   // 实例
+let origin = Point(0, 0, 0);  // 实例
+```
+
+需要注意的是，上面的 `black` 和 `origin` 是不同的类型，因为它们是不同的 `tuple struct` 的实例
+
+#### Unit-Link Struct（空结构体）
+
+`Unit-Link Struct` 就是空结构体，没有任何字段的 `struct`，与 `()`，单元类型相似。它适用于需要在某个类型上实现某个 `trait`（与接口相似），但在里面有没有想要存储的数据
+
+#### struct 数据的所有权
+
+还是上面的例子：
+
+```rust
+struct User {
+    uername: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+```
+
+`username` 和 `email` 两个字段使用了 `String`，而非 `&str` 切片，下面两个是标量类型，所以这个 `struct` 拥有所有数据的的所有权。只要 `struct` 实例是有效的，那么里面的字段数据也是有效的。
+
+另外 `struct` 中的字段也可以存放引用，需要使用生命周期。生命周期保证只要 `struct` 实例是有效的，那么里面的引用也是有效的，如果 `struct` 里存储引用，而不使用生命周期，那么就会报错。
+
+### 一个 struct 的例子
+
+我们来做一个 `struct` 的例子，这个例子是计算一个长方体的面积，其实一开始很简单，看下面的代码：
+
+```rust
+fn main() {
+    let w = 30;
+    let l = 50;
+
+    println!("{}", area(w, l));  // 1500
+}
+
+// 计算长方体面积的函数 area
+fn area(width: u32, height: u32) -> u32 {
+    width * height
+}
+```
+
+可以看出，这个需求很简单，但是函数 area 的参数不是很直观，而且需要传入两个参数，这时我们想到了用 `Tuple` 来表示长方体的长和宽
+
+```rust
+fn main() {
+    let rect = (30, 50);
+
+    println!("{}", area(rect));  // 1500
+}
+
+fn area(rect: (u32, u32)) -> u32 {
+    rect.0 * rect.1
+}
+```
+
+这样，我们用了一个元组来解决参数的问题，但是元组没有键来表示字段属性，所以，我们再使用 `struct` 来表示长方体的属性
+
+```rust
+// 定义struct
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    // 实例化struct
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    }
+
+    println!("{}", area(&rect));  // 传入引用
+}
+
+fn area(rect: &Rectangle) -> u32 {
+    rect.width * rect.height
+}
+```
+
+这样看上去就很不错了，如果我们想要打印这个 `struct`，需要在定义 `struct` 时加上注解
+
+```rust
+#[derive(Debug)]   // 注解
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!("{}", area(&rect));
+
+    println!("{:#?}", rect);  // 正确打印struct，不会报错
+}
+
+fn area(rect: &Rectangle) -> u32 {
+    rect.width * rect.height
+}
+
+```
+
+### struct 的方法
+
+方法与函数类似：由 `fn` 关键字定义、有名称、参数和返回值
+
+它们的不同之处在于：方法是在 `struct`（或 `enum`、`trait`）的上下文中定义，第一个参数是 `self`，表示方法被调用的 `struct` 实例
+
+如何为 `struct` 定义方法呢? 还是上面的计算长方体面积的例子
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+// 需要使用 impl 关键字来为 Rectangle 这个 struct 声明方法 area
+// 相当于将 area 计算面积的方法与 struct 关联起来
+impl Rectangle {
+    fn area(&self) => u32 {
+        self.width * self.height
+    }
+}
+
+fn main() {
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    }
+
+    println!("{}", rect.area());  // 直接使用struct实例来调用area方法，且无需传入参数
+}
+```
+
+为 `struct` 定义方法，需要在 `impl` 块里定义方法，方法的第一个参数可以是 `&self`，也可以获得其所有权或可变借用，和其他参数一样，这样可以获得更良好的代码组织。
+
+`Rust` 会自动引用或解引用，在调用方法时就会发生这种行为，在调用方法时，`Rust` 根据情况自动添加 `&`、`&mut` 或 `*`，以便 `object` 可以匹配方法的签名。
+
+#### 其他参数
+
+在 `struct` 的方法中，除了 `&self` 参数外，也可以带其他的一个或多个参数。还是上面的例子，我们增加一个方法，该方法用来判断一个长方形是否能容纳另一个长方形
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    // 判断一个长方形是否能容纳另一个长方形
+    // 只需要比较长和宽即可
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+```
+
+#### 关联函数
+
+我们可以在 `impl` 块里定义不把 `self` 作为第一个参数的函数，它们叫关联函数（不是方法），例如：`String::from()`
+
+关联函数通常用于构造器，也就是初始化时使用的函数，例如我们可以构造一个正方形，同样是上面的例子
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // 返回面积
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    // 判断大小
+    fn can_hold(&self, other: Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+
+    // 关联函数，用于构造一个正方形
+    // 它的参数可以不以 self 开始
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
+fn main() {
+    // 调用关联函数，创建正方形
+    let s = Rectangle::square(20);
+}
+```
+
+#### 多个 impl 块
+
+每个 `struct` 允许拥有多个 `impl` 块
