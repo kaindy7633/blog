@@ -63,6 +63,26 @@
       - [悬空引用 Dangling References](#%E6%82%AC%E7%A9%BA%E5%BC%95%E7%94%A8-dangling-references)
       - [引用的规则](#%E5%BC%95%E7%94%A8%E7%9A%84%E8%A7%84%E5%88%99)
     - [切片](#%E5%88%87%E7%89%87)
+  - [struct](#struct)
+    - [定义和实例化 struct](#%E5%AE%9A%E4%B9%89%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%8C%96-struct)
+      - [什么是 struct](#%E4%BB%80%E4%B9%88%E6%98%AF-struct)
+      - [定义 struct](#%E5%AE%9A%E4%B9%89-struct)
+      - [实例化 struct](#%E5%AE%9E%E4%BE%8B%E5%8C%96-struct)
+      - [在 struct 中取值](#%E5%9C%A8-struct-%E4%B8%AD%E5%8F%96%E5%80%BC)
+      - [struct 作为函数返回值](#struct-%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC)
+      - [字段名简写](#%E5%AD%97%E6%AE%B5%E5%90%8D%E7%AE%80%E5%86%99)
+      - [struct 的更新语法](#struct-%E7%9A%84%E6%9B%B4%E6%96%B0%E8%AF%AD%E6%B3%95)
+      - [Tuple struct](#tuple-struct)
+      - [Unit-Link Struct（空结构体）](#unit-link-struct%E7%A9%BA%E7%BB%93%E6%9E%84%E4%BD%93)
+      - [struct 数据的所有权](#struct-%E6%95%B0%E6%8D%AE%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83)
+    - [一个 struct 的例子](#%E4%B8%80%E4%B8%AA-struct-%E7%9A%84%E4%BE%8B%E5%AD%90)
+    - [struct 的方法](#struct-%E7%9A%84%E6%96%B9%E6%B3%95)
+      - [其他参数](#%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0)
+      - [关联函数](#%E5%85%B3%E8%81%94%E5%87%BD%E6%95%B0)
+      - [多个 impl 块](#%E5%A4%9A%E4%B8%AA-impl-%E5%9D%97)
+  - [枚举](#%E6%9E%9A%E4%B8%BE)
+    - [定义枚举](#%E5%AE%9A%E4%B9%89%E6%9E%9A%E4%B8%BE)
+    - [Option 枚举](#option-%E6%9E%9A%E4%B8%BE)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1368,3 +1388,219 @@ fn main() {
 #### 多个 impl 块
 
 每个 `struct` 允许拥有多个 `impl` 块
+
+## 枚举
+
+### 定义枚举
+
+枚举就是允许我们列举所有可能的值来定义的一个类型
+
+比如 `IP` 地址，它可能是两种不同类型的，一个是 `IPv4`、一个是 `IPv6`
+
+```rust
+// 定义的数据类型，其中v4和v6都是变体
+enum IpAddrKind {
+    V4,
+    V6,
+}
+```
+
+那么如何创建枚举值呢? 枚举值 = 枚举名::变体名 , 如：
+
+```rust
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+```
+
+下面是使用枚举的例子：
+
+```rust
+enum IpAddrKind {
+    V4,
+    V6,
+}
+
+fn main() {
+    let four = IpAddrKind::V4;
+    let six = IpAddrKind::V6;
+
+    route(four);    // 直接使用枚举值
+    route(six);     // 直接使用枚举值
+    route(IpAddrKind::V6);   // 也可以直接创建枚举
+}
+
+fn route(ip_kind: IpAddrKind) {
+    println!("{}", ip_kind);
+}
+```
+
+枚举是自定义的数据类型，它可以作为 `struct` 中任意属性值的类型
+
+```rust
+enum IpAddrKind {
+    V4,
+    V6,
+}
+
+// 使用struct来存储IP地址相关的信息
+struct IpAddr {
+    kind: IpAddrKind, // 使用枚举作为 struct 中属性的值类型
+    address: String,
+}
+
+fn main() {
+    let home = IpAddr {
+        kind: IpAddrKind::V4, // 直接创建枚举值
+        address: String::from("127.0.0.1"),
+    };
+
+    let loopback = IpAddr {
+        kind: IpAddrKind::V6, // 直接创建枚举值
+        address: String::from("::1"),
+    };
+}
+```
+
+在 `Rust` 中，允许将数据直接附加到枚举的变体中。
+
+```rust
+enum IpAddr {
+    V4(String),   // 直接指定枚举值的类型为 String
+    V6(String),   // 直接指定枚举值的类型为 String
+}
+```
+
+这样做的优点在于，它不需要额外的 `struct`，每个变体可以拥有不同 的类型以及关联的数据量，例如：
+
+```rust
+enum IpAddr {
+    V4(u8, u8, u8, u8),   // 用4个u8类型的值表示IPv4的数据
+    V6(String),
+}
+```
+
+改写上面的例子：
+
+```rust
+enum IpAddrKind {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+fn main() {
+    let home = IpAddrKind::V4(127, 0, 0, 1);
+    let loopback = IpAddrKind::V6(String::from("::1"));
+}
+```
+
+标准库中有个 IpAddr，我们来看下它的结构：
+
+```rust
+struct Ipv4Addr {
+    // --snip--
+}
+
+struct Ipv6Addr {
+    // --snip--
+}
+
+enum IpAddr {
+    V4(Ipv4Addr),  // 我们可以在变体的类型中嵌入任意的类型
+    V6(Ipv6Addr),
+}
+```
+
+枚举的变体可以嵌入任意的类型，甚至是另一个枚举，看下面的例子：
+
+```rust
+enum Message {
+    Quit,                           // 没有关联任何类型的数据
+    Move { x: i32, y: i32 },        // 关联了一个匿名的结构体
+    Write(String),                  // 关联了一个字符串
+    ChangeColor(i32, i32, i32),     // 关联了一个元组
+}
+
+fn main() {
+    let q = Message::Quit;
+    let m = Message::Move { x: 12, y: 24 };
+    let w = Message::Write(String::from("Hello"));
+    let c = Message::ChangeColor(0, 255, 255);
+}
+```
+
+枚举也可以定义方法，与 `struct` 一样，我们可以使用 `impl` 关键字来定义方法
+
+```rust
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+// 在 Message 枚举上定义方法 call
+impl Message {
+    fn call(&self) {}
+}
+
+fn main() {
+    let q = Message::Quit;
+    let m = Message::Move { x: 12, y: 24 };
+    let w = Message::Write(String::from("Hello"));
+    let c = Message::ChangeColor(0, 255, 255);
+
+    m.call();  // 使用枚举的实例m调用call方法
+}
+```
+
+### Option 枚举
+
+`Option` 枚举是定义在标准库中的，在 `Prelude`（预导入模块）中，它描述了某个值可能存在（某种类型）或可能不存在的情况。
+
+在其他语言中，都有一个 `Null` 类型，`Null` 是一个值，它表示"没有值"或空值，一个变量可以处于两种状态：空值（`null`）或者非空
+
+`Null` 的创造者曾经表示，`Null` 引用就是一个 `Billion Dollar Mistake`，也就是价值十亿美元的错误。举个例子，如果你有一个字符串类型的值和一个可能为 `Null` 的值连接（相加），这时就会引发错误，也就是说当你尝试想使用非 `Null` 值那样使用 `Null` 值时可能就会引发某种错误。
+
+因此，在 `Rust` 中，没有 `Null`，但 `Null` 的这个概念还有有用的，它可以表示因某种原因而变为无效或缺失的值。
+
+所以，`Rust` 提供了一个类似 `Null` 概念的枚举：`Option<T>`，它在标准库中的定义是这样的：
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,     // 这个就表示Null
+}
+```
+
+它包含在 Prelude（预导入模块）中，可以直接使用
+
+- `Option<T>`
+- `Some<T>`
+- `None`
+
+```rust
+fn main() {
+    let some_number = Some(5);  // Rust自动推断为 i32 类型
+    let some_string = Some("A String");   // 自动推断为 String 类型
+    let absent_number: Option<i32> = None;  // Null类型，无法推断，需要显式的声明T类型，当前为i32
+}
+```
+
+那么，`Option<T>` 比 `Null` 好在哪呢?
+
+`Option<T>` 和 `T` 是不同的类型，我们不可以把 `Option<T>` 直接当成 `T` 来使用，看下面的例子：
+
+```rust
+fn main() {
+    let x: i8 = 5;
+    let y: Option<i8> = Some(5);
+
+    let sum = x + y;    // 这行会报错
+}
+```
+
+上面例子中最后的计算会报错，`Rust` 认为 `Option<i8>` 和 `i8` 不是同一种类型，所以它们无法进行加法运算，那如何让它们能计算呢? 那就是将 `Option<i8>` 转换为 `i8` 类型即可。
+
+所以，若想使用 `Option<T>` 中的 `T`，就必须将它转换为 `T`
+
+这就避免了像在其他语言里的情况，在无法确定一个值是否为 `Null` 的情况下使用它，就有可能会出错，而 `Rust` 这种处理避免了这种错误的出现
