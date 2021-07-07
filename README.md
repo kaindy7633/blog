@@ -65,7 +65,7 @@
 ### Nodejs
 
 - [Nodejs 入门指北](https://github.com/kaindy7633/blog/blob/main/nodejs/Nodejs%E5%85%A5%E9%97%A8%E6%8C%87%E5%8C%97.md)
-- [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/issues/80)
+- [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/blob/main/nodejs/Nodejs%E7%B2%BE%E7%AE%80%E7%AC%94%E8%AE%B0%E6%95%99%E7%A8%8B.md)
 
 ### Golang
 
