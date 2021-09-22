@@ -116,3 +116,7 @@ func main() {
 ![](../images/AB62537BAB7B40529A86210DC94FB15B.png)
 
 第一张蓝色的图表示 `numbers` 协程，第二张褐红色的图表示 `alphabets` 协程，第三张绿色的图表示 `Go` 主协程，而最后一张黑色的图把以上三种协程合并了，表明程序是如何运行的。在每个方框顶部，诸如 0 ms 和 250 ms 这样的字符串表示时间（以微秒为单位）。在每个方框的底部，1、2、3 等表示输出。蓝色方框表示：250 ms 打印出 1，500 ms 打印出 2，依此类推。最后黑色方框的底部的值会是 `1 a 2 3 b 4 c 5 d e main terminated`，这同样也是整个程序的输出。以上图片非常直观，你可以用它来理解程序是如何运作的。
+
+---
+
+[Go 经典入门 21：Channel](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A821%EF%BC%9AChannel.md)

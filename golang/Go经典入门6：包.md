@@ -1,4 +1,4 @@
-# Go经典入门7：包
+# Go 经典入门 7：包
 
 ## 什么是包，为什么使用包？
 
@@ -312,3 +312,7 @@ func main() {
 ```
 
 运行上面的程序，会输出 `rectangle package initialized`。尽管在所有代码里，我们都没有使用这个包，但还是成功初始化了它。
+
+---
+
+下一节：[Go 经典入门 7：if-else 语句](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A87%EF%BC%9Aif-else%E8%AF%AD%E5%8F%A5.md)

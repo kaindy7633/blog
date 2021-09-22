@@ -1,4 +1,4 @@
-# Go经典入门13：Maps
+# Go 经典入门 13：Maps
 
 ## 什么是 map ？
 
@@ -70,7 +70,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     fmt.Println("personSalary map contents:", personSalary)
 }
@@ -100,7 +100,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
-    
+
     personSalary["mike"] = 9000
     employee := "jamie"
     fmt.Println("Salary of", employee, "is", personSalary[employee])
@@ -123,10 +123,10 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     employee := "jamie"
- 
+
     fmt.Println("Salary of", employee, "is", personSalary[employee])
     fmt.Println("Salary of joe is", personSalary["joe"])
 }
@@ -161,7 +161,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     newEmp := "joe"
     value, ok := personSalary[newEmp]
@@ -193,7 +193,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     fmt.Println("All items of a map")
     for key, value := range personSalary {
@@ -229,7 +229,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     fmt.Println("map before deletion", personSalary)
     delete(personSalary, "steve")
@@ -261,7 +261,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     fmt.Println("length is", len(personSalary))
 }
@@ -285,7 +285,7 @@ func main() {
         "steve": 12000,
         "jamie": 15000,
     }
- 
+
     personSalary["mike"] = 9000
     fmt.Println("Original person salary", personSalary)
     newPersonSalary := personSalary
@@ -326,3 +326,7 @@ func main() {
 上面程序抛出编译错误 `invalid operation: map1 == map2 (map can only be compared to nil)`。
 
 判断两个 `map` 是否相等的方法是遍历比较两个 `map` 中的每个元素
+
+---
+
+下一节：[Go 经典入门 13：字符串](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A813%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2.md)

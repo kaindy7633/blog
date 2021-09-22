@@ -1,4 +1,4 @@
-# Go经典入门8：if-else语句
+# Go 经典入门 8：if-else 语句
 
 ## `if` 是条件语句。
 
@@ -96,7 +96,6 @@ func main() {
 
 在上面的程序中，如果 `else if num >= 51 && num <= 100` 为真，程序将输出 `number is between 51 and 100`。
 
-
 ## 一个注意点
 
 `else` 语句应该在 `if` 语句的大括号 `}` 之后的同一行中。如果不是，编译器会不通过。
@@ -164,3 +163,7 @@ func main() {
     }
 }
 ```
+
+---
+
+下一节：[Go 经典入门 8：循环](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A88%EF%BC%9A%E5%BE%AA%E7%8E%AF.md)

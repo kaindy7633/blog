@@ -187,3 +187,7 @@ func main() {
 就我们上面解决的问题而言，我更倾向于使用 `Mutex`，因为该问题并不需要协程间的通信。所以 `Mutex` 是很自然的选择。
 
 我的建议是去选择针对问题的工具，而别让问题去将就工具。:)
+
+---
+
+[Go 经典入门 25：结构体取代类](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A825%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93%E5%8F%96%E4%BB%A3%E7%B1%BB.md)

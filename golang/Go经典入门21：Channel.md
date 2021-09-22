@@ -448,3 +448,7 @@ func main() {
 ```
 
 关于信道还有一些其他的概念，比如缓冲信道（`Buffered Channel`）、工作池（`Worker Pool`）和 `select`。我们会在接下来的教程里专门介绍它们
+
+---
+
+[Go 经典入门 22：缓冲信道和工作池](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A822%EF%BC%9A%E7%BC%93%E5%86%B2%E4%BF%A1%E9%81%93%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B1%A0.md)

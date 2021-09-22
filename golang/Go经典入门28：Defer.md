@@ -261,3 +261,7 @@ func main() {
 ```
 
 在上面的程序中，使用 `defer` 还有一个好处。假设我们使用 `if` 条件语句，又给 `area` 方法添加了一条返回路径（`Return Path`）。如果没有使用 `defer` 来调用 `wg.Done()`，我们就得很小心了，确保在这条新添的返回路径里调用了 `wg.Done()`。由于现在我们延迟调用了 `wg.Done()`，因此无需再为这条新的返回路径添加 `wg.Done()` 了。
+
+---
+
+[Go 经典入门 29：错误处理](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A829%EF%BC%9A%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86.md)

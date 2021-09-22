@@ -1,4 +1,4 @@
-# Go经典入门：介绍、安装和Hello World
+# Go 经典入门：介绍、安装和 Hello World
 
 ## Golang 是什么
 
@@ -88,3 +88,7 @@ func main() { //3
 - `func main()` - `main` 是一个特殊的函数。整个程序就是从 `main` 函数开始运行的。`main` 函数必须放置在 `main` 包中。`{` 和 `}` 分别表示 `main` 函数的开始和结束部分。
 
 - `fmt.Println("Hello World")` - `fmt` 包中的 `Println` 函数用于把文本写入标准输出。
+
+---
+
+[Go 经典入门 2：变量](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A82%EF%BC%9A%E5%8F%98%E9%87%8F.md)

@@ -61,7 +61,7 @@ func main() {
 
 ```go
 // panic: runtime error: last name cannot be nil
-// 
+//
 // goroutine 1 [running]:
 // main.fullName(0x1040c128, 0x0)
 //     /tmp/sandbox135038844/main.go:12 +0x120
@@ -136,11 +136,11 @@ func main() {
 
 ```go
 // This program prints,
-// 
+//
 // deferred call in fullName
 // deferred call in main
 // panic: runtime error: last name cannot be nil
-// 
+//
 // goroutine 1 [running]:
 // main.fullName(0x1042bf90, 0x0)
 //     /tmp/sandbox060731990/main.go:13 +0x280
@@ -277,7 +277,7 @@ func main() {
 // Inside A
 // Inside B
 // panic: oh! B panicked
-// 
+//
 // goroutine 5 [running]:
 // main.b()
 //     /tmp/sandbox388039916/main.go:23 +0x80
@@ -340,7 +340,7 @@ func main() {
 
 ```go
 // panic: runtime error: index out of range
-// 
+//
 // goroutine 1 [running]:
 // main.a()
 //     /tmp/sandbox780439659/main.go:9 +0x40
@@ -442,3 +442,7 @@ func main() {
 ```
 
 从输出我们可以看出，首先已经恢复了 `panic`，打印出 `Recovered runtime error: index out of range`。此外，我们也打印出了堆栈跟踪。在恢复了 `panic` 之后，还打印出 `normally returned from main`。
+
+---
+
+[Go 经典入门 32：函数是一等公民（头等函数）](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A832%EF%BC%9A%E5%87%BD%E6%95%B0%E6%98%AF%E4%B8%80%E7%AD%89%E5%85%AC%E6%B0%91%EF%BC%88%E5%A4%B4%E7%AD%89%E5%87%BD%E6%95%B0%EF%BC%89.md)

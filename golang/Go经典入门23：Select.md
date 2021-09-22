@@ -237,3 +237,7 @@ func main() {
 // main.main()
 //     /tmp/sandbox299546399/main.go:4 +0x20
 ```
+
+---
+
+[Go 经典入门 24：Mutex](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A824%EF%BC%9AMutex.md)

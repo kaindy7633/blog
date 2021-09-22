@@ -1,4 +1,4 @@
-# Go经典入门10：switch语句
+# Go 经典入门 10：switch 语句
 
 `switch` 是一个条件语句，用于将表达式的值与可能匹配的选项列表进行比较，并根据匹配情况执行相应的代码块。它可以被认为是替代多个 `if else` 子句的常用方式。
 
@@ -186,3 +186,7 @@ func main() {
 ```
 
 `fallthrough` 语句应该是 `case` 子句的最后一个语句。如果它出现在了 `case` 语句的中间，编译器将会报错：`fallthrough statement out of place`
+
+---
+
+下一节：[Go 经典入门 10：数组和切片](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A810%EF%BC%9A%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87.md)

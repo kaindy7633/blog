@@ -1,4 +1,4 @@
-# Go经典入门：变量
+# Go 经典入门：变量
 
 ## 变量是什么
 
@@ -273,3 +273,7 @@ func main() {
     age = "naveen" // 错误，尝试赋值一个字符串给int类型变量
 }
 ```
+
+---
+
+下一节：[Go 经典入门 3：常量](https://github.com/kaindy7633/blog/blob/main/golang/Go%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A83%EF%BC%9A%E5%B8%B8%E9%87%8F.md)
