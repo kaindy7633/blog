@@ -64,7 +64,8 @@
 
 ### Golang
 
-- [用 Gin 编写一个完整的博客后端应用（一）]()
+- [用 Gin 编写一个完整的博客后端应用（二）](https://github.com/kaindy7633/blog/blob/main/golang/%E7%94%A8Gin%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E5%8D%9A%E5%AE%A2%E5%90%8E%E7%AB%AF%E5%BA%94%E7%94%A8%EF%BC%88%E4%BA%8C%EF%BC%89.md)
+- [用 Gin 编写一个完整的博客后端应用（一）](https://github.com/kaindy7633/blog/blob/main/golang/%E7%94%A8Gin%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E5%8D%9A%E5%AE%A2%E5%90%8E%E7%AB%AF%E5%BA%94%E7%94%A8%EF%BC%88%E4%B8%80%EF%BC%89.md)
 - [在 AWS 中部署 Golang 应用程序](https://github.com/kaindy7633/blog/blob/main/golang/%E5%9C%A8AWS%E4%B8%AD%E9%83%A8%E7%BD%B2Golang%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
 - [Go 语言里的空接口](https://github.com/kaindy7633/blog/blob/main/golang/Go%E8%AF%AD%E8%A8%80%E9%87%8C%E7%9A%84%E7%A9%BA%E6%8E%A5%E5%8F%A3.md)
 - [Go 语言中的编码规范](https://github.com/kaindy7633/blog/blob/main/golang/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83.md)

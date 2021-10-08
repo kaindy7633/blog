@@ -67,3 +67,7 @@ kaindy@liuzhendeMacBook-Pro blog-service % go run main.go
 kaindy@liuzhendeMacBook-Pro blog-service % curl http://localhost:8080/ping
 {"message":"pong"}
 ```
+
+---
+
+下一节：[用 Gin 编写一个完整的博客后端应用（二）](https://github.com/kaindy7633/blog/blob/main/golang/%E7%94%A8Gin%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E5%8D%9A%E5%AE%A2%E5%90%8E%E7%AB%AF%E5%BA%94%E7%94%A8%EF%BC%88%E4%BA%8C%EF%BC%89.md)
