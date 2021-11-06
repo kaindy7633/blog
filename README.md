@@ -6,7 +6,6 @@
 
 ### 前端相关
 
-- [前端架构杂谈](<https://github.com/kaindy7633/blog/blob/main/front-end/%E5%89%8D%E7%AB%AF%E6%9E%B6%E6%9E%84%E6%9D%82%E8%B0%88(%E4%B8%80).md>)
 - [解决 css in js 中遇到的找不到 css 类型的问题](https://github.com/kaindy7633/blog/blob/main/front-end/%E8%A7%A3%E5%86%B3css%20in%20js%20%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E6%89%BE%E4%B8%8D%E5%88%B0css%E7%B1%BB%E5%9E%8B%E7%9A%84%E9%97%AE%E9%A2%98.md)
 - [前端工程师面试题合集](https://github.com/kaindy7633/blog/blob/main/front-end/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E5%90%88%E9%9B%86.md)
 - [使用 React-Styleguidist 生成文档](https://github.com/kaindy7633/blog/blob/main/front-end/%E4%BD%BF%E7%94%A8React-Styleguidist%E7%94%9F%E6%88%90%E6%96%87%E6%A1%A3.md)
@@ -64,6 +63,7 @@
 
 ### Golang
 
+- [使用 vscode 运行 golang 测试的小技巧]()
 - [在 AWS 中部署 Golang 应用程序](https://github.com/kaindy7633/blog/blob/main/golang/%E5%9C%A8AWS%E4%B8%AD%E9%83%A8%E7%BD%B2Golang%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
 - [Go 语言里的空接口](https://github.com/kaindy7633/blog/blob/main/golang/Go%E8%AF%AD%E8%A8%80%E9%87%8C%E7%9A%84%E7%A9%BA%E6%8E%A5%E5%8F%A3.md)
 - [Go 语言中的编码规范](https://github.com/kaindy7633/blog/blob/main/golang/Go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83.md)
