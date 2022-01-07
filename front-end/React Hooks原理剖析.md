@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-04 23:14:43
+ * @LastEditTime: 2022-01-07 23:01:42
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -103,3 +103,59 @@ React.createElement(
 ```
 
 `JSX` 的部分我们是用 `JavaScript` 的方式去实现的，并且用到了 `React.createElement` 这样一个 API，它的作用就是创建一个组件的实例。
+
+#### 实战：创建一个能发送请求的组件
+
+```jsx
+import React, { useState, useEffect } from "react";
+
+export default function UserList() {
+  // 使用三个 state 分别保存用户列表， loading 状态和错误状态
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // 定义获取用户的回调函数
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://reqres.in/api/users/");
+      const json = await res.json();
+      // 请求成功后将用户数据放入 state
+      setUsers(json.data);
+    } catch (err) {
+      // 请求失败将错误状态放入 state
+      setError(err);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="user-list">
+      <button onClick={fetchUsers} disabled={loading}>
+        {loading ? "Loading..." : "Show Users"}
+      </button>
+      {error && <div stle={{ color: "red" }}>Failed: {String(error)}</div>}
+      <br />
+      <ul>
+        {users.length > 0 &&
+          users.map((user) => {
+            return <li key={user.id}>{user.first_name}</li>;
+          })}
+      </ul>
+    </div>
+  );
+}
+```
+
+## 为什么会有 Hooks ?
+
+思考 `React`组件的本质, `React` 组件的模型其实很直观，就是从 `Model` 到 `View` 的映射，这里的 `Model` 对应到 `React` 中就是 `state` 和 `props`
+
+顾名思义，`Hook` 就是“钩子”的意思。在 `React` 中，`Hooks` 就是把某个目标结果钩到某个可能会变化的数据源或者事件源上，那么当被钩到的数据或事件发生变化时，产生这个目标结果的代码会重新执行，产生更新后的结果
+
+对于函数组件，这个结果是最终的 `DOM` 树；对于 `useCallback`、`useMemo` 这样与缓存相关的组件，则是在依赖项发生变化时去更新缓存
+
+我们的初衷是为了实现 `UI` 组件的渲染，那么在 `React` 中，其实所有的 `Hooks`的最终结果都是导致 `UI` 的变化。
+
+`Hooks` 中被钩的对象，不仅可以是某个独立的数据源，也可以是另一个 `Hook` 执行的结果，这就带来了 `Hooks` 的最大好处：逻辑的复用
