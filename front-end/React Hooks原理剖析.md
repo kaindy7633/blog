@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-07 23:01:42
+ * @LastEditTime: 2022-01-09 15:01:46
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -159,3 +159,90 @@ export default function UserList() {
 我们的初衷是为了实现 `UI` 组件的渲染，那么在 `React` 中，其实所有的 `Hooks`的最终结果都是导致 `UI` 的变化。
 
 `Hooks` 中被钩的对象，不仅可以是某个独立的数据源，也可以是另一个 `Hook` 执行的结果，这就带来了 `Hooks` 的最大好处：逻辑的复用
+
+让我们来看看调整浏览器窗口重新布局这样一个需求，在 `class` 类组件中如何实现, 首先我们不可能实现两个组件来满足需求，所以，我们必须使用 `HOC`（高阶组件）来完成
+
+```js
+const withWindowSize = (Component) => {
+  // 产生一个高阶组件 WrapperdComponent ，只包含监听窗口大小逻辑
+  class WrappedComponent extends React.PureComponent {
+    constructor(props) {
+      super(props);
+      this.state = {
+        size: this.getSize(),
+      };
+    }
+
+    componentDidMount() {
+      window.addEventListener("resize", this.handleResize);
+    }
+
+    componnetWillUnmount() {
+      window.removeEventListener("resize", this.handleResize);
+    }
+
+    getSize() {
+      return window.innerWidth > 1000 ? "large" : "small";
+    }
+
+    handleResize = () => {
+      const currentSize = this.getSize();
+      this.setState({
+        size: this.getSize(),
+      });
+    };
+
+    render() {
+      // 将窗口大小传递给真正的业务逻辑组件
+      return <Component size={this.state.size} />;
+    }
+  }
+
+  return WrappedComponent;
+};
+```
+
+接下来，包装我们的业务组件
+
+```jsx
+class MyComponent extends React.PureComponent {
+  render() {
+    const { size } = this.props;
+    if (size === "small") return <SmallComponent />;
+    else return <LargeCoponent />;
+  }
+}
+
+export default withWindowSize(MyComponent);
+```
+
+高阶组件几乎是 `Class` 组件中实现代码逻辑复用的唯一方式，其缺点其实比较显然：
+
+- 代码难理解，不直观，很多人甚至宁愿重复代码，也不愿用高阶组件；
+- 会增加很多额外的组件节点。每一个高阶组件都会多一层节点，这就会给调试带来很大的负担。
+
+然后我们再来使用 `Hooks` 实现这个需求
+
+```js
+cons getSize = () => {
+  return window.innerWindow > 1000 ? "large" : "small"
+}
+
+const useWindowSize = () => {
+  const [size, setSize] = seState(getSize())
+
+  useEffect(() => {
+    const handler = () => setSize(getSize())
+    window.addEventListener("resize", handler)
+    return () => {
+      window.removeEventListener("resize", handler)
+    }
+  }, [])
+
+  return size
+}
+```
+
+## 关注分离
+
+关注分离的意思是说 `Hooks` 能够让针对同一个业务逻辑的代码尽可能聚合在一块儿。这是过去在 `Class` 组件中很难做到的。因为在 `Class` 组件中，你不得不把同一个业务逻辑的代码分散在类组件的不同生命周期的方法中。所以通过 `Hooks` 的方式，把业务逻辑清晰地隔离开，能够让代码更加容易理解和维护。
