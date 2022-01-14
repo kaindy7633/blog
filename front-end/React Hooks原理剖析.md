@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-09 15:01:46
+ * @LastEditTime: 2022-01-12 22:18:03
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -246,3 +246,28 @@ const useWindowSize = () => {
 ## 关注分离
 
 关注分离的意思是说 `Hooks` 能够让针对同一个业务逻辑的代码尽可能聚合在一块儿。这是过去在 `Class` 组件中很难做到的。因为在 `Class` 组件中，你不得不把同一个业务逻辑的代码分散在类组件的不同生命周期的方法中。所以通过 `Hooks` 的方式，把业务逻辑清晰地隔离开，能够让代码更加容易理解和维护。
+
+## 组件状态和生命周期
+
+`React` 提供的 `Hooks` 其实非常少，一共只有 `10` 个，比如 `useState`、`useEffect`、`useCallback`、`useMemo`、`useRef`、`useContext`
+
+### useState
+
+`useState` 这个 `Hook` 用来管理 `state`, 它可以让函数组件具有维持状态的能力。在一个
+函数组件的多次渲染之间，这个 `state` 是共享的。
+
+```jsx
+import React, { useState } from "react";
+
+function Example() {
+  // 创建一个保存 count 的 state， 并给初始值 0
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}> + </button>
+    </div>
+  );
+}
+```
