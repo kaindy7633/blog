@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-12 22:18:03
+ * @LastEditTime: 2022-01-18 19:54:01
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -270,4 +270,84 @@ function Example() {
     </div>
   );
 }
+```
+
+- `useState(initialState)` 的参数 `initialState` 是创建 `state` 的初始值，它可以是任意类型。
+- `useState()` 的返回值是一个有着两个元素的数组。第一个数组元素用来读取 `state` 的值，第二个则是用来设置这个 `state` 的值。在这里要注意的是，`state` 的变量（例子中的 `count`）是只读的，所以我们必须通过第二个数组元素 `setCount` 来设置它的值。
+
+通常来说，我们要遵循的一个原则就是： `state` 中永远不要保存可以通过计算得到的值。比如说：
+
+- 从 `props` 传递过来的值。
+- 从 `URL` 中读到的值。
+- 从 `cookie`、`localStorage` 中读取的值。
+
+### useEffect
+
+`useEffect` 用于执行一段副作用。副作用是指一段和当前执行结果无关的代码。比如说要修改函数外部的某个变量，要发起一个请求，等等。也就是说，在函数组件的当次执行过程中，`useEffect` 中代码的执行是不影响渲染出来的 `UI` 的。
+
+useEffect 可以接收两个参数，函数签名如下：
+
+```js
+useEffect(callback, dependencies);
+```
+
+第一个为要执行的函数 `callback`，第二个是可选的依赖项数组 `dependencies`。其中依赖项是可选的，如果不指定，那么 `callback` 就会在每次函数组件执行完后都执行；如果指定了，那么只有依赖项中的值发生变化的时候，它才会执行。
+
+> `useEffect` 是每次组件 `render` 完后判断依赖并执行
+
+```jsx
+import React, { useState, useEffect } from "react";
+
+function BlogView({ id }) {
+  // 设置一个本地 state 用于保存 blog 内容
+  const [blogContent, setBlogContent] = useState(null);
+
+  useEffect(() => {
+    // useEffect 的 callback 要避免直接的 async 函数，需要封装一下
+    const doAsync = async () => {
+      // 当 id 发生变化时，将当前内容清除以保持一致性
+      setBlogContent(null);
+      // 发起请求获取数据
+      const res = await fetch(`/blog-content/${id}`);
+      // 将数据存入 state
+      setBlogContent(await res.text());
+    };
+    doAsync();
+  }, [id]); // 使用 id 作为依赖项，变化时则执行副作用
+
+  // 如果没有 blogContent 则认为是在 loading 状态
+  const isLoading = !blogContent;
+  return <div>{isLoading ? "Loading..." : blogContent}</div>;
+}
+```
+
+`useEffect` 还有两个特殊的用法：没有依赖项，以及依赖项作为空数组
+
+- 没有依赖项，则每次 `render` 后都会重新执行。
+- 空数组作为依赖项，则只在首次执行时触发
+
+```jsx
+useEffect(() => {
+  // 组件首次渲染时执行，等价于 class 组件中的componentDidMount
+  console.log("did mount");
+}, []);
+```
+
+`useEffect` 还允许你返回一个函数，用于在组件销毁的时候做一些清理的操作。比如移除事件的监听。
+
+```jsx
+const [size, setSize] = useState({});
+
+useEffect(() => {
+  const handler = () => {
+    setSize(getSize());
+  };
+  window.addEventListener("resize", handler);
+
+  // 返回一个 callback 在组件销毁时调用
+  return () => {
+    // 移除 resize 事件
+    window.removeEventListener("resize", handler);
+  };
+}, []);
 ```
