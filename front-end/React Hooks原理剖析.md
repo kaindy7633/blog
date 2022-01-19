@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-18 19:54:01
+ * @LastEditTime: 2022-01-19 19:41:46
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -350,4 +350,52 @@ useEffect(() => {
     window.removeEventListener("resize", handler);
   };
 }, []);
+```
+
+### 理解 Hooks 的依赖
+
+`Hooks` 提供了让你监听某个数据变化的能力。这个变化可能会触发组件的刷新，也可能是去创建一个副作用，又或者是刷新一个缓存。那么定义要监听哪些数据变化的机制，其实就是指定 `Hooks` 的依赖项。
+
+- 依赖项中定义的变量一定是会在回调函数中用到的，否则声明依赖项其实是没有意义的。
+- 依赖项一般是一个常量数组，而不是一个变量。因为一般在创建 `callback` 的时候，你其实非常清楚其中要用到哪些依赖项了。
+- `React` 会使用浅比较来对比依赖项是否发生了变化，所以要特别注意数组或者对象类型。如果你是每次创建一个新对象，即使和之前的值是等价的，也会被认为是依赖项发生了变化。
+
+### Hooks 的使用规则
+
+- 只能在函数组件的顶级作用域使用；
+
+  `Hooks` 只能在函数组件的顶级作用域使用, 它不能在循环、条件判断或者嵌套函数内执行，而必须是在顶层。同时 `Hooks` 在组件的多次渲染之间，必须按顺序被执行。在 `React` 组件内部，其实是维护了一个对应组件的固定 `Hooks` 执行列表的，以便在多次渲染之间保持 `Hooks` 的状态，并做对比。
+
+- 只能在函数组件或者其他 `Hooks` 中使用。
+
+  `Hooks` 作为专门为函数组件设计的机制，使用的情况只有两种，一种是在函数组件内，另外一种则是在自定义的 `Hooks` 里面。
+
+### 使用 ESLint 插件帮助检查 Hooks 的使用
+
+`React` 官方为我们提供了一个 `ESLint` 的插件，专门用来检查 `Hooks` 是否正确被使用，它就是
+`eslint-plugin-react-hooks`
+
+通过 `npm` 或者 `yarn` 安装这个插件：
+
+```bash
+npm install eslint-plugin-react-hooks --save-dev
+```
+
+然后在你的 `ESLint` 配置文件中加入两个规则：`rules-of-hooks` 和 `exhaustive-deps`
+
+```json
+{
+  "plugins": [
+    // ...
+    "react-hooks"
+  ],
+
+  "rules": {
+    // ...
+    // 检查 Hooks 的使用规则
+    "react-hooks/rules-of-hooks": "error",
+    // 检查依赖项的声明
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}
 ```
