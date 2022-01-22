@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-19 19:41:46
+ * @LastEditTime: 2022-01-22 12:51:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
@@ -399,3 +399,104 @@ npm install eslint-plugin-react-hooks --save-dev
   }
 }
 ```
+
+## useCallback：缓存回调函数
+
+在 `React` 函数组件中，每一次 `UI` 的变化，都是通过重新执行整个函数来完成的。使用 useCallback 可以缓存哪些不需要重新创建的函数，如果这个函数是作为 props 传递给子组件的，那么如果重新创建函数，也会引发其子组件重新渲染，带来不必要的系统开支。
+
+```js
+useCallback(fn, deps);
+```
+
+列子：
+
+```jsx
+import React, { useState, useCallback } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const handleIncrement = useCallback(
+    () => setCount(count + 1),
+    [count] // 只有当 count 发生变化时，才会重新创建回调函数
+  );
+
+  // ...
+
+  return <button onClick={handleIncrement}>+</button>;
+}
+```
+
+只有 `count` 发生变化的时候，才需要重新创建一个回调函数，这样就保证了组件不会创建重复的回调函数。而接收这个回调函数作为属性的组件，也不会频繁地需要重新渲染。
+
+除了 `useCallback`， `useMemo` 也是为了缓存而设计的。只不过，`useCallback` 缓存的是一个函数，而 `useMemo` 缓存的是计算的结果。
+
+## useMemo：缓存计算的结果
+
+```js
+useMemo(fn, deps);
+```
+
+如果某个数据是通过其它数据计算得到的，那么只有当用到的数据，也就是依赖的数据发生变化的时候，才应该需要重新计算
+
+下面看一个获取用户列表的例子：
+
+```jsx
+import React, { useState, useEffect } from "react";
+
+export default function SearchUserList() {
+  const [users, setUsers] = useState(null);
+  const [searchKey, setSearchKey] = useState("");
+
+  useEffect(() => {
+    const doFecth = async () => {
+      // 组件首次加载时发起请求获取用户数据
+      const res = await fetch("https://reqres.in/api/users/");
+      setUsers(await res.json());
+    };
+    doFetch();
+  }, []);
+
+  let usersToShow = null;
+
+  if (users) {
+    // 无论组件为何刷新，这里一定会对数据做一次过滤操作
+    usersToShow = users.data.filter((user) =>
+      user.first_name.includes(searchKey)
+    );
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={searchKey}
+        onChange={(evt) => setSearchKey(evt.target.value)}
+      />
+      <ul>
+        {usersToShow &&
+          usersToShow.length > 0 &&
+          usersToShow.map((user) => {
+            return <li key={user.id}>{user.first_name}</li>;
+          })}
+      </ul>
+    </div>
+  );
+}
+```
+
+上面的例子中，无论状态 `users` 和 `searchKey` 是否发生变化，过滤操作都会被执行，也就是说，它们没有发生变化时，我们应该直接返回上一次计算的结果，也就是缓存结果
+
+```jsx
+// ...
+// 使用 useMemo 缓存计算结果
+const usersToShow = useMemo(() => {
+  if (!users) return null;
+  return users.data.filter((user) => {
+    return user.first_name.includes(searchKey);
+  });
+}, [users, searchKey]);
+```
+
+与 `useCallback` 相似， `useMemo` 也可以避免子组件的重复渲染
+
+## useRef：在多次渲染之间共享数据
