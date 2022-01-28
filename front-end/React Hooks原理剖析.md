@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-22 12:51:52
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-28 10:20:25
+ * @LastEditors: LiuZhen
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /blog/front-end/React Hooks原理剖析.md
 -->
@@ -500,3 +500,70 @@ const usersToShow = useMemo(() => {
 与 `useCallback` 相似， `useMemo` 也可以避免子组件的重复渲染
 
 ## useRef：在多次渲染之间共享数据
+
+在 `React` 中，使用 `useRef` 来在多次渲染之间共享数据
+
+```jsx
+const myRefContainer = useRef(initialValue);
+```
+
+我们可以把 `useRef` 看作是在函数组件之外创建的一个容器空间。在这个容器上，我们可以通过唯一的 `current` 属设置一个值，从而在函数组件的多次渲染之间共享这个值。
+
+```jsx
+import React, { useState, useCallback, useRef } from "react";
+
+export default function Timer() {
+  // 定义 time state 用用于保存的累计时间
+  const [time, setTime] = useState(0);
+
+  // 定义 timer 这样一个容器用于在跨组件渲染之间保持一个变量
+  const timer = useRef(null);
+
+  // 开始计时的事件处理函数
+  const handleStart = useCallback(() => {
+    // 使用 current 属性设置 ref 的值
+    timer.current = window.setInterval(() => {
+      setTime((time) => time + 1);
+    }, 100);
+  }, []);
+
+  // 暂停计时的事件处理函数
+  const handlePause = useCallback(() => {
+    // 使用 clearInterval 来停止计时
+    window.clearInterval(timer.current);
+    timer.current = null;
+  }, []);
+
+  return (
+    <div>
+      {time / 10} seconds.
+      <br />
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handlePause}>Pause</button>
+    </div>
+  );
+}
+```
+
+使用 `useRef` 保存的数据一般是和 `UI` 的渲染无关的，因此当 `ref` 的值发生变化时，是不会触发组件的重新渲染的，这也是 `useRef` 区别于 `useState` 的地方.
+
+`useRef` 还有一个重要的功能，就是保存某个 `DOM` 节点的引用，结合 `React` 的 `ref` 属性和 `useRef` 这个 `Hook`，我们就可以获得真实的 `DOM` 节点，并对这个节点进行操作。
+
+```jsx
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+  const onButtonClick = () => {
+    // current 属性指向了真实的input 这个 DOM 节点，从而可以调用 focus 方法
+    inputEl.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
+    </>
+  );
+}
+```
+
+## useContext： 定义全局状态
