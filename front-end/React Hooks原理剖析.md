@@ -1,12 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2022-01-04 22:51:36
- * @LastEditTime: 2022-01-28 10:20:25
- * @LastEditors: LiuZhen
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: /blog/front-end/React Hooks原理剖析.md
--->
-
 # React Hooks 原理剖析
 
 > React 拥有两个非常颠覆式的创新，一个是虚拟 DOM， 一个是 JSX
@@ -567,3 +558,62 @@ function TextInputWithFocusButton() {
 ```
 
 ## useContext： 定义全局状态
+
+`React` 提供了 `Context` 这样一个机制，能够让所有在某个组件开始的组件树上创建一个 `Context`。这样这个组件树上的所有组件，就都能访问和修改这个 `Context` 了。那么在函数组件里，我们就可以使用`useContext` 这样一个 `Hook` 来管理 `Context`
+
+```jsx
+const value = useContext(MyContext);
+```
+
+创建一个 `Context`，这就是 `React.createContext` API
+
+```jsx
+const MyContext = React.createContext(initialValue);
+```
+
+`MyContext` 具有一个 `Provider` 的属性，一般是作为组件树的根组件。
+
+```jsx
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee",
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222",
+  },
+};
+
+// 创建一个 Theme 的 Context
+const ThemeContext = React.createContext(themes.light);
+
+function App() {
+  // 整个应用使用 ThemeContext.Provider 作为根组件
+  return (
+    // 使用 themes.dark 作为当前 Context
+    <ThemeContext.Provider value={themes.dark}>
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+// 在 Toolbar 组件中使用一个会使用 Theme 的 Button
+function Toolbar(props) {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+// 在 Theme Button 中使用 useContext 来获取当前的主题
+function ThemedButton() {
+  const theme = useContext(ThemeContext);
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
+}
+```
