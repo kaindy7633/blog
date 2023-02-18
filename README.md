@@ -65,6 +65,7 @@
 
 ### Rust
 
+- [Rust语言圣经-读书笔记](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E8%AF%AD%E8%A8%80%E5%9C%A3%E7%BB%8F-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.md)
 - [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
 
 ### Golang
