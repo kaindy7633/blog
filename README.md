@@ -6,7 +6,7 @@
 
 ### 前端相关
 
-- [Typescript进阶](https://github.com/kaindy7633/blog/blob/main/front-end/React%20Hooks%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90.md)
+- [Typescript进阶](https://github.com/kaindy7633/blog/blob/main/front-end/Typescript%E8%BF%9B%E9%98%B6.md)
 - [React Hooks 原理剖析](https://github.com/kaindy7633/blog/blob/main/front-end/React%20Hooks%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90.md)
 - [解决 css in js 中遇到的找不到 css 类型的问题](https://github.com/kaindy7633/blog/blob/main/front-end/%E8%A7%A3%E5%86%B3css%20in%20js%20%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E6%89%BE%E4%B8%8D%E5%88%B0css%E7%B1%BB%E5%9E%8B%E7%9A%84%E9%97%AE%E9%A2%98.md)
 - [前端工程师面试题合集](https://github.com/kaindy7633/blog/blob/main/front-end/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E9%9D%A2%E8%AF%95%E9%A2%98%E5%90%88%E9%9B%86.md)
