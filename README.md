@@ -63,6 +63,10 @@
 - [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/blob/main/front-end/%E7%BA%AFCSS3%E5%88%B6%E4%BD%9C%E6%89%8B%E9%A3%8E%E7%90%B4%E6%95%88%E6%9E%9C.md)
 - [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/blob/main/front-end/%E9%97%B2%E8%81%8AJavaScript%E4%B8%AD%E7%9A%84apply.md)
 
+### Rust
+
+- [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
+
 ### Golang
 
 - [使用 vscode 运行 golang 测试的小技巧](https://github.com/kaindy7633/blog/blob/main/golang/%E4%BD%BF%E7%94%A8%20vscode%20%E8%BF%90%E8%A1%8C%20golang%20%E6%B5%8B%E8%AF%95%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7.md)
@@ -115,10 +119,6 @@
 
 - [Nodejs 入门指北](https://github.com/kaindy7633/blog/blob/main/nodejs/Nodejs%E5%85%A5%E9%97%A8%E6%8C%87%E5%8C%97.md)
 - [Nodejs 精简笔记教程](https://github.com/kaindy7633/blog/blob/main/nodejs/Nodejs%E7%B2%BE%E7%AE%80%E7%AC%94%E8%AE%B0%E6%95%99%E7%A8%8B.md)
-
-### Rust
-
-- [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
 
 ### Flutter
 
