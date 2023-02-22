@@ -30,6 +30,12 @@
       - [修饰符](#%E4%BF%AE%E9%A5%B0%E7%AC%A6)
       - [静态成员](#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98)
       - [继承、实现、抽象类](#%E7%BB%A7%E6%89%BF%E5%AE%9E%E7%8E%B0%E6%8A%BD%E8%B1%A1%E7%B1%BB)
+  - [内置类型：any、unknown、never与类型断言](#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8Banyunknownnever%E4%B8%8E%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80)
+    - [内置类型：any 、unknown 与 never](#%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8Bany-unknown-%E4%B8%8E-never)
+    - [虚无的 never 类型](#%E8%99%9A%E6%97%A0%E7%9A%84-never-%E7%B1%BB%E5%9E%8B)
+    - [类型断言：警告编译器不准报错](#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E8%AD%A6%E5%91%8A%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8D%E5%87%86%E6%8A%A5%E9%94%99)
+    - [双重断言](#%E5%8F%8C%E9%87%8D%E6%96%AD%E8%A8%80)
+    - [非空断言](#%E9%9D%9E%E7%A9%BA%E6%96%AD%E8%A8%80)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
