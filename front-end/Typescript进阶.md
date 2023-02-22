@@ -622,3 +622,90 @@ class Foo implements FooStruct {
   }
 }
 ```
+
+## 内置类型：any、unknown、never与类型断言
+
+我们可以使用 `TypeScript` 提供的内置类型在类型世界里获得更好的编程体验。内置的可用于标注的类型，包括 any、unknown 与 never
+
+### 内置类型：any 、unknown 与 never
+
+为了能够表示“任意类型”，`TypeScript` 中提供了一个内置类型 `any` ，来表示所谓的任意类型
+
+```ts
+log(message?: any, ...optionalParams: any[]): void
+```
+
+在某些情况下你的变量/参数也会被隐式地推导为 `any`。比如使用 `let` 声明一个变量但不提供初始值，以及不为函数参数提供类型标注：
+
+```ts
+// any
+let foo;
+
+// foo、bar 均为 any
+function func(foo, bar){}
+```
+
+以上的函数声明在 `tsconfig` 中启用了 `noImplicitAny` 时会报错，你可以显式为这两个参数指定 `any` 类型。你可以在 `any` 类型变量上任意地进行操作，包括赋值、访问、方法调用等等，此时可以认为类型推导与检查是被完全禁用的
+
+为了避免滥用 `any`，请记住下面的规则：
+
+- 如果是类型不兼容报错导致你使用 `any`，考虑用类型断言替代。
+- 如果是类型太复杂导致你不想全部声明而使用 `any`，考虑将这一处的类型去断言为你需要的最简类型。
+- 如果你是想表达一个未知类型，更合理的方式是使用 `unknown`
+
+`unknown` 类型和 `any` 类型有些类似，一个 `unknown` 类型的变量可以再次赋值为任意其它类型，但只能赋值给 `any` 与 `unknown` 类型的变量
+
+`unknown` 类型区别于 `any` 之处在于， `unknown` 在未来一定会得到一个确定的类型。
+
+内置类型 `never` 就是这么一个“什么都没有”的类型
+
+### 虚无的 never 类型
+
+`never` 是一个“什么都没有”的类型，它甚至不包括空的类型，严格来说，`never` 类型不携带任何的类型信息，因此会在联合类型中被直接移除
+
+在编程语言的类型系统中，`never` 类型被称为 `Bottom Type`，是整个类型系统层级中最底层的类型。和 `null`、`undefined` 一样，它是所有类型的子类型，但只有 `never` 类型的变量能够赋值给另一个 `never` 类型变量
+
+通常我们不会显式地声明一个 `never` 类型，它主要被类型检查所使用。但在某些情况下使用 `never` 确实是符合逻辑的，比如一个只负责抛出错误的函数：
+
+```ts
+function justThrow(): never {
+  throw new Error()
+}
+```
+
+### 类型断言：警告编译器不准报错
+
+类型断言能够显式告知类型检查程序当前这个变量的类型，可以进行类型分析地修正、类型。它其实就是一个将变量的已有类型更改为新指定类型的操作，它的基本语法是 `as NewType`
+
+```ts
+let unknownVar: unknown;
+
+(unknownVar as { foo: () => {} }).foo();
+```
+
+在联合类型中断言一个具体的分支：
+
+```ts
+function foo(union: string | number) {
+  if ((union as string).includes("linbudu")) { }
+
+  if ((union as number).toFixed() === '599') { }
+}
+```
+
+### 双重断言
+
+如果在使用类型断言时，原类型与断言类型之间差异过大，`TypeScript` 会给你一个类型报错：
+
+```ts
+const str: string = "linbudu";
+
+// 从 X 类型 到 Y 类型的断言可能是错误的，blabla
+(str as { handler: () => {} }).handler()
+```
+
+这是因为你的断言类型和原类型的差异太大，需要先断言到一个通用的类，即 `any / unknown`。这一通用类型包含了所有可能的类型，因此断言到它和从它断言到另一个类型差异不大
+
+### 非空断言
+
+非空断言其实是类型断言的简化，它使用 `!` 语法，即 `obj!.func()!.prop` 的形式标记前面的一个声明一定是非空的
