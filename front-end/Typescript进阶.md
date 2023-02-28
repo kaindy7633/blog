@@ -36,6 +36,14 @@
     - [类型断言：警告编译器不准报错](#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E8%AD%A6%E5%91%8A%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%8D%E5%87%86%E6%8A%A5%E9%94%99)
     - [双重断言](#%E5%8F%8C%E9%87%8D%E6%96%AD%E8%A8%80)
     - [非空断言](#%E9%9D%9E%E7%A9%BA%E6%96%AD%E8%A8%80)
+  - [Typescript类型工具(上)](#typescript%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7%E4%B8%8A)
+    - [类型别名](#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D)
+    - [联合类型与交叉类型](#%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E4%B8%8E%E4%BA%A4%E5%8F%89%E7%B1%BB%E5%9E%8B)
+    - [索引类型](#%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B)
+      - [索引签名类型](#%E7%B4%A2%E5%BC%95%E7%AD%BE%E5%90%8D%E7%B1%BB%E5%9E%8B)
+      - [索引类型查询](#%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E6%9F%A5%E8%AF%A2)
+      - [索引类型访问](#%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E8%AE%BF%E9%97%AE)
+    - [映射类型](#%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -715,3 +723,197 @@ const str: string = "linbudu";
 ### 非空断言
 
 非空断言其实是类型断言的简化，它使用 `!` 语法，即 `obj!.func()!.prop` 的形式标记前面的一个声明一定是非空的
+
+## Typescript类型工具(上)
+
+类型工具顾名思义，它就是对类型进行处理的工具。如果按照使用方式来划分，类型工具可以分成三类：操作符、关键字与专用语法
+
+而按照使用目的来划分，类型工具可以分为 类型创建 与 类型安全保护 两类
+
+### 类型别名
+
+通过 `type` 关键字声明了一个类型别名 `A` ，同时它的类型等价于 `string` 类型。类型别名的作用主要是对一组类型或一个特定类型结构进行封装，以便于在其它地方进行复用
+
+```ts
+type A = string;
+```
+
+抽离一组联合类型：
+
+```ts
+type StatusCode = 200 | 301 | 400 | 500 | 502;
+type PossibleDataTypes = string | number | (() => unknown);
+
+const status: StatusCode = 502;
+```
+
+抽离一个函数类型：
+
+```ts
+type Handler = (e: Event) => void;
+
+const clickHandler: Handler = (e) => { };
+const moveHandler: Handler = (e) => { };
+const dragHandler: Handler = (e) => { };
+```
+
+声明一个对象类型:
+
+```ts
+type ObjType = {
+  name: string;
+  age: number;
+}
+```
+
+类型别名还能作为工具类型, 工具类同样基于类型别名，只是多了个泛型。在类型别名中，类型别名可以这么声明自己能够接受泛型（我称之为泛型坑位）。一旦接受了泛型，我们就叫它工具类型：
+
+```ts
+type Factory<T> = T | number | string;
+```
+
+声明一个简单、有实际意义的工具类型：
+
+```ts
+type MaybeNull<T> = T | null;
+```
+
+这个工具类型会接受一个类型，并返回一个包括 `null` 的联合类型。这样一来，在实际使用时就可以确保你处理了可能为空值的属性读取与方法调用：
+
+```ts
+type MaybeNull<T> = T | null;
+
+function process(input: MaybeNull<{ handler: () => {} }>) {
+  input?.handler();
+}
+```
+
+```ts
+type MaybeArray<T> = T | T[];
+
+function ensureArray<T>(input: MaybeArray<T>): T[] {
+  return Array.isArray(input) ? input : [input];
+}
+```
+
+### 联合类型与交叉类型
+
+联合类型还有一个和它有点像的孪生兄弟：交叉类型。它和联合类型的使用位置一样，只不过符号是 `&`，即按位与运算符
+
+实际上，正如联合类型的符号是`|`，它代表了按位或，即只需要符合联合类型中的一个类型，既可以认为实现了这个联合类型，如`A | B`，只需要实现 `A` 或 `B` 即可
+
+而代表着按位与的 `&` 则不同，你需要符合这里的所有类型，才可以说实现了这个交叉类型，即 `A & B`，需要同时满足 `A` 与 `B` 两个类型才行
+
+```ts
+interface NameStruct {
+  name: string;
+}
+
+interface AgeStruct {
+  age: number;
+}
+
+type ProfileStruct = NameStruct & AgeStruct;
+
+const profile: ProfileStruct = {
+  name: "linbudu",
+  age: 18
+}
+```
+
+对于对象类型的交叉类型，其内部的同名属性类型同样会按照交叉类型进行合并：
+
+```ts
+type Struct1 = {
+  primitiveProp: string;
+  objectProp: {
+    name: string;
+  }
+}
+
+type Struct2 = {
+  primitiveProp: number;
+  objectProp: {
+    age: number;
+  }
+}
+
+type Composed = Struct1 & Struct2;
+
+type PrimitivePropType = Composed['primitiveProp']; // never
+type ObjectPropType = Composed['objectProp']; // { name: string; age: number; }
+```
+
+### 索引类型
+
+索引类型包含三个部分：索引签名类型、索引类型查询与索引类型访问，它们唯一共同点是，它们都通过索引的形式来进行类型操作，但索引签名类型是声明，后两者则是读取
+
+#### 索引签名类型
+
+索引签名类型主要指的是在接口或类型别名中，通过以下语法来快速声明一个键值类型一致的类型结构：
+
+```ts
+interface AllStringTypes {
+  [key: string]: string;
+}
+
+type AllStringTypes = {
+  [key: string]: string;
+}
+```
+
+#### 索引类型查询
+
+索引类型查询，也就是 `keyof` 操作符, 它可以将对象中的所有键转换为对应字面量类型，然后再组合成联合类型。注意，这里并不会将数字类型的键名转换为字符串类型字面量，而是仍然保持为数字类型字面量。
+
+```ts
+interface Foo {
+  linbudu: 1,
+  599: 2
+}
+
+type FooKeys = keyof Foo; // "linbudu" | 599
+```
+
+#### 索引类型访问
+
+```ts
+interface Foo {
+  propA: number;
+  propB: boolean;
+}
+
+type PropAType = Foo['propA']; // number
+type PropBType = Foo['propB']; // boolean
+```
+
+### 映射类型
+
+映射类型的主要作用即是基于键名映射到键值类型
+
+```ts
+type Stringify<T> = {
+  [K in keyof T]: string;
+};
+```
+
+这个工具类型会接受一个对象类型，使用 `keyof` 获得这个对象类型的键名组成字面量联合类型，然后通过映射类型（即这里的 `in` 关键字）将这个联合类型的每一个成员映射出来，并将其键值类型设置为 `string`
+
+```ts
+interface Foo {
+  prop1: string;
+  prop2: number;
+  prop3: boolean;
+  prop4: () => void;
+}
+
+type StringifiedFoo = Stringify<Foo>;
+
+// 等价于
+interface StringifiedFoo {
+  prop1: string;
+  prop2: string;
+  prop3: string;
+  prop4: string;
+}
+```
