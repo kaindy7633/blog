@@ -44,6 +44,17 @@
       - [索引类型查询](#%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E6%9F%A5%E8%AF%A2)
       - [索引类型访问](#%E7%B4%A2%E5%BC%95%E7%B1%BB%E5%9E%8B%E8%AE%BF%E9%97%AE)
     - [映射类型](#%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B)
+  - [Typescript类型工具(下)](#typescript%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7%E4%B8%8B)
+    - [类型查询操作符：typeof](#%E7%B1%BB%E5%9E%8B%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C%E7%AC%A6typeof)
+    - [类型守卫](#%E7%B1%BB%E5%9E%8B%E5%AE%88%E5%8D%AB)
+  - [泛型](#%E6%B3%9B%E5%9E%8B)
+    - [类型别名中的泛型](#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
+    - [泛型约束与默认值](#%E6%B3%9B%E5%9E%8B%E7%BA%A6%E6%9D%9F%E4%B8%8E%E9%BB%98%E8%AE%A4%E5%80%BC)
+    - [多泛型关联](#%E5%A4%9A%E6%B3%9B%E5%9E%8B%E5%85%B3%E8%81%94)
+    - [对象类型中的泛型](#%E5%AF%B9%E8%B1%A1%E7%B1%BB%E5%9E%8B%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
+    - [函数中的泛型](#%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
+    - [Class 中的泛型](#class-%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
+    - [内置方法中的泛型](#%E5%86%85%E7%BD%AE%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -916,4 +927,248 @@ interface StringifiedFoo {
   prop3: string;
   prop4: string;
 }
+```
+
+## Typescript类型工具(下)
+
+上一节讲述的类型工具的作用是基于已有的类型去创建出新的类型，而除了类型的创建以外，就是两个主要用于类型安全的类型工具：类型查询操作符与类型守卫。
+
+### 类型查询操作符：typeof
+
+`TypeScript` 存在两种功能不同的 `typeof` 操作符。我们最常见的一种 `typeof` 操作符就是 `JavaScript` 中，用于检查变量类型的 `typeof` ，它会返回 `"string"` / `"number"` / `"object"` / `"undefined"` 等值。而除此以外， `TypeScript` 还新增了用于类型查询的 `typeof` ，即 `Type Query Operator`，这个 `typeof` 返回的是一个 `TypeScript` 类型：
+
+```ts
+const str = "linbudu";
+
+const obj = { name: "linbudu" };
+
+const nullVar = null;
+const undefinedVar = undefined;
+
+const func = (input: string) => {
+  return input.length > 10;
+}
+
+type Str = typeof str; // "linbudu"
+type Obj = typeof obj; // { name: string; }
+type Null = typeof nullVar; // null
+type Undefined = typeof undefined; // undefined
+type Func = typeof func; // (input: string) => boolean
+```
+
+### 类型守卫
+
+`TypeScript` 引入了 `is` 关键字来显式地提供类型信息：
+
+```ts
+function isString(input: unknown): input is string {
+  return typeof input === "string";
+}
+
+function foo(input: string | number) {
+  if (isString(input)) {
+    // 正确了
+    (input).replace("linbudu", "linbudu599")
+  }
+  if (typeof input === 'number') { }
+  // ...
+}
+```
+
+`is string`，即 `is` 关键字 + 预期类型，即如果这个函数成功返回为 `true`，那么 `is` 关键字前这个入参的类型，就会被这个类型守卫调用方后续的类型控制流分析收集到。
+
+从这个角度来看，其实类型守卫有些类似于类型断言，但类型守卫更宽容，也更信任你一些。你指定什么类型，它就是什么类型
+
+## 泛型
+
+### 类型别名中的泛型
+
+类型别名中的泛型，等价于一个接受参数的函数：
+
+```ts
+type Factory<T> = T | number | string;
+```
+
+类型别名中的泛型大多是用来进行工具类型封装:
+
+```ts
+type Stringify<T> = {
+  [K in keyof T]: string;
+};
+
+type Clone<T> = {
+  [K in keyof T]: T[K];
+};
+```
+
+来看一个 `TypeScript` 的内置工具类型实现：
+
+```ts
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+```
+
+类型别名与泛型的结合中，还有一个是条件类型
+
+```ts
+type IsEqual<T> = T extends true ? 1 : 2;
+
+type A = IsEqual<true>; // 1
+type B = IsEqual<false>; // 2
+type C = IsEqual<'linbudu'>; // 2
+```
+
+### 泛型约束与默认值
+
+泛型也有着默认值的设定：
+
+```ts
+type Factory<T = boolean> = T | number | string;
+```
+
+泛型约束可以要求传入这个工具类型的泛型必须符合某些条件，否则你就拒绝进行后面的逻辑
+
+```ts
+function add(source: number, add: number){
+  if(typeof source !== 'number' || typeof add !== 'number'){
+    throw new Error("Invalid arguments!")
+  }
+  
+  return source + add;
+}
+```
+
+在泛型中，我们可以使用 `extends` 关键字来约束传入的泛型参数必须符合要求
+
+```ts
+type ResStatus<ResCode extends number> = ResCode extends 10000 | 10001 | 10002
+  ? 'success'
+  : 'failure';
+```
+
+### 多泛型关联
+
+我们可以同时传入多个泛型参数，还可以让这几个泛型参数之间也存在联系
+
+```ts
+type Conditional<Type, Condition, TruthyResult, FalsyResult> =
+  Type extends Condition ? TruthyResult : FalsyResult;
+
+//  "passed!"
+type Result1 = Conditional<'linbudu', string, 'passed!', 'rejected!'>;
+
+// "rejected!"
+type Result2 = Conditional<'linbudu', boolean, 'passed!', 'rejected!'>;
+```
+
+多泛型参数其实就像接受更多参数的函数，其内部的运行逻辑（类型操作）会更加抽象，表现在参数（泛型参数）需要进行的逻辑运算（类型操作）会更加复杂
+
+### 对象类型中的泛型
+
+下面是一个响应类型结构的泛型处理：
+
+```ts
+interface IRes<TData = unknown> {
+  code: number;
+  error?: string;
+  data: TData;
+}
+```
+
+实际例子：
+
+```ts
+interface IUserProfileRes {
+  name: string;
+  homepage: string;
+  avatar: string;
+}
+
+function fetchUserProfile(): Promise<IRes<IUserProfileRes>> {}
+
+type StatusSucceed = boolean;
+function handleOperation(): Promise<IRes<StatusSucceed>> {}
+```
+
+泛型嵌套的场景也非常常用，比如对存在分页结构的数据，我们也可以将其分页的响应结构抽离出来：
+
+```ts
+interface IPaginationRes<TItem = unknown> {
+  data: TItem[];
+  page: number;
+  totalCount: number;
+  hasNextPage: boolean;
+}
+
+function fetchUserProfileList(): Promise<IRes<IPaginationRes<IUserProfileRes>>> {}
+```
+
+### 函数中的泛型
+
+```ts
+function handle<T>(input: T): T {}
+```
+
+我们为函数声明了一个泛型参数 `T`，并将参数的类型与返回值类型指向这个泛型参数。这样，在这个函数接收到参数时，`T` 会自动地被填充为这个参数的类型。这也就意味着你不再需要预先确定参数的可能类型了，而在返回值与参数类型关联的情况下，也可以通过泛型参数来进行运算
+
+对于箭头函数的泛型，其书写方式是这样的：
+
+```ts
+const handle = <T>(input: T): T => {}
+```
+
+在 `tsx` 文件中，可以这样写：
+
+```ts
+const handle = <T extends any>(input: T): T => {}
+```
+
+### Class 中的泛型
+
+`Class` 中的泛型消费方是属性、方法、乃至装饰器等
+
+```ts
+class Queue<TElementType> {
+  private _list: TElementType[];
+
+  constructor(initial: TElementType[]) {
+    this._list = initial;
+  }
+
+  // 入队一个队列泛型子类型的元素
+  enqueue<TType extends TElementType>(ele: TType): TElementType[] {
+    this._list.push(ele);
+    return this._list;
+  }
+
+  // 入队一个任意类型元素（无需为队列泛型子类型）
+  enqueueWithUnknownType<TType>(element: TType): (TElementType | TType)[] {
+    return [...this._list, element];
+  }
+
+  // 出队
+  dequeue(): TElementType[] {
+    this._list.shift();
+    return this._list;
+  }
+}
+```
+
+### 内置方法中的泛型
+
+`TypeScript` 中为非常多的内置对象都预留了泛型坑位，如 `Promise` 中
+
+```ts
+function p() {
+  return new Promise<boolean>((resolve, reject) => {
+    resolve(true);
+  });
+}
+```
+
+还有数组 `Array<T>` 当中，其泛型参数代表数组的元素类型
+
+```ts
+const arr: Array<number> = [1, 2, 3];
 ```
