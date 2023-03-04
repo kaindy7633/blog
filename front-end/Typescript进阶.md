@@ -55,6 +55,13 @@
     - [函数中的泛型](#%E5%87%BD%E6%95%B0%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
     - [Class 中的泛型](#class-%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
     - [内置方法中的泛型](#%E5%86%85%E7%BD%AE%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B)
+  - [类型系统](#%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F)
+    - [结构化类型系统](#%E7%BB%93%E6%9E%84%E5%8C%96%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F)
+    - [标称类型系统](#%E6%A0%87%E7%A7%B0%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F)
+    - [在 TypeScript 中模拟标称类型系统](#%E5%9C%A8-typescript-%E4%B8%AD%E6%A8%A1%E6%8B%9F%E6%A0%87%E7%A7%B0%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F)
+  - [类型系统层级](#%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F%E5%B1%82%E7%BA%A7)
+    - [判断类型兼容性的方式](#%E5%88%A4%E6%96%AD%E7%B1%BB%E5%9E%8B%E5%85%BC%E5%AE%B9%E6%80%A7%E7%9A%84%E6%96%B9%E5%BC%8F)
+    - [从原始类型开始](#%E4%BB%8E%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B%E5%BC%80%E5%A7%8B)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1172,3 +1179,90 @@ function p() {
 ```ts
 const arr: Array<number> = [1, 2, 3];
 ```
+
+## 类型系统
+
+### 结构化类型系统
+
+首先看下面的例子：
+
+```ts
+class Cat {
+  eat() { }
+}
+
+class Dog {
+  eat() { }
+}
+
+function feedCat(cat: Cat) { }
+
+feedCat(new Dog())
+```
+
+`TypeScript` 比较两个类型并非通过类型的名称，而是比较这两个类型上实际拥有的属性与方法，虽然是两个名字不同的类型，但仍然被视为结构一致，这就是结构化类型系统的特性
+
+结构类型的别称鸭子类型（`Duck Typing`），这个名字来源于鸭子测试（`Duck Test`）。其核心理念是，如果你看到一只鸟走起来像鸭子，游泳像鸭子，叫得也像鸭子，那么这只鸟就是鸭子
+
+严格来说，鸭子类型系统和结构化类型系统并不完全一致，结构化类型系统意味着基于完全的类型结构来判断类型兼容性，而鸭子类型则只基于运行时访问的部分来决定
+
+除了基于类型结构进行兼容性判断的结构化类型系统以外，还有一种基于类型名进行兼容性判断的类型系统，标称类型系统。
+
+### 标称类型系统
+
+标称类型系统（`Nominal Typing System`）要求，两个可兼容的类型，其名称必须是完全一致的，比如以下代码：
+
+```ts
+type USD = number;
+type CNY = number;
+
+const CNYCount: CNY = 200;
+const USDCount: USD = 200;
+
+function addCNY(source: CNY, input: CNY) {
+  return source + input;
+}
+
+addCNY(CNYCount, USDCount)
+```
+
+在标称类型系统中，`CNY` 与 `USD` 被认为是两个完全不同的类型
+
+### 在 TypeScript 中模拟标称类型系统
+
+类型的重要意义之一是限制了数据的可用操作与实际意义。这往往是通过类型附带的额外信息来实现的（类似于元数据）
+
+## 类型系统层级
+
+类型层级实际上指的是，`TypeScript` 中所有类型的兼容关系，从最上面一层的 `any` 类型，到最底层的 `never` 类型
+
+### 判断类型兼容性的方式
+
+在需要判断多个类型的层级时，条件类型更为直观，而如果只是两个类型之间的兼容性判断时，使用类型声明则更好理解一些
+
+```ts
+declare let source: string;
+
+declare let anyType: any;
+declare let neverType: never;
+
+anyType = source;
+
+// 不能将类型“string”分配给类型“never”。
+neverType = source;
+```
+
+### 从原始类型开始
+
+原始类型、对象类型和它们对应的字面量类型：
+
+```ts
+type Result1 = "linbudu" extends string ? 1 : 2; // 1
+type Result2 = 1 extends number ? 1 : 2; // 1
+type Result3 = true extends boolean ? 1 : 2; // 1
+type Result4 = { name: string } extends object ? 1 : 2; // 1
+type Result5 = { name: 'linbudu' } extends object ? 1 : 2; // 1
+type Result6 = [] extends object ? 1 : 2; // 1
+```
+
+一个基础类型和它们对应的字面量类型必定存在父子类型关系, 字面量类型 < 对应的原始类型。
