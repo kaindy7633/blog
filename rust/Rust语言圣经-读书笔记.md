@@ -47,6 +47,15 @@
         - [可变引用](#%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8)
         - [悬垂引用(Dangling References)](#%E6%82%AC%E5%9E%82%E5%BC%95%E7%94%A8dangling-references)
       - [借用规则总结](#%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99%E6%80%BB%E7%BB%93)
+    - [复合类型](#%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B)
+      - [字符串与切片](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E5%88%87%E7%89%87)
+        - [切片(slice)](#%E5%88%87%E7%89%87slice)
+        - [字符串字面量是切片](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%AD%97%E9%9D%A2%E9%87%8F%E6%98%AF%E5%88%87%E7%89%87)
+        - [什么是字符串](#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AD%97%E7%AC%A6%E4%B8%B2)
+        - [String 与 &str 的转换](#string-%E4%B8%8E-str-%E7%9A%84%E8%BD%AC%E6%8D%A2)
+        - [字符串索引](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B4%A2%E5%BC%95)
+        - [字符串切片](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%87%E7%89%87)
+        - [操作字符串](#%E6%93%8D%E4%BD%9C%E5%AD%97%E7%AC%A6%E4%B8%B2)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -795,6 +804,164 @@ fn change(some_string: &mut String) {  // 声明可变引用参数
 
 - 同一时刻，你只能拥有要么一个可变引用, 要么任意多个不可变引用
 - 引用必须总是有效的
+
+### 复合类型
+
+复合类型是由其它类型组合而成的，最典型的就是结构体 `struct` 和枚举 `enum`
+
+#### 字符串与切片
+
+##### 切片(slice)
+
+切片( `slice` ) 允许你引用集合中部分连续的元素序列，而不是引用整个集合，对于字符串而言，切片就是对 `String` 类型中某一部分的引用
+
+```rs
+let s = String::from("hello world");
+
+let hello = &s[0..5];
+let world = &s[6..11];
+```
+
+这就是创建切片的语法，使用方括号包括的一个序列：[开始索引..终止索引]，其中开始索引是切片中第一个元素的索引位置，而终止索引是最后一个元素后面的索引位置，也就是这是一个 右半开区间。在切片数据结构内部会保存开始的位置和切片的长度，其中长度是通过 终止索引 - 开始索引 的方式计算得来的
+
+在使用 `Rust` 的 `.. range` 序列语法时，如果你想从索引 `0` 开始，可以省略 `0`
+
+```rs
+let s = String::from("hello");
+
+let slice = &s[0..2];
+let slice = &s[..2];  // 与上面的代码效果一样
+```
+
+同样的，如果你的切片想要包含 `String` 的最后一个字节，则可以这样使用：
+
+```rs
+let s = String::from("hello");
+
+let len = s.len();
+
+let slice = &s[4..len];
+let slice = &s[4..];
+```
+
+你也可以截取完整的 `String` 切片：
+
+```rs
+let s = String::from("hello");
+
+let len = s.len();
+
+let slice = &s[0..len];
+let slice = &s[..];
+```
+
+**注意：** 切片的索引必须落在字符之间的边界位置，否则可能会引起程序崩溃
+
+因为切片是对集合的部分引用，因此不仅仅字符串有切片，其它集合类型也有，例如数组：
+
+```rs
+let a = [1, 2, 3, 4, 5];
+
+let slice = &a[1..3];
+
+assert_eq!(slice, &[2, 3]);
+```
+
+##### 字符串字面量是切片
+
+字符串字面量的类型其实就是 `&str`
+
+```rs
+let s = "Hello, world!"; // s -> &str
+```
+
+该切片指向了程序可执行文件中的某个点，这也是为什么字符串字面量是不可变的，因为 `&str` 是一个不可变引用
+
+##### 什么是字符串
+
+字符串是由字符组成的连续集合，`Rust` 中的字符是 `Unicode` 类型，因此每个字符占据 `4` 个字节内存空间，但是在字符串中不一样，字符串是 `UTF-8` 编码，也就是字符串中的字符所占的字节数是变化的(`1` - `4`)
+
+当 `Rust` 用户提到字符串时，往往指的就是 `String` 类型和 `&str` 字符串切片类型，这两个类型都是 `UTF-8` 编码
+
+除了 `String` 类型的字符串，`Rust` 的标准库还提供了其他类型的字符串，例如 `OsString`， `OsStr`， `CsString` 和 `CsStr` 等，注意到这些名字都以 `String` 或者 `Str` 结尾了吗？它们分别对应的是具有所有权和被借用的变量
+
+##### String 与 &str 的转换
+
+从 `&str` 类型生成 `String` 类型的操作：
+
+- `String::from("hello,world")`
+- `"hello,world".to_string()`
+
+将 `String` 类型转为 `&str` 类型，可以直接取引用
+
+```rs
+fn main() {
+    let s = String::from("hello,world!");
+    say_hello(&s);
+    say_hello(&s[..]);
+    say_hello(s.as_str());
+}
+
+fn say_hello(s: &str) {
+    println!("{}",s);
+}
+```
+
+##### 字符串索引
+
+在 `Rust` 中，不能使用索引的方式访问字符串的某个字符或者子串，字符串的底层的数据存储格式实际上是 `[ u8 ]`，一个字节数组，每个英文字母在 `UTF-8` 编码中仅占用 `1` 个字节，但大部分中文占 `3` 个字节，这样的访问就会报错。
+
+##### 字符串切片
+
+字符串切片是非常危险的操作，因为切片的索引是通过字节来进行，遇到中文，或其他非英文字符，很容易报错导致程序 `panic`
+
+##### 操作字符串
+
+- 追加 (Push)
+
+  在字符串尾部可以使用 `push()` 方法追加字符 `char`，也可以使用 `push_str()` 方法追加字符串字面量。这两个方法都是在原有的字符串上追加，并不会返回新的字符串。由于字符串追加操作要修改原来的字符串，则该字符串必须是可变的，即字符串变量必须由 `mut` 关键字修饰。
+
+  ```rs
+  fn main() {
+      let mut s = String::from("Hello ");
+
+      s.push_str("rust");
+      println!("追加字符串 push_str() -> {}", s);
+
+      s.push('!');
+      println!("追加字符 push() -> {}", s);
+  }
+  ```
+
+- 插入 (Insert)
+
+  可以使用 `insert()` 方法插入单个字符 `char`，也可以使用 `insert_str()` 方法插入字符串字面量, 它们需要传入两个参数，第一个参数是字符（串）插入位置的索引，第二个参数是要插入的字符（串），索引从 `0` 开始计数。该字符串必须是可变的，即字符串变量必须由 `mut` 关键字修饰
+
+  ```rs
+  fn main() {
+      let mut s = String::from("Hello rust!");
+      s.insert(5, ',');
+      println!("插入字符 insert() -> {}", s);
+      s.insert_str(6, " I like");
+      println!("插入字符串 insert_str() -> {}", s);
+  }
+  ```
+
+- 替换 (Replace)
+
+  把字符串中的某个字符串替换成其它的字符串，使用 `replace()` 方法，替换相关的操作有三个方法：
+
+  - `replace`
+
+  该方法可适用于 `String` 和 `&str` 类型。`replace()` 方法接收两个参数，第一个参数是要被替换的字符串，第二个参数是新的字符串。该方法会替换所有匹配到的字符串。该方法是返回一个新的字符串，而不是操作原来的字符串。
+
+  ```rs
+  fn main() {
+      let string_replace = String::from("I like rust. Learning rust is my favorite!");
+      let new_string_replace = string_replace.replace("rust", "RUST");
+      dbg!(new_string_replace);
+  }
+  ```
 
 ## 高级进阶
 
