@@ -4,6 +4,11 @@
 
 ## 目录
 
+### Rust
+
+- [Rust语言圣经-读书笔记](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E8%AF%AD%E8%A8%80%E5%9C%A3%E7%BB%8F-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.md)
+- [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
+
 ### 前端相关
 
 - [Typescript进阶](https://github.com/kaindy7633/blog/blob/main/front-end/Typescript%E8%BF%9B%E9%98%B6.md)
@@ -62,11 +67,6 @@
 - [纯 CSS3 制作 3D 导航栏](https://github.com/kaindy7633/blog/blob/main/front-end/%E7%BA%AFCSS3%E5%88%B6%E4%BD%9C3D%E5%AF%BC%E8%88%AA%E6%A0%8F.md)
 - [纯 CSS3 制作手风琴效果](https://github.com/kaindy7633/blog/blob/main/front-end/%E7%BA%AFCSS3%E5%88%B6%E4%BD%9C%E6%89%8B%E9%A3%8E%E7%90%B4%E6%95%88%E6%9E%9C.md)
 - [闲聊 JavaScript 中的 apply](https://github.com/kaindy7633/blog/blob/main/front-end/%E9%97%B2%E8%81%8AJavaScript%E4%B8%AD%E7%9A%84apply.md)
-
-### Rust
-
-- [Rust语言圣经-读书笔记](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E8%AF%AD%E8%A8%80%E5%9C%A3%E7%BB%8F-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.md)
-- [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
 
 ### Golang
 
