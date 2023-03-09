@@ -56,6 +56,9 @@
         - [字符串索引](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B4%A2%E5%BC%95)
         - [字符串切片](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%88%87%E7%89%87)
         - [操作字符串](#%E6%93%8D%E4%BD%9C%E5%AD%97%E7%AC%A6%E4%B8%B2)
+        - [字符串转义](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E4%B9%89)
+        - [操作 UTF-8 字符串](#%E6%93%8D%E4%BD%9C-utf-8-%E5%AD%97%E7%AC%A6%E4%B8%B2)
+        - [字符串深度剖析](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -917,7 +920,7 @@ fn say_hello(s: &str) {
 
 ##### 操作字符串
 
-- 追加 (Push)
+- 追加 (`Push`)
 
   在字符串尾部可以使用 `push()` 方法追加字符 `char`，也可以使用 `push_str()` 方法追加字符串字面量。这两个方法都是在原有的字符串上追加，并不会返回新的字符串。由于字符串追加操作要修改原来的字符串，则该字符串必须是可变的，即字符串变量必须由 `mut` 关键字修饰。
 
@@ -933,7 +936,7 @@ fn say_hello(s: &str) {
   }
   ```
 
-- 插入 (Insert)
+- 插入 (`Insert`)
 
   可以使用 `insert()` 方法插入单个字符 `char`，也可以使用 `insert_str()` 方法插入字符串字面量, 它们需要传入两个参数，第一个参数是字符（串）插入位置的索引，第二个参数是要插入的字符（串），索引从 `0` 开始计数。该字符串必须是可变的，即字符串变量必须由 `mut` 关键字修饰
 
@@ -947,21 +950,258 @@ fn say_hello(s: &str) {
   }
   ```
 
-- 替换 (Replace)
+- 替换 (`Replace`)
 
   把字符串中的某个字符串替换成其它的字符串，使用 `replace()` 方法，替换相关的操作有三个方法：
 
   - `replace`
 
-  该方法可适用于 `String` 和 `&str` 类型。`replace()` 方法接收两个参数，第一个参数是要被替换的字符串，第二个参数是新的字符串。该方法会替换所有匹配到的字符串。该方法是返回一个新的字符串，而不是操作原来的字符串。
+    该方法可适用于 `String` 和 `&str` 类型。`replace()` 方法接收两个参数，第一个参数是要被替换的字符串，第二个参数是新的字符串。该方法会替换所有匹配到的字符串。该方法是返回一个新的字符串，而不是操作原来的字符串。
+
+    ```rs
+    fn main() {
+        let string_replace = String::from("I like rust. Learning rust is my favorite!");
+        let new_string_replace = string_replace.replace("rust", "RUST");
+        dbg!(new_string_replace);
+    }
+    ```
+
+  - `replacen`
+
+      该方法可适用于 `String` 和 `&str` 类型。`replacen()` 方法接收三个参数，前两个参数与 `replace()` 方法一样，第三个参数则表示替换的个数。该方法是返回一个新的字符串，而不是操作原来的字符串
+
+      ```rs
+      fn main() {
+          let string_replace = "I like rust. Learning rust is my favorite!";
+          let new_string_replacen = string_replace.replacen("rust", "RUST", 1);
+          dbg!(new_string_replacen);
+      }
+      ```
+
+  - `replace_range`
+
+      该方法仅适用于 `String` 类型。`replace_range` 接收两个参数，第一个参数是要替换字符串的范围（`Range`），第二个参数是新的字符串。该方法是直接操作原来的字符串，不会返回新的字符串。该方法需要使用 `mut` 关键字修饰。
+
+      ```rs
+      fn main() {
+          let mut string_replace_range = String::from("I like rust!");
+          string_replace_range.replace_range(7..8, "R");
+          dbg!(string_replace_range);
+      }
+      ```
+
+- 删除 (`Delete`)
+
+  与字符串删除相关的方法有 `4` 个，他们分别是 `pop()`，`remove()`，`truncate()`，`clear()`。这四个方法仅适用于 `String` 类型
+
+  - `pop` —— 删除并返回字符串的最后一个字符
+
+    该方法是直接操作原来的字符串。但是存在返回值，其返回值是一个 `Option` 类型，如果字符串为空，则返回 `None`
+
+    ```rs
+    fn main() {
+        let mut string_pop = String::from("rust pop 中文!");
+        let p1 = string_pop.pop();
+        let p2 = string_pop.pop();
+        dbg!(p1);
+        dbg!(p2);
+        dbg!(string_pop);
+    }
+    ```
+
+  - `remove` —— 删除并返回字符串中指定位置的字符
+
+    该方法是直接操作原来的字符串。但是存在返回值，其返回值是删除位置的字符串，只接收一个参数，表示该字符起始索引位置。`remove()` 方法是按照字节来处理字符串的，如果参数所给的位置不是合法的字符边界，则会发生错误。
+
+    ```rs
+        fn main() {
+        let mut string_remove = String::from("测试remove方法");
+        println!(
+            "string_remove 占 {} 个字节",
+            std::mem::size_of_val(string_remove.as_str())
+        );
+        // 删除第一个汉字
+        string_remove.remove(0);
+        // 下面代码会发生错误
+        // string_remove.remove(1);
+        // 直接删除第二个汉字
+        // string_remove.remove(3);
+        dbg!(string_remove);
+    }
+    ```
+
+  - `truncate` —— 删除字符串中从指定位置开始到结尾的全部字符
+
+    该方法是直接操作原来的字符串。无返回值。 `truncate()` 方法是按照字节来处理字符串的，如果参数所给的位置不是合法的字符边界，则会发生错误。
+
+    ```rs
+    fn main() {
+        let mut string_truncate = String::from("测试truncate");
+        string_truncate.truncate(3);
+        dbg!(string_truncate);
+    }
+    ```
+
+  - `clear` —— 清空字符串
+
+    该方法是直接操作原来的字符串。调用后，删除字符串中的所有字符，相当于 `truncate()` 方法参数为 `0` 的时候
+
+    ```rs
+    fn main() {
+        let mut string_clear = String::from("string clear");
+        string_clear.clear();
+        dbg!(string_clear);
+    }
+    ```
+
+- 连接 (`Concatenate`)
+
+  - 使用 `+` 或者 `+=` 连接字符串
+
+    使用 `+` 或者 `+=` 连接字符串，要求右边的参数必须为字符串的切片引用（`Slice`）类型，`+` 和 `+=` 都是返回一个新的字符串。所以变量声明可以不需要 `mut` 关键字修饰。
+
+    ```rs
+    fn main() {
+        let string_append = String::from("hello ");
+        let string_rust = String::from("rust");
+        // &string_rust会自动解引用为&str
+        let result = string_append + &string_rust;
+        let mut result = result + "!";
+        result += "!!!";
+
+        println!("连接字符串 + -> {}", result);
+    }
+    ```
+
+  - 使用 `format!` 连接字符串
+
+    `format!` 这种方式适用于 `String` 和 `&str`
+
+    ```rs
+    fn main() {
+        let s1 = "hello";
+        let s2 = String::from("rust");
+        let s = format!("{} {}!", s1, s2);
+        println!("{}", s);
+    }
+    ```
+
+##### 字符串转义
+
+我们可以通过转义的方式 `\` 输出 `ASCII` 和 `Unicode` 字符
+
+```rs
+fn main() {
+    // 通过 \ + 字符的十六进制表示，转义输出一个字符
+    let byte_escape = "I'm writing \x52\x75\x73\x74!";
+    println!("What are you doing\x3F (\\x3F means ?) {}", byte_escape);
+
+    // \u 可以输出一个 unicode 字符
+    let unicode_codepoint = "\u{211D}";
+    let character_name = "\"DOUBLE-STRUCK CAPITAL R\"";
+
+    println!(
+        "Unicode character {} (U+211D) is called {}",
+        unicode_codepoint, character_name
+    );
+
+    // 换行了也会保持之前的字符串格式
+    let long_string = "String literals
+                        can span multiple lines.
+                        The linebreak and indentation here ->\
+                        <- can be escaped too!";
+    println!("{}", long_string);
+}
+```
+
+希望保持字符串的原样，不要转义:
+
+```rs
+fn main() {
+    println!("{}", "hello \\x52\\x75\\x73\\x74");
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+    println!("{}", raw_str);
+
+    // 如果字符串包含双引号，可以在开头和结尾加 #
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    // 如果还是有歧义，可以继续增加，没有限制
+    let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+    println!("{}", longer_delimiter);
+}
+```
+
+##### 操作 UTF-8 字符串
+
+- 字符
+
+  如果你想要以 `Unicode` 字符的方式遍历字符串，最好的办法是使用 `chars` 方法
 
   ```rs
-  fn main() {
-      let string_replace = String::from("I like rust. Learning rust is my favorite!");
-      let new_string_replace = string_replace.replace("rust", "RUST");
-      dbg!(new_string_replace);
+  for c in "中国人".chars() {
+      println!("{}", c);
   }
+  /**
+    中
+    国
+    人
+  */
   ```
+
+- 字节
+
+  字节返回字符串的底层字节数组表现形式
+
+  ```rs
+  for b in "中国人".bytes() {
+      println!("{}", b);
+  }
+  /**
+    228
+    184
+    173
+    229
+    155
+    189
+    228
+    186
+    186
+   */
+
+  ```
+
+- 获取子串
+
+  从 `UTF-8` 字符串中获取子串是较为复杂的事情，使用标准库你是做不到的。 你需要在 `crates.io` 上搜索 `utf8` 来寻找想要的功能。可以考虑尝试下这个库：`utf8_slice`。
+
+##### 字符串深度剖析
+
+我们来思考一下，为什么 `String` 可变，而字符串字面值 `&str` 不可变。
+
+就字符串字面值来说，我们在编译时就知道其内容，最终字面值文本被直接硬编码进可执行文件中，这使得字符串字面值快速且高效，这主要得益于字符串字面值的不可变性。不幸的是，我们不能为了获得这种性能，而把每一个在编译时大小未知的文本都放进内存中（你也做不到！），因为有的字符串是在程序运行得过程中动态生成的。
+
+对于 `String` 类型，为了支持一个可变、可增长的文本片段，需要在堆上分配一块在编译时未知大小的内存来存放内容，这些都是在程序运行时完成的：
+
+- 首先向操作系统请求内存来存放 `String` 对象
+- 在使用完成后，将内存释放，归还给操作系统
+
+其中第一部分由 `String::from` 完成，它创建了一个全新的 `String`。
+
+到了第二部分，在有垃圾回收 `GC` 的语言中，`GC` 来负责标记并清除这些不再使用的内存对象，这个过程都是自动完成，无需开发者关心；但是在无 `GC` 的语言中，需要开发者手动去释放这些内存对象，就像创建对象需要通过编写代码来完成一样，未能正确释放对象造成的后果简直不可估量。
+
+而在 Rust 中，变量在离开作用域后，就自动释放其占用的内存：
+
+```rs
+{
+    let s = String::from("hello"); // 从此处起，s 是有效的
+
+    // 使用 s
+}                                  // 此作用域已结束，
+                                   // s 不再有效，调用 drop函数， 内存被释放
+```
+
+与其它系统编程语言的 `free` 函数相同，`Rust` 也提供了一个释放内存的函数： `drop`，但是不同的是，其它语言要手动调用 `free` 来释放每一个变量占用的内存，而 `Rust` 则在变量离开作用域时，自动调用 `drop` 函数: 上面代码中，`Rust` 在结尾的 `}` 处自动调用 `drop`。
 
 ## 高级进阶
 
