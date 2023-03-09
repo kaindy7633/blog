@@ -69,6 +69,14 @@
         - [单元结构体(Unit-like Struct)](#%E5%8D%95%E5%85%83%E7%BB%93%E6%9E%84%E4%BD%93unit-like-struct)
         - [结构体数据的所有权](#%E7%BB%93%E6%9E%84%E4%BD%93%E6%95%B0%E6%8D%AE%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83)
         - [使用 `#[derive(Debug)]` 来打印结构体的信息](#%E4%BD%BF%E7%94%A8-derivedebug-%E6%9D%A5%E6%89%93%E5%8D%B0%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E4%BF%A1%E6%81%AF)
+      - [枚举](#%E6%9E%9A%E4%B8%BE)
+        - [枚举值](#%E6%9E%9A%E4%B8%BE%E5%80%BC)
+        - [同一化类型](#%E5%90%8C%E4%B8%80%E5%8C%96%E7%B1%BB%E5%9E%8B)
+        - [Option 枚举用于处理空值](#option-%E6%9E%9A%E4%B8%BE%E7%94%A8%E4%BA%8E%E5%A4%84%E7%90%86%E7%A9%BA%E5%80%BC)
+      - [数组](#%E6%95%B0%E7%BB%84)
+        - [创建数组](#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84)
+        - [访问数组元素](#%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0)
+        - [数组切片](#%E6%95%B0%E7%BB%84%E5%88%87%E7%89%87)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -1457,6 +1465,236 @@ fn main() {
         height: 50,
     }
   */
+```
+
+#### 枚举
+
+枚举(`enum` 或 `enumeration`)允许你通过列举可能的成员来定义一个枚举类型，枚举类型是一个类型，它会包含所有可能的枚举成员, 而枚举值是该类型中的具体某个成员的实例。
+
+```rs
+enum PokerSuit {
+  Clubs,
+  Spades,
+  Diamonds,
+  Hearts,
+}
+```
+
+##### 枚举值
+
+我们来创建枚举类型的成员实例：
+
+```rs
+let heart = PokerSuit::Hearts;
+let diamond = PokerSuit::Diamonds;
+```
+
+通过 `::` 操作符来访问 `PokerSuit` 下的具体成员
+
+```rs
+fn main() {
+    let heart = PokerSuit::Hearts;
+    let diamond = PokerSuit::Diamonds;
+
+    print_suit(heart);
+    print_suit(diamond);
+}
+
+fn print_suit(card: PokerSuit) {
+    println!("{:?}",card);
+}
+```
+
+那如何为枚举添加枚举值呢？我们可以使用 struct 来表示，但 Rust 提供了更优雅的方式
+
+```rs
+enum PokerCard {
+    Clubs(u8),
+    Spades(u8),
+    Diamonds(u8),
+    Hearts(u8),
+}
+
+fn main() {
+   let c1 = PokerCard::Spades(5);
+   let c2 = PokerCard::Diamonds(13);
+}
+```
+
+我们可以直接将数据信息关联到枚举成员上，不仅如此，同一个枚举类型下的不同成员还能持有不同的数据类型
+
+```rs
+enum PokerCard {
+    Clubs(u8),
+    Spades(u8),
+    Diamonds(char),
+    Hearts(char),
+}
+
+fn main() {
+   let c1 = PokerCard::Spades(5);
+   let c2 = PokerCard::Diamonds('A');
+}
+```
+
+Rust 标准库中表示 IP 地址的枚举这样定义：
+
+```rs
+struct Ipv4Addr {
+    // --snip--
+}
+
+struct Ipv6Addr {
+    // --snip--
+}
+
+enum IpAddr {
+    V4(Ipv4Addr),
+    V6(Ipv6Addr),
+}
+```
+
+可以看出，任何类型的数据都可以放入枚举成员中: 例如字符串、数值、结构体甚至另一个枚举。
+
+##### 同一化类型
+
+```rs
+enum Websocket {
+  Tcp(Websocket<TcpStream>),
+  Tls(Websocket<native_tls::TlsStream<TcpStream>>),
+}
+```
+
+使用枚举定义了两种不同的长连接方式
+
+##### Option 枚举用于处理空值
+
+在 `Rust` 中，没有其他语言中的 `null` 值，而改为使用 `Option` 枚举变量来表述这种结果
+
+`Option` 枚举包含两个成员，一个成员表示含有值：`Some(T)`, 另一个表示没有值：`None`
+
+```rs
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+#### 数组
+
+在 `Rust` 中，最常用的数组有两种，第一种是速度很快但是长度固定的 `array`(数组)，第二种是可动态增长的但是有性能损耗的 `Vector`(动态数组)。
+
+`String` 和 `Vector` 在 `Rust` 中都是高级类型：集合类型。
+
+数组的具体定义是：将多个类型相同的元素依次组合在一起，就是一个数组
+
+- 长度固定
+- 元素必须有相同的类型
+- 依次线性排列
+
+**注意：** 这里说的数组是 `Rust` 的基本类型，是固定长度的，这点与其他编程语言不同，其它编程语言的数组往往是可变长度的，与 `Rust` 中的动态数组 `Vector` 类似。
+
+##### 创建数组
+
+在 `Rust` 中，数组是这样定义的：
+
+```rs
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+```
+
+数组 `Array` 元素类型大小固定，且长度也是固定，因此存储在栈上，性能也会非常优秀。动态数组 `Vector` 是存储在堆上，因此长度可以动态改变。当你不确定是使用数组还是动态数组时，那就应该使用后者
+
+```rs
+// 月份是固定的，这里使用 Array
+let months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+```
+
+为数组声明类型：
+
+```rs
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+```
+
+还可以使用下面的语法初始化一个某个值重复出现 `N` 次的数组：
+
+```rs
+let a = [3; 5];
+```
+
+##### 访问数组元素
+
+可以通过索引的方式来访问存放其中的元素：
+
+```rs
+fn main() {
+    let a = [9, 8, 7, 6, 5];
+
+    let first = a[0]; // 获取a数组第一个元素
+    let second = a[1]; // 获取第二个元素
+}
+```
+
+如果使用超出数组范围的索引访问数组元素, 则会访问到不存在的数组元素，最终程序会崩溃退出：
+
+```rs
+use std::io;
+
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    println!("Please enter an array index.");
+
+    let mut index = String::new();
+    // 读取控制台的输出
+    io::stdin()
+        .read_line(&mut index)
+        .expect("Failed to read line");
+
+    let index: usize = index
+        .trim()
+        .parse()
+        .expect("Index entered was not a number");
+
+    let element = a[index];
+
+    println!(
+        "The value of the element at index {} is: {}",
+        index, element
+    );
+}
+```
+
+当你尝试使用索引访问元素时，`Rust` 将检查你指定的索引是否小于数组长度。如果索引大于或等于数组长度，`Rust` 会出现 `panic`。这种检查只能在运行时进行
+
+在实际开发中，如果数组元素是非基本类型，比如：
+
+```rs
+let array = [String::from("rust is good!"); 8];
+
+println!("{:#?}", array);
+```
+
+此时你会得到一段错误，因为复杂类型没有实现 Copy 特征，所以在数组元素是复杂类型时，正确的写法，应该调用 `std::array::from_fn`
+
+```rs
+let array: [String; 8] = core::array::from_fn(|i| String::from("rust is good!"));
+
+println!("{:#?}", array);
+```
+
+##### 数组切片
+
+切片允许你引用集合中的部分连续片段，而不是整个集合，对于数组也是，数组切片允许我们引用数组的一部分
+
+```rs
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+let slice: &[i32] = &a[1..3];
+
+assert_eq!(slice, &[2, 3]);
 ```
 
 ## 高级进阶
