@@ -1505,7 +1505,7 @@ fn print_suit(card: PokerSuit) {
 }
 ```
 
-那如何为枚举添加枚举值呢？我们可以使用 struct 来表示，但 Rust 提供了更优雅的方式
+那如何为枚举添加枚举值呢？我们可以使用 `struct` 来表示，但 `Rust` 提供了更优雅的方式
 
 ```rs
 enum PokerCard {
