@@ -59,6 +59,16 @@
         - [字符串转义](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E4%B9%89)
         - [操作 UTF-8 字符串](#%E6%93%8D%E4%BD%9C-utf-8-%E5%AD%97%E7%AC%A6%E4%B8%B2)
         - [字符串深度剖析](#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90)
+      - [元组](#%E5%85%83%E7%BB%84)
+        - [用模式匹配解构元组](#%E7%94%A8%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D%E8%A7%A3%E6%9E%84%E5%85%83%E7%BB%84)
+        - [用 `.` 来访问元组](#%E7%94%A8--%E6%9D%A5%E8%AE%BF%E9%97%AE%E5%85%83%E7%BB%84)
+        - [元组的使用示例](#%E5%85%83%E7%BB%84%E7%9A%84%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B)
+      - [结构体](#%E7%BB%93%E6%9E%84%E4%BD%93)
+        - [结构体语法](#%E7%BB%93%E6%9E%84%E4%BD%93%E8%AF%AD%E6%B3%95)
+        - [元组结构体(Tuple Struct)](#%E5%85%83%E7%BB%84%E7%BB%93%E6%9E%84%E4%BD%93tuple-struct)
+        - [单元结构体(Unit-like Struct)](#%E5%8D%95%E5%85%83%E7%BB%93%E6%9E%84%E4%BD%93unit-like-struct)
+        - [结构体数据的所有权](#%E7%BB%93%E6%9E%84%E4%BD%93%E6%95%B0%E6%8D%AE%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83)
+        - [使用 `#[derive(Debug)]` 来打印结构体的信息](#%E4%BD%BF%E7%94%A8-derivedebug-%E6%9D%A5%E6%89%93%E5%8D%B0%E7%BB%93%E6%9E%84%E4%BD%93%E7%9A%84%E4%BF%A1%E6%81%AF)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -1202,6 +1212,252 @@ fn main() {
 ```
 
 与其它系统编程语言的 `free` 函数相同，`Rust` 也提供了一个释放内存的函数： `drop`，但是不同的是，其它语言要手动调用 `free` 来释放每一个变量占用的内存，而 `Rust` 则在变量离开作用域时，自动调用 `drop` 函数: 上面代码中，`Rust` 在结尾的 `}` 处自动调用 `drop`。
+
+#### 元组
+
+元组是由多种类型组合到一起形成的，因此它是复合类型，元组的长度是固定的，元组中元素的顺序也是固定的。
+
+```rs
+fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+```
+
+##### 用模式匹配解构元组
+
+```rs
+fn main() {
+    let tup = (500, 6.4, 1);
+
+    let (x, y, z) = tup;
+
+    println!("The value of y is: {}", y);
+}
+```
+
+##### 用 `.` 来访问元组
+
+如果只想要访问某个特定元素，`Rust` 提供了 `.` 的访问方式：
+
+```rs
+fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+
+    let six_point_four = x.1;
+
+    let one = x.2;
+}
+```
+
+元组的索引从 `0` 开始
+
+##### 元组的使用示例
+
+元组在函数返回值场景很常用，可以使用元组返回多个值：
+
+```rs
+fn main() {
+    let s1 = String::from("hello");
+
+    let (s2, len) = calculate_length(s1);
+
+    println!("The length of '{}' is {}.", s2, len);
+}
+
+fn calculate_length(s: String) -> (String, usize) {
+    let length = s.len(); // len() 返回字符串的长度
+
+    (s, length)
+}
+```
+
+#### 结构体
+
+结构体 `struct` 是一种更高级的数据结构，它由其它数据类型组合而来，帮助我们更好的抽象问题
+
+##### 结构体语法
+
+- 定义结构体
+
+  一个结构体由几部分组成：
+  
+  - 通过关键字 `struct` 定义
+  - 一个清晰明确的结构体 名称
+  - 几个有名字的结构体 字段
+
+  ```rs
+  struct User {
+      active: bool,
+      username: String,
+      email: String,
+      sign_in_count: u64,
+  }
+  ```
+
+- 创建结构体实例
+
+  创建 User 结构体的实例:
+
+  ```rs
+  let user1 = User {
+      email: String::from("someone@example.com"),
+      username: String::from("someusername123"),
+      active: true,
+      sign_in_count: 1,
+  };
+  ```
+
+  **注意：**
+
+  - 初始化实例时，每个字段都需要进行初始化
+  - 初始化时的字段顺序不需要和结构体定义时的顺序一致
+
+- 访问结构体字段
+
+  通过 `.` 操作符即可访问结构体实例内部的字段值，也可以修改它们：
+
+  ```rs
+  let mut user1 = User {
+      email: String::from("someone@example.com"),
+      username: String::from("someusername123"),
+      active: true,
+      sign_in_count: 1,
+  };
+
+  user1.email = String::from("anotheremail@example.com");
+  ```
+
+  `Rust` 不支持将某个结构体某个字段标记为可变。
+
+- 简化结构体创建
+
+  ```rs
+  fn build_user(email: String, username: String) -> User {
+      User {
+          email: email,
+          username: username,
+          active: true,
+          sign_in_count: 1,
+      }
+  }
+  ```
+
+  通过上面的函数我们可以简化结构体实例的创建，另外，参数也可以简化，类似于 `TypeScript`
+
+  ```rs
+  fn build_user(email: String, username: String) -> User {
+      User {
+          email,
+          username,
+          active: true,
+          sign_in_count: 1,
+      }
+  }
+  ```
+
+- 结构体更新语法
+
+  在实际开发场景中，我们如何通过一个结构体实例来创建另外一个实例呢?  `Rust` 为我们提供了结构体更新语法：
+
+  ```rs
+  let user2 = User {
+      email: String::from("another@example.com"),
+      ..user1
+  };
+  ```
+
+  需要注意的是 `..user1` 必须在结构体的尾部使用。
+
+  上面的操作会导致 `user1` 中的 `username` 无法使用，因为它已经发生了所有权转移，其他字段仍然可以使用，因为具有 `Copy` 特性而发生了值拷贝。所以，把结构体中具有所有权的字段转移出去后，将无法再访问该字段，但是可以正常访问其它的字段。
+
+##### 元组结构体(Tuple Struct)
+
+结构体必须要有名称，但是结构体的字段可以没有名称，这种结构体长得很像元组，因此被称为元组结构体，例如：
+
+```rs
+    struct Color(i32, i32, i32);
+    struct Point(i32, i32, i32);
+
+    let black = Color(0, 0, 0);
+    let origin = Point(0, 0, 0);
+```
+
+##### 单元结构体(Unit-like Struct)
+
+之前讲过的啥也没有用的单元类型，单元结构体就跟它很像，没有任何字段和属性
+
+如果你定义一个类型，且并不关心该类型的内容, 只关心它的行为时，就可以使用 单元结构体：
+
+```rs
+struct AlwaysEqual;
+
+let subject = AlwaysEqual;
+
+// 我们不关心 AlwaysEqual 的字段数据，只关心它的行为，因此将它声明为单元结构体，然后再为它实现某个特征
+impl SomeTrait for AlwaysEqual {
+
+}
+```
+
+##### 结构体数据的所有权
+
+上面的示例中，我们使用了自身拥有所有权的 String 类型而非基于引用的 &str 类型，当然，结构体属性可以向其他数据源借用数据，但需要标记生命周期。
+
+##### 使用 `#[derive(Debug)]` 来打印结构体的信息
+
+在使用 `println!()` 方法进行打印时，占位符使用 `{}` 只能打印简单类型，如果想要打印类似结构体这种类型，需要使用 `{:?}` 这样的占位符，否则就会报错，结构体没有实现 `Display` 特征，而基本类型，都默认实现了该特征。
+
+手动实现 `Display` 特征明显不明智，而我们可以使用 `#[derive(Debug)]` 这样的派生实现
+
+```rs
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+
+    println!("rect1 is {:?}", rect1);
+}
+```
+
+如果结构体足够复杂，我们希望有更好的输出，可以使用 `{:#?}` 来替代 `{:?}`
+
+还有一个简单的输出 `debug` 信息的方法，那就是使用 `dbg!` 宏，它会拿走表达式的所有权，然后打印出相应的文件名、行号等 `debug` 信息，当然还有我们需要的表达式的求值结果。除此之外，它最终还会把表达式值的所有权返回！
+
+```rs
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let scale = 2;
+    let rect1 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
+
+    dbg!(&rect1);
+}
+
+/**
+    $ cargo run
+    [src/main.rs:10] 30 * scale = 60
+    [src/main.rs:14] &rect1 = Rectangle {
+        width: 60,
+        height: 50,
+    }
+  */
+```
 
 ## 高级进阶
 
