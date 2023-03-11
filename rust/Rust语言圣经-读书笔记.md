@@ -88,6 +88,9 @@
         - [loop 循环](#loop-%E5%BE%AA%E7%8E%AF)
     - [模式匹配](#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D)
       - [match 和 if let](#match-%E5%92%8C-if-let)
+        - [match](#match)
+        - [if let 匹配](#if-let-%E5%8C%B9%E9%85%8D)
+        - [matches!宏](#matches%E5%AE%8F)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -1916,6 +1919,169 @@ fn main() {
 模式匹配经常出现在函数式编程里，用于为复杂的类型系统提供一个轻松的解构能力。
 
 #### match 和 if let
+
+在 `Rust` 中，模式匹配最常用的就是 `match` 和 `if let`
+
+##### match
+
+先来看一个关于 `match` 的简单例子：
+
+```rs
+enum Direction {
+    East,
+    West,
+    North,
+    South,
+}
+
+fn main() {
+    let dire = Direction::South;
+    match dire {
+        Direction::East => println!("East"),
+        Direction::North | Direction::South => {
+            println!("South or North");
+        },
+        _ => println!("West"),
+    };
+}
+```
+
+- `match` 的匹配必须要穷举出所有可能，因此这里用 `_` 来代表未列出的所有可能性
+- `match` 的每一个分支都必须是一个表达式，且所有分支的表达式最终返回值的类型必须相同
+- `X | Y`，类似逻辑运算符 或，代表该分支可以匹配 `X` 也可以匹配 `Y`，只要满足一个即可
+
+match 的通用形式:
+
+```rs
+match target {
+    模式1 => 表达式1,
+    模式2 => {
+        语句1;
+        语句2;
+        表达式2
+    },
+    _ => 表达式3
+}
+```
+
+`match` 允许我们将一个值与一系列的模式相比较，并根据相匹配的模式执行对应的代码
+
+`match` 本身也是一个表达式，因此可以用它来赋值：
+
+```rs
+enum IpAddr {
+   Ipv4,
+   Ipv6
+}
+
+fn main() {
+    let ip1 = IpAddr::Ipv6;
+    let ip_str = match ip1 {
+        IpAddr::Ipv4 => "127.0.0.1",
+        _ => "::1",
+    };
+
+    println!("{}", ip_str);
+}
+```
+
+模式匹配的另外一个重要功能是从模式中取出绑定的值，例如：
+
+```rs
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+    // --snip--
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState), // 25美分硬币
+}
+
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
+            println!("State quarter from {:?}!", state);
+            25
+        },
+    }
+}
+```
+
+`match` 的匹配必须穷尽所有情况，否则编译器会报错
+
+```rs
+enum Direction {
+    East,
+    West,
+    North,
+    South,
+}
+
+fn main() {
+    let dire = Direction::South;
+    match dire {
+        Direction::East => println!("East"),
+        Direction::North | Direction::South => {
+            println!("South or North");
+        },
+    };
+}
+// 报错...
+```
+
+当我们不想在匹配时列出所有值的时候，可以使用 `Rust` 提供的一个特殊模式 `_` 替代
+
+```rs
+let some_u8_value = 0u8;
+match some_u8_value {
+    1 => println!("one"),
+    3 => println!("three"),
+    5 => println!("five"),
+    7 => println!("seven"),
+    _ => (),
+}
+```
+
+##### if let 匹配
+
+如果只有一个模式的值需要被处理，其它值直接忽略，我们可以用 `if let` 的方式来实现：
+
+```rs
+if let Some(3) = v {
+    println!("three");
+}
+```
+
+当你只要匹配一个条件，且忽略其他条件时就用 `if let` ，否则都用 `match`
+
+##### matches!宏
+
+`Rust` 标准库中提供了一个非常实用的宏：`matches!`，它可以将一个表达式跟模式进行匹配，然后返回匹配的结果
+
+```rs
+enum MyEnum {
+    Foo,
+    Bar
+}
+
+fn main() {
+    let v = vec![MyEnum::Foo,MyEnum::Bar,MyEnum::Foo];
+}
+```
+
+使用 `matches!` 宏匹配 `MyEnum::Foo`
+
+```rs
+v.iter().filter(|x| matches!(x, MyEnum::Foo));
+```
 
 ## 高级进阶
 
