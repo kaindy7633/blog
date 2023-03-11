@@ -91,6 +91,9 @@
         - [match](#match)
         - [if let 匹配](#if-let-%E5%8C%B9%E9%85%8D)
         - [matches!宏](#matches%E5%AE%8F)
+      - [解构 Option](#%E8%A7%A3%E6%9E%84-option)
+      - [模式适用场景](#%E6%A8%A1%E5%BC%8F%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF)
+      - [全模式列表](#%E5%85%A8%E6%A8%A1%E5%BC%8F%E5%88%97%E8%A1%A8)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -2082,6 +2085,357 @@ fn main() {
 ```rs
 v.iter().filter(|x| matches!(x, MyEnum::Foo));
 ```
+
+#### 解构 Option
+
+`Option` 枚举用来解决 `Rust` 中变量是否有值的问题，定义如下：
+
+```rs
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+一个变量要么有值：`Some(T)`, 要么为空：`None`
+
+```rs
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(i) => Some(i + 1),
+    }
+}
+
+let five = Some(5);
+let six = plus_one(five);
+let none = plus_one(None);
+```
+
+#### 模式适用场景
+
+模式是 `Rust` 中的特殊语法，它用来匹配类型中的结构和数据，它往往和 `match` 表达式联用，以实现强大的模式匹配能力。模式一般由以下内容组合而成：字面值、解构的数组、枚举、结构体或者元组、变量、通配符、占位符。
+
+- `match` 分支
+
+  ```rs
+  match VALUE {
+      PATTERN => EXPRESSION,
+      PATTERN => EXPRESSION,
+      _ => EXPRESSION,
+  }
+  ```
+
+- `if let` 分支
+
+  `if let` 往往用于匹配一个模式，而忽略剩下的所有模式的场景：
+
+  ```rs
+  if let PATTERN = SOME_VALUE {
+
+  }
+  ```
+
+- `while let` 条件循环
+
+  `while let` 允许只要模式匹配就一直进行 `while` 循环
+
+  ```rs
+    // Vec是动态数组
+  let mut stack = Vec::new();
+
+  // 向数组尾部插入元素
+  stack.push(1);
+  stack.push(2);
+  stack.push(3);
+
+  // stack.pop从数组尾部弹出元素
+  while let Some(top) = stack.pop() {
+      println!("{}", top);
+  }
+  ```
+
+- `for` 循环
+
+  ```rs
+  let v = vec!['a', 'b', 'c'];
+
+  for (index, value) in v.iter().enumerate() {
+      println!("{} is at index {}", value, index);
+  }
+  ```
+
+- `let` 语句
+
+  是的， 该语句我们已经用了无数次了，它也是一种模式匹配：
+
+  ```rs
+  let PATTERN = EXPRESSION;
+  ```
+
+- 函数参数
+
+  函数参数也是模式：
+
+  ```rs
+  fn foo(x: i32) {
+      // 代码
+  }
+  ```
+
+#### 全模式列表
+
+- 匹配字面值
+
+  ```rs
+  let x = 1;
+
+  match x {
+      1 => println!("one"),
+      2 => println!("two"),
+      3 => println!("three"),
+      _ => println!("anything"),
+  }
+  ```
+
+- 匹配命名变量
+
+  匹配命名变量时会遇到变量覆盖的问题
+
+  ```rs
+  fn main() {
+      let x = Some(5);
+      let y = 10;
+
+      match x {
+          Some(50) => println!("Got 50"),
+          Some(y) => println!("Matched, y = {:?}", y), // 这个新的 y 绑定会匹配任何 Some 中的值，在这里是 x 中的值
+          _ => println!("Default case, x = {:?}", x),
+      }
+
+      println!("at the end: x = {:?}, y = {:?}", x, y);
+  }
+  ```
+
+- 单分支多模式
+
+  在 `match` 表达式中，可以使用 `|` 语法匹配多个模式，它代表 或的意思
+
+  ```rs
+  let x = 1;
+
+  match x {
+      1 | 2 => println!("one or two"),
+      3 => println!("three"),
+      _ => println!("anything"),
+  }
+  ```
+
+- 通过序列 `..=` 匹配值的范围
+
+  `..=` 语法允许你匹配一个闭区间序列内的值
+
+  ```rs
+  let x = 5;
+
+  match x {
+      1..=5 => println!("one through five"),
+      _ => println!("something else"),
+  }
+  ```
+
+- 解构并分解值
+
+  使用模式来解构结构体、枚举、元组、数组和引用
+
+  ```rs
+  // 解构结构体
+  struct Point {
+    x: i32,
+    y: i32,
+  }
+
+  fn main() {
+      let p = Point { x: 0, y: 7 };
+
+      let Point { x: a, y: b } = p;
+      assert_eq!(0, a);
+      assert_eq!(7, b);
+  }
+  ```
+
+  ```rs
+  // 解构枚举
+  enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+  }
+
+  fn main() {
+      let msg = Message::ChangeColor(0, 160, 255);
+
+      match msg {
+          Message::Quit => {
+              println!("The Quit variant has no data to destructure.")
+          }
+          Message::Move { x, y } => {
+              println!(
+                  "Move in the x direction {} and in the y direction {}",
+                  x,
+                  y
+              );
+          }
+          Message::Write(text) => println!("Text message: {}", text),
+          Message::ChangeColor(r, g, b) => {
+              println!(
+                  "Change the color to red {}, green {}, and blue {}",
+                  r,
+                  g,
+                  b
+              )
+          }
+      }
+  }
+  ```
+
+  ```rs
+  // 解构嵌套的结构体和枚举
+  enum Color {
+    Rgb(i32, i32, i32),
+    Hsv(i32, i32, i32),
+  }
+
+  enum Message {
+      Quit,
+      Move { x: i32, y: i32 },
+      Write(String),
+      ChangeColor(Color),
+  }
+
+  fn main() {
+      let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
+
+      match msg {
+          Message::ChangeColor(Color::Rgb(r, g, b)) => {
+              println!(
+                  "Change the color to red {}, green {}, and blue {}",
+                  r,
+                  g,
+                  b
+              )
+          }
+          Message::ChangeColor(Color::Hsv(h, s, v)) => {
+              println!(
+                  "Change the color to hue {}, saturation {}, and value {}",
+                  h,
+                  s,
+                  v
+              )
+          }
+          _ => ()
+      }
+  }
+  ```
+
+  ```rs
+  // 解构结构体和元组
+  struct Point {
+     x: i32,
+     y: i32,
+  }
+
+  let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+  ```
+
+  ```rs
+  // 解构定长数组
+  let arr: [u16; 2] = [114, 514];
+  let [x, y] = arr;
+
+  assert_eq!(x, 114);
+  assert_eq!(y, 514);
+
+  // 解构不定长数组
+  let arr: &[u16] = &[114, 514];
+
+  if let [x, ..] = arr {
+      assert_eq!(x, &114);
+  }
+
+  if let &[.., y] = arr {
+      assert_eq!(y, 514);
+  }
+
+  let arr: &[u16] = &[];
+
+  assert!(matches!(arr, [..]));
+  assert!(!matches!(arr, [x, ..]));
+  ```
+
+  ```rs
+  // 使用 _ 忽略整个值
+  fn foo(_: i32, y: i32) {
+    println!("This code only uses the y parameter: {}", y);
+  }
+
+  fn main() {
+      foo(3, 4);
+  }
+
+  // 使用下划线开头忽略未使用的变量
+  fn main() {
+    let _x = 5;
+    let y = 10;
+  }
+
+  // 用 .. 忽略剩余值
+  struct Point {
+      x: i32,
+      y: i32,
+      z: i32,
+  }
+
+  let origin = Point { x: 0, y: 0, z: 0 };
+
+  match origin {
+      Point { x, .. } => println!("x is {}", x),
+  }
+
+  // 匹配守卫提供的额外条件
+  let num = Some(4);
+
+  match num {
+      Some(x) if x < 5 => println!("less than five: {}", x),
+      Some(x) => println!("{}", x),
+      None => (),
+  }
+  ```
+
+- @绑定
+
+  `@`（读作 `at`）运算符允许为一个字段绑定另外一个变量
+
+  ```rs
+  enum Message {
+      Hello { id: i32 },
+  }
+
+  let msg = Message::Hello { id: 5 };
+
+  match msg {
+      Message::Hello { id: id_variable @ 3..=7 } => {
+          println!("Found an id in range: {}", id_variable)
+      },
+      Message::Hello { id: 10..=12 } => {
+          println!("Found an id in another range")
+      },
+      Message::Hello { id } => {
+          println!("Found some other id: {}", id)
+      },
+  }
+  ```
 
 ## 高级进阶
 
