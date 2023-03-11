@@ -86,6 +86,8 @@
         - [break](#break)
         - [while 循环](#while-%E5%BE%AA%E7%8E%AF)
         - [loop 循环](#loop-%E5%BE%AA%E7%8E%AF)
+    - [模式匹配](#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D)
+      - [match 和 if let](#match-%E5%92%8C-if-let)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -1908,6 +1910,12 @@ fn main() {
     println!("The result is {}", result);
 }
 ```
+
+### 模式匹配
+
+模式匹配经常出现在函数式编程里，用于为复杂的类型系统提供一个轻松的解构能力。
+
+#### match 和 if let
 
 ## 高级进阶
 
