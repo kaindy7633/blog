@@ -77,6 +77,15 @@
         - [创建数组](#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84)
         - [访问数组元素](#%E8%AE%BF%E9%97%AE%E6%95%B0%E7%BB%84%E5%85%83%E7%B4%A0)
         - [数组切片](#%E6%95%B0%E7%BB%84%E5%88%87%E7%89%87)
+    - [流程控制](#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6)
+      - [使用 if 来做分支控制](#%E4%BD%BF%E7%94%A8-if-%E6%9D%A5%E5%81%9A%E5%88%86%E6%94%AF%E6%8E%A7%E5%88%B6)
+      - [使用 else if 来处理多重条件](#%E4%BD%BF%E7%94%A8-else-if-%E6%9D%A5%E5%A4%84%E7%90%86%E5%A4%9A%E9%87%8D%E6%9D%A1%E4%BB%B6)
+      - [循环控制](#%E5%BE%AA%E7%8E%AF%E6%8E%A7%E5%88%B6)
+        - [for 循环](#for-%E5%BE%AA%E7%8E%AF)
+        - [continue](#continue)
+        - [break](#break)
+        - [while 循环](#while-%E5%BE%AA%E7%8E%AF)
+        - [loop 循环](#loop-%E5%BE%AA%E7%8E%AF)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -1695,6 +1704,209 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 let slice: &[i32] = &a[1..3];
 
 assert_eq!(slice, &[2, 3]);
+```
+
+### 流程控制
+
+#### 使用 if 来做分支控制
+
+`if else` 表达式根据条件执行不同的代码分支：
+
+```rs
+if condition == true {
+    // A...
+} else {
+    // B...
+}
+```
+
+- `if` 语句块是表达式
+- 用 `if` 来赋值时，要保证每个分支返回的类型一样
+
+```rs
+fn main() {
+    let condition = true;
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!("The value of number is: {}", number);
+}
+```
+
+#### 使用 else if 来处理多重条件
+
+```rs
+fn main() {
+    let n = 6;
+
+    if n % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if n % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if n % 2 == 0 {
+        println!("number is divisible by 2");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }
+}
+```
+
+我们可以使用 `match` 专门用以解决多分支模式匹配的问题
+
+#### 循环控制
+
+在 `Rust` 语言中有三种循环方式：`for`、`while` 和 `loop`
+
+##### for 循环
+
+```rs
+fn main() {
+    for i in 1..=5 {
+        println!("{}", i);
+    }
+}
+```
+
+**注意**，使用 `for` 时我们往往使用集合的引用形式，除非你不想在后面的代码中继续使用该集合。对于实现了 `copy` 特征的数组，循环体的所有权并不会转移
+
+```rs
+for item in &container {
+  // ...
+}
+```
+
+如果想在循环中，修改该元素，可以使用 `mut` 关键字：
+
+```rs
+for item in &mut collection {
+  // ...
+}
+```
+
+总结：
+
+|使用方法|等价使用方式|所有权|
+|--|--|--|
+|`for item in collection`|`for item in IntoIterator::into_iter(collection)`|转移所有权|
+|`for item in &collection`|`for item in collection.iter()`|不可变借用|
+|`for item in &mut collection`|`for item in collection.iter_mut()`|可变借用|
+
+如果想在循环中获取元素的索引，可以使用 `iter()`：
+
+```rs
+fn main() {
+    let a = [4, 3, 2, 1];
+    // `.iter()` 方法把 `a` 数组变成一个迭代器
+    for (i, v) in a.iter().enumerate() {
+        println!("第{}个元素是{}", i + 1, v);
+    }
+}
+```
+
+仅仅循环多次，我们可以使用 `_`
+
+```rs
+for _ in 0..10 {
+  // ...
+}
+```
+
+在 `Rust` 中 `_` 的含义是忽略该值或者类型的意思，如果不使用 `_`，那么编译器会给你一个变量未使用的警告
+
+来看下面这两种循环的方式：
+
+```rs
+// 第一种
+let collection = [1, 2, 3, 4, 5];
+for i in 0..collection.len() {
+  let item = collection[i];
+  // ...
+}
+
+// 第二种
+for item in collection {
+
+}
+```
+
+第一种方式因为需要数组长度，所有存在便捷检查所带来的性能损耗，且访问可能是不连续的，循环体发生变化则会产生脏数据，而第二种不存在这些问题。
+
+由于 `for` 循环无需任何条件限制，也不需要通过索引来访问，因此是最安全也是最常用的
+
+##### continue
+
+使用 `continue` 可以跳过当前当次的循环，开始下次的循环：
+
+```rs
+for i in 1..4 {
+    if i == 2 {
+        continue;
+    }
+    println!("{}", i);
+}
+```
+
+##### break
+
+使用 `break` 可以直接跳出当前整个循环：
+
+```rs
+ for i in 1..4 {
+     if i == 2 {
+         break;
+     }
+     println!("{}", i);
+ }
+ ```
+
+##### while 循环
+
+```rs
+fn main() {
+    let mut n = 0;
+
+    while n <= 5  {
+        println!("{}!", n);
+
+        n = n + 1;
+    }
+
+    println!("我出来了！");
+}
+```
+
+使用 `wihle` 循环同样能模拟 `for` 循环， 但 `for` 循环并不会使用索引去访问数组，因此更安全也更简洁，同时避免运行时的边界检查，性能更高。
+
+##### loop 循环
+
+```rs
+fn main() {
+    loop {
+        println!("again!");
+    }
+}
+// 死循环...
+```
+
+当使用 `loop` 时，必不可少的伙伴是 `break` 关键字，它能让循环在满足某个条件时跳出：
+
+```rs
+fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    println!("The result is {}", result);
+}
 ```
 
 ## 高级进阶
