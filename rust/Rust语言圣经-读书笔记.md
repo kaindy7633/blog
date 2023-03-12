@@ -100,6 +100,14 @@
       - [关联函数](#%E5%85%B3%E8%81%94%E5%87%BD%E6%95%B0)
       - [多个 impl 定义](#%E5%A4%9A%E4%B8%AA-impl-%E5%AE%9A%E4%B9%89)
       - [为枚举实现方法](#%E4%B8%BA%E6%9E%9A%E4%B8%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95)
+    - [泛型和特征](#%E6%B3%9B%E5%9E%8B%E5%92%8C%E7%89%B9%E5%BE%81)
+      - [泛型](#%E6%B3%9B%E5%9E%8B)
+      - [泛型详解](#%E6%B3%9B%E5%9E%8B%E8%AF%A6%E8%A7%A3)
+      - [结构体中使用泛型](#%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B)
+      - [枚举中使用泛型](#%E6%9E%9A%E4%B8%BE%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B)
+      - [方法中使用泛型](#%E6%96%B9%E6%B3%95%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B)
+      - [const泛型](#const%E6%B3%9B%E5%9E%8B)
+      - [泛型的性能](#%E6%B3%9B%E5%9E%8B%E7%9A%84%E6%80%A7%E8%83%BD)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -2637,6 +2645,186 @@ fn main() {
 ```
 
 除了结构体和枚举，我们还能为特征(`trait`)实现方法
+
+### 泛型和特征
+
+#### 泛型
+
+#### 泛型详解
+
+先来看一段代码：
+
+```rs
+fn add<T>(a:T, b:T) -> T {
+    a + b
+}
+
+fn main() {
+    println!("add i8: {}", add(2i8, 3i8));
+    println!("add i32: {}", add(20, 30));
+    println!("add f64: {}", add(1.23, 1.23));
+}
+```
+
+上面代码的 `T` 就是泛型参数，实际上在 `Rust` 中，泛型参数的名称出于惯例，我们都用 `T` ( `T` 是 `type` 的首字母)来作为首选，对上面代码的理解就是函数 `largest` 有泛型类型 `T`，它有个参数 `list`，其类型是元素为 `T` 的数组切片，最后，该函数返回值的类型也是 `T`
+
+```rs
+fn largest<T>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list.iter() {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let number_list = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&number_list);
+    println!("The largest number is {}", result);
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&char_list);
+    println!("The largest char is {}", result);
+}
+```
+
+上面的代码编译会报错，是因为泛型 T 没有做类型限制，不是所有的类型都可以做比较，编译器建议我们给 T 添加一个类型限制：使用 `std::cmp::PartialOrd` 特征（`Trait`）对 `T` 进行限制
+
+#### 结构体中使用泛型
+
+结构体中的字段类型也可以用泛型来定义
+
+```rs
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+}
+```
+
+**注意：**
+
+- 提前声明，跟泛型函数定义类似，首先我们在使用泛型参数之前必需要进行声明 `Point<T>`，接着就可以在结构体的字段类型中使用 `T` 来替代具体的类型
+- `x` 和 `y` 是相同的类型
+
+我们也可以使用不同的泛型参数
+
+```rs
+struct Point<T,U> {
+    x: T,
+    y: U,
+}
+fn main() {
+    let p = Point{x: 1, y :1.1};
+}
+```
+
+#### 枚举中使用泛型
+
+前面讲的 `Option` 就是一个带泛型的枚举
+
+```rs
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+还有一种主要用于函数返回值的枚举 `Result`
+
+```rs
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+#### 方法中使用泛型
+
+```rs
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+
+fn main() {
+    let p = Point { x: 5, y: 10 };
+
+    println!("p.x = {}", p.x());
+}
+```
+
+使用泛型参数前，依然需要提前声明：`impl<T>`，这样 `Rust` 就知道 `Point` 的尖括号中的类型是泛型而不是具体类型
+
+除了结构体中的泛型参数，我们还能在该结构体的方法中定义额外的泛型参数
+
+```rs
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
+
+impl<T, U> Point<T, U> {
+    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: "Hello", y: 'c'};
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+}
+```
+
+#### const泛型
+
+之前讲的泛型是针对类型的，而 `const` 泛型，是针对值的泛型，正好可以用于处理数组长度的问题
+
+```rs
+fn display_array<T: std::fmt::Debug, const N: usize>(arr: [T; N]) {
+    println!("{:?}", arr);
+}
+fn main() {
+    let arr: [i32; 3] = [1, 2, 3];
+    display_array(arr);
+
+    let arr: [i32; 2] = [1, 2];
+    display_array(arr);
+}
+```
+
+我们定义了一个类型为 `[T; N]` 的数组，其中 `T` 是一个基于类型的泛型参数，`N` 这个泛型参数，它是一个基于值的泛型参数！因为它用来替代的是数组的长度。
+
+`N` 就是 `const` 泛型，定义的语法是 `const N: usize`，表示 `const` 泛型 `N` ，它基于的值类型是 `usize`
+
+#### 泛型的性能
+
+在 `Rust` 中泛型是零成本的抽象，虽然我们获得了高性能，但 `Rust` 是在编译期为泛型对应的多个类型，生成各自的代码，因此损失了编译速度和增大了最终生成文件的大小。
+
+`Rust` 通过在编译时进行泛型代码的 单态化(`monomorphization`)来保证效率。单态化是一个通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程。
 
 ## 高级进阶
 
