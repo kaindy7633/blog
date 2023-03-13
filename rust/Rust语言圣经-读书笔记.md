@@ -2650,7 +2650,7 @@ fn main() {
 
 #### 泛型
 
-#### 泛型详解
+##### 泛型详解
 
 先来看一段代码：
 
@@ -2696,7 +2696,7 @@ fn main() {
 
 上面的代码编译会报错，是因为泛型 T 没有做类型限制，不是所有的类型都可以做比较，编译器建议我们给 T 添加一个类型限制：使用 `std::cmp::PartialOrd` 特征（`Trait`）对 `T` 进行限制
 
-#### 结构体中使用泛型
+##### 结构体中使用泛型
 
 结构体中的字段类型也可以用泛型来定义
 
@@ -2729,7 +2729,7 @@ fn main() {
 }
 ```
 
-#### 枚举中使用泛型
+##### 枚举中使用泛型
 
 前面讲的 `Option` 就是一个带泛型的枚举
 
@@ -2749,7 +2749,7 @@ enum Result<T, E> {
 }
 ```
 
-#### 方法中使用泛型
+##### 方法中使用泛型
 
 ```rs
 struct Point<T> {
@@ -2799,7 +2799,7 @@ fn main() {
 }
 ```
 
-#### const泛型
+##### const泛型
 
 之前讲的泛型是针对类型的，而 `const` 泛型，是针对值的泛型，正好可以用于处理数组长度的问题
 
@@ -2820,11 +2820,290 @@ fn main() {
 
 `N` 就是 `const` 泛型，定义的语法是 `const N: usize`，表示 `const` 泛型 `N` ，它基于的值类型是 `usize`
 
-#### 泛型的性能
+##### 泛型的性能
 
 在 `Rust` 中泛型是零成本的抽象，虽然我们获得了高性能，但 `Rust` 是在编译期为泛型对应的多个类型，生成各自的代码，因此损失了编译速度和增大了最终生成文件的大小。
 
 `Rust` 通过在编译时进行泛型代码的 单态化(`monomorphization`)来保证效率。单态化是一个通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程。
+
+#### 特征 Trait
+
+如果我们想要实现一个文件系统的操作，包含 `open`、 `write`、 `read` 和 `close`，就需要把这些行为抽象出来，这就是 `Rust` 中的 特征 `trait`，它类似于其他语言中的接口 `interface`
+
+```rs
+fn add<T: std::ops::Add<Output = T>>(a:T, b:T) -> T {
+    a + b
+}
+```
+
+上面的代码中，通过 `std::ops::Add` 特征来限制 `T`，只有 `T` 实现了 `std::ops::Add` 才能进行合法的加法操作。
+
+特征定义了一个可以被共享的行为，只要实现了特征，你就能使用该行为。
+
+##### 定义特征
+
+如果不同的类型具有相同的行为，那么我们就可以定义一个特征，然后为这些类型实现该特征。定义特征是把一些方法组合在一起，目的是定义一个实现某些目标所必需的行为的集合。
+
+```rs
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+```
+
+使用 `trait` 关键字来声明一个特征，`Summary` 是特征名。在大括号中定义了该特征的所有方法。特征只定义方法签名，而不进行实现
+
+##### 为类型实现特征
+
+为 `Post` 和 `Weibo` 实现 `Summary` 特征：
+
+```rs
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+pub struct Post {
+    pub title: String, // 标题
+    pub author: String, // 作者
+    pub content: String, // 内容
+}
+
+impl Summary for Post {
+    fn summarize(&self) -> String {
+        format!("文章{}, 作者是{}", self.title, self.author)
+    }
+}
+
+pub struct Weibo {
+    pub username: String,
+    pub content: String
+}
+
+impl Summary for Weibo {
+    fn summarize(&self) -> String {
+        format!("{}发表了微博{}", self.username, self.content)
+    }
+}
+```
+
+实现特征的语法与为结构体、枚举实现方法很像：`impl Summary for Post`，读作“为 `Post` 类型实现 `Summary` 特征”，然后在 `impl` 的花括号中实现该特征的具体方法
+
+##### 特征定义与实现的位置(孤儿规则)
+
+关于特征实现与定义的位置，有一条非常重要的原则：如果你想要为类型 `A` 实现特征 `T`，那么 `A` 或者 `T` 至少有一个是在当前作用域中定义的！
+
+##### 默认实现
+
+我们可以在特征中定义具有默认实现的方法，这样其它类型无需再实现该方法，或者也可以选择重载该方法：
+
+```rs
+pub trait Summary {
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+
+/// Post 使用了默认实现
+impl Summary for Post {}
+
+/// Weibo 重载了该方法
+impl Summary for Weibo {
+    fn summarize(&self) -> String {
+        format!("{}发表了微博{}", self.username, self.content)
+    }
+}
+```
+
+##### 使用特征作为函数参数
+
+```rs
+pub fn notify(item: &impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+
+上面的函数定义中，`item` 就是实现了 `Summary` 特征参数
+
+##### 特征约束(trait bound)
+
+`impl Trait` 这种语法实际上只是一个语法糖：
+
+```rs
+pub fn notify<T: Summary>(item: &T) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+
+`T: Summary` 被称为特征约束，比如我们需要约束多个参数都必须是同一类型:
+
+```rs
+pub fn notify<T: Summary>(item1: &T, item2: &T) {}
+```
+
+泛型类型 `T` 说明了 `item1` 和 `item2` 必须拥有同样的类型，同时 `T: Summary` 说明了 `T` 必须实现 `Summary` 特征。
+
+同时，我们还可以让参数实现多种约束，即实现多个不同的特征：
+
+```rs
+pub fn notify(item: &(impl Summary + Display)) {}
+```
+
+使用特征约束表示上面的代码：
+
+```rs
+pub fn notify<T: Summary + Display>(item: &T) {}
+```
+
+当特征约束变得很多时，我们可以使用 where 约束：
+
+```rs
+fn some_function<T, U>(t: &T, u: &U) -> i32
+    where T: Display + Clone,
+          U: Clone + Debug
+{}
+```
+
+##### 函数返回中的 impl Trait
+
+可以通过 `impl Trait` 来说明一个函数返回了一个类型，该类型实现了某个特征：
+
+```rs
+fn returns_summarizable() -> impl Summary {
+    Weibo {
+        username: String::from("sunface"),
+        content: String::from(
+            "m1 max太厉害了，电脑再也不会卡",
+        )
+    }
+}
+```
+
+##### 通过 derive 派生特征
+
+我们上面的代码中已经出现了多次形如 `#[derive(Debug)]` 的代码，这种是一种特征派生语法，被 `derive` 标记的对象会自动实现对应的默认特征代码，继承相应的功能
+
+#### 特征对象
+
+先看下面的实现代码：
+
+```rs
+pub trait Draw {
+    fn draw(&self);
+}
+
+pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&self) {
+        // 绘制按钮的代码
+    }
+}
+
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec<String>,
+}
+
+impl Draw for SelectBox {
+    fn draw(&self) {
+        // 绘制SelectBox的代码
+    }
+}
+
+// 这里使用动态数组存储这些需要绘制的组件
+pub struct Screen {
+    pub components: Vec<?>,
+}
+```
+
+特征对象指向实现了 `Draw` 特征的类型的实例，也就是指向了 `Button` 或者 `SelectBox` 的实例，这种映射关系是存储在一张表中，可以在运行时通过特征对象找到具体调用的类型方法。
+
+可以通过 `&` 引用或者 `Box<T>` 智能指针的方式来创建特征对象。
+
+```rs
+trait Draw {
+    fn draw(&self) -> String;
+}
+
+impl Draw for u8 {
+    fn draw(&self) -> String {
+        format!("u8: {}", *self)
+    }
+}
+
+impl Draw for f64 {
+    fn draw(&self) -> String {
+        format!("f64: {}", *self)
+    }
+}
+
+// 若 T 实现了 Draw 特征， 则调用该函数时传入的 Box<T> 可以被隐式转换成函数参数签名中的 Box<dyn Draw>
+fn draw1(x: Box<dyn Draw>) {
+    // 由于实现了 Deref 特征，Box 智能指针会自动解引用为它所包裹的值，然后调用该值对应的类型上定义的 `draw` 方法
+    x.draw();
+}
+
+fn draw2(x: &dyn Draw) {
+    x.draw();
+}
+
+fn main() {
+    let x = 1.1f64;
+    // do_something(&x);
+    let y = 8u8;
+
+    // x 和 y 的类型 T 都实现了 `Draw` 特征，因为 Box<T> 可以在函数调用时隐式地被转换为特征对象 Box<dyn Draw> 
+    // 基于 x 的值创建一个 Box<f64> 类型的智能指针，指针指向的数据被放置在了堆上
+    draw1(Box::new(x));
+    // 基于 y 的值创建一个 Box<u8> 类型的智能指针
+    draw1(Box::new(y));
+    draw2(&x);
+    draw2(&y);
+}
+```
+
+那么上面的 Screen 结构体中的类型就可以这样写：
+
+```rs
+pub struct Screen {
+    pub components: Vec<Box<dyn Draw>>,
+}
+```
+
+#### 深入特征
+
+##### 关联类型
+
+关联类型是在特征定义的语句块中，申明一个自定义类型，这样就可以在特征的方法签名中使用该类型：
+
+```rs
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item>;
+}
+```
+
+`Self` 用来指代当前调用者的具体类型
+
+##### 默认泛型类型参数
+
+当使用泛型类型参数时，可以为其指定一个默认的具体类型，例如标准库中的 `std::ops::Add` 特征：
+
+```rs
+trait Add<RHS=Self> {
+    type Output;
+
+    fn add(self, rhs: RHS) -> Self::Output;
+}
+```
+
+##### 调用同名的方法
+
+### 集合类型
 
 ## 高级进阶
 
