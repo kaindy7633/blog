@@ -129,6 +129,11 @@
         - [Vector 与其元素共存亡](#vector-%E4%B8%8E%E5%85%B6%E5%85%83%E7%B4%A0%E5%85%B1%E5%AD%98%E4%BA%A1)
         - [从 Vector 中读取元素](#%E4%BB%8E-vector-%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%85%83%E7%B4%A0)
         - [迭代遍历 Vector 中的元素](#%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86-vector-%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0)
+      - [KV 存储 HashMap](#kv-%E5%AD%98%E5%82%A8-hashmap)
+        - [创建 HashMap](#%E5%88%9B%E5%BB%BA-hashmap)
+        - [所有权转移](#%E6%89%80%E6%9C%89%E6%9D%83%E8%BD%AC%E7%A7%BB)
+        - [查询 HashMap](#%E6%9F%A5%E8%AF%A2-hashmap)
+        - [更新 HashMap 中的值](#%E6%9B%B4%E6%96%B0-hashmap-%E4%B8%AD%E7%9A%84%E5%80%BC)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -3221,6 +3226,139 @@ for i in &v {
 let mut v = vec![1, 2, 3];
 for i in &mut v {
     *i += 10
+}
+```
+
+#### KV 存储 HashMap
+
+`HashMap` 是 `Rust` 标准库中提供的集合类型，但是又与动态数组不同，`HashMap` 中存储的是一一映射的 `KV` 键值对，并提供了平均复杂度为 `O(1)` 的查询方法，当我们希望通过一个 `Key` 去查询值时，该类型非常有用
+
+##### 创建 HashMap
+
+我们可以使用 `new` 方法来创建 `HashMap`，然后通过 `insert` 方法插入键值对。
+
+```rs
+use std::collections::HashMap;
+
+// 创建一个HashMap，用于存储宝石种类和对应的数量
+let mut my_gems = HashMap::new();
+
+// 将宝石类型和对应的数量写入表中
+my_gems.insert("红宝石", 1);
+my_gems.insert("蓝宝石", 2);
+my_gems.insert("河边捡的误以为是宝石的破石头", 18);
+```
+
+所有的集合类型都是动态的，意味着它们没有固定的内存大小，因此它们底层的数据都存储在内存堆上，然后通过一个存储在栈中的引用类型来访问。同时，跟其它集合类型一致，`HashMap` 也是内聚性的，即所有的 `K` 必须拥有同样的类型，`V` 也是如此。
+
+如果预先知道要存储的 `KV` 对个数，可以使用 `HashMap::with_capacity(capacity)` 创建指定大小的 `HashMap`，避免频繁的内存分配和拷贝，提升性能
+
+如果我们想将一个动态数组转换成 `HashMap`，可以先将 `Vec` 转为迭代器，然后通过 `collect` 方法，将迭代器中的元素收集后转成 `HashMap`。
+
+```rs
+fn main() {
+    use std::collections::HashMap;
+
+    let teams_list = vec![
+        ("中国队".to_string(), 100),
+        ("美国队".to_string(), 10),
+        ("日本队".to_string(), 50),
+    ];
+
+    let teams_map: HashMap<_,_> = teams_list.into_iter().collect();
+    
+    println!("{:?}",teams_map)
+}
+```
+
+##### 所有权转移
+
+`HashMap` 的所有权规则与其它 `Rust` 类型没有区别：
+
+- 若类型实现 `Copy` 特征，该类型会被复制进 `HashMap`，因此无所谓所有权
+- 若没实现 `Copy` 特征，所有权将被转移给 `HashMap` 中
+
+```rs
+fn main() {
+    use std::collections::HashMap;
+
+    let name = String::from("Sunface");
+    let age = 18;
+
+    let mut handsome_boys = HashMap::new();
+    handsome_boys.insert(&name, age);
+
+    std::mem::drop(name);
+    println!("因为过于无耻，{:?}已经被除名", handsome_boys);
+    println!("还有，他的真实年龄远远不止{}岁", age);
+}
+```
+
+##### 查询 HashMap
+
+我们通过 `get` 方法可以获取元素：
+
+```rs
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Yellow"), 50);
+
+let team_name = String::from("Blue");
+let score: Option<&i32> = scores.get(&team_name);
+```
+
+- `get` 方法返回一个 `Option<&i32>` 类型：当查询不到时，会返回一个 `None`，查询到时返回 `Some(&i32)`
+- `&i32` 是对 `HashMap` 中值的借用，如果不使用借用，可能会发生所有权的转移
+
+如果想直接获取 `score` 中的值，可以这样：
+
+```rs
+let score: i32 = scores.get(&team_name).copied().unwrap_or(0);
+```
+
+我们还可以通过 `for` 循环遍历 `HashMap`
+
+```rs
+use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Yellow"), 50);
+
+for (key, value) in &scores {
+    println!("{}: {}", key, value);
+}
+```
+
+##### 更新 HashMap 中的值
+
+```rs
+fn main() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert("Blue", 10);
+
+    // 覆盖已有的值
+    let old = scores.insert("Blue", 20);
+    assert_eq!(old, Some(10));
+
+    // 查询新插入的值
+    let new = scores.get("Blue");
+    assert_eq!(new, Some(&20));
+
+    // 查询Yellow对应的值，若不存在则插入新值
+    let v = scores.entry("Yellow").or_insert(5);
+    assert_eq!(*v, 5); // 不存在，插入5
+
+    // 查询Yellow对应的值，若不存在则插入新值
+    let v = scores.entry("Yellow").or_insert(50);
+    assert_eq!(*v, 5); // 已经存在，因此50没有插入
 }
 ```
 
