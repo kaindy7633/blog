@@ -3509,6 +3509,48 @@ impl<'a> ImportantExcerpt<'a> {
 let s: &'static str = "我没啥优点，就是活得久，嘿嘿";
 ```
 
+### 返回值和错误处理
+
+Rust 中的错误主要分为两类：
+
+- 可恢复错误，通常用于从系统全局角度来看可以接受的错误，例如处理用户的访问、操作等错误，这些错误只会影响某个用户自身的操作进程，而不会对系统的全局稳定性产生影响
+- 不可恢复错误，刚好相反，该错误通常是全局性或者系统性的错误，例如数组越界访问，系统启动时发生了影响启动流程的错误等等，这些错误的影响往往对于系统来说是致命的
+
+`Rust` 没有异常，但是 `Rust` 也会把错误分为两类：`Result<T, E>` 用于可恢复错误，`panic!` 用于不可恢复错误。
+
+#### panic 深入剖析
+
+对于严重到影响程序运行的错误，触发 `panic` 是很好的解决方式。在 `Rust` 中触发 `panic` 有两种方式：被动触发和主动调用
+
+```rs
+fn main() {
+    let v = vec![1, 2, 3];
+
+    v[99];
+}
+```
+
+上面的代码一看就知道：数组访问越界，在其它编程语言中无一例外，都会报出严重的异常，甚至导致程序直接崩溃关闭。类似的 `panic` 还有很多，而被动触发的 `panic` 是我们日常开发中最常遇到的。
+
+如果开发者想要主动抛出一个异常，`Rust` 为我们提供了 `panic!` 宏，当调用执行该宏时，程序会打印出一个错误信息，展开报错点往前的函数调用堆栈，最后退出程序
+
+```rs
+fn main() {
+    panic!("crash and burn");
+}
+// thread 'main' panicked at 'crash and burn', src/main.rs:2:5
+// note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+```
+
+上面输入的结果信息包含了两条重要信息：
+
+- `main` 函数所在的线程崩溃了，发生的代码位置是 `src/main.rs` 中的第 `2` 行第 `5` 个字符（去除该行前面的空字符）
+- 在使用时加上一个环境变量可以获取更详细的栈展开信息：
+  - `Linux/macOS` 等 `UNIX` 系统： `RUST_BACKTRACE=1 cargo run`
+  - `Windows` 系统（`PowerShell`）： `$env:RUST_BACKTRACE=1 ; cargo run`
+
+##### backtrace 栈展开
+
 ## 高级进阶
 
 ## 异步编程
