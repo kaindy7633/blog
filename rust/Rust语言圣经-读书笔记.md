@@ -3551,6 +3551,100 @@ fn main() {
 
 ##### backtrace 栈展开
 
+对于上面的数组越界访问的问题，如果使用栈展开，将会得到下面的信息：
+
+```bash
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', src/main.rs:4:5
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/std/src/panicking.rs:517:5
+   1: core::panicking::panic_fmt
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/core/src/panicking.rs:101:14
+   2: core::panicking::panic_bounds_check
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/core/src/panicking.rs:77:5
+   3: <usize as core::slice::index::SliceIndex<[T]>>::index
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/core/src/slice/index.rs:184:10
+   4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/core/src/slice/index.rs:15:9
+   5: <alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/alloc/src/vec/mod.rs:2465:9
+   6: world_hello::main
+             at ./src/main.rs:4:5
+   7: core::ops::function::FnOnce::call_once
+             at /rustc/59eed8a2aac0230a8b53e89d4e99d55912ba6b35/library/core/src/ops/function.rs:227:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+```
+
+上面的代码就是一次栈展开(也称栈回溯)，它包含了函数调用的顺序，当然按照逆序排列：最近调用的函数排在列表的最上方
+
+##### panic 时的两种终止方式
+
+当出现 `panic!` 时，程序提供了两种方式来处理终止流程：栈展开和直接终止。
+
+其中，默认的方式就是 栈展开，这意味着 `Rust` 会回溯栈上数据和函数调用，因此也意味着更多的善后工作，好处是可以给出充分的报错信息和栈调用信息，便于事后的问题复盘。直接终止，顾名思义，不清理数据就直接退出程序，善后工作交与操作系统来负责
+
+#### 可恢复的错误 Result
+
+当发生错误时，有时我们不能直接 `panic`， 而是需要一种比较温和的处理方式，`Result<T, E>`
+
+`Result<T, E>` 是一个枚举类型，定义如下：
+
+```rs
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+泛型参数 `T` 代表成功时存入的正确值的类型，存放方式是 `Ok(T)`，`E` 代表错误时存入的错误值，存放方式是 `Err(E)`
+
+```rs
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt");
+}
+```
+
+上面的代码编译时编译器会告诉你，返回值类型是：`std::result::Result<std::fs::File, std::io::Error>`, 也就是一个 `Result<T, E>`, `File::open` 调用如果成功则返回一个可以进行读写的文件句柄，如果失败，则返回一个 `IO` 错误：文件不存在或者没有访问文件的权限等
+
+```rs
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt");
+
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => {
+            panic!("Problem opening the file: {:?}", error)
+        },
+    };
+}
+```
+
+`unwrap` 和 `expect` 两个方法针对 `Result<T, E>`, 如果返回成功，就将 `Ok(T)` 中的值取出来，如果失败，就直接 `panic`
+
+```rs
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt").unwrap();
+}
+```
+
+`expect` 跟 `unwrap` 很像，也是遇到错误直接 `panic`, 但是会带上自定义的错误提示信息，相当于重载了错误打印的函数：
+
+```rs
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt").expect("Failed to open hello.txt");
+}
+```
+
+
+
 ## 高级进阶
 
 ## 异步编程
