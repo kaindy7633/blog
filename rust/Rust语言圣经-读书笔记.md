@@ -143,6 +143,26 @@
       - [生命周期消除](#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%B6%88%E9%99%A4)
       - [方法中的生命周期](#%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
       - [静态生命周期](#%E9%9D%99%E6%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
+    - [返回值和错误处理](#%E8%BF%94%E5%9B%9E%E5%80%BC%E5%92%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
+      - [panic 深入剖析](#panic-%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90)
+        - [backtrace 栈展开](#backtrace-%E6%A0%88%E5%B1%95%E5%BC%80)
+        - [panic 时的两种终止方式](#panic-%E6%97%B6%E7%9A%84%E4%B8%A4%E7%A7%8D%E7%BB%88%E6%AD%A2%E6%96%B9%E5%BC%8F)
+      - [可恢复的错误 Result](#%E5%8F%AF%E6%81%A2%E5%A4%8D%E7%9A%84%E9%94%99%E8%AF%AF-result)
+    - [包和模块](#%E5%8C%85%E5%92%8C%E6%A8%A1%E5%9D%97)
+      - [包和 Package](#%E5%8C%85%E5%92%8C-package)
+        - [定义](#%E5%AE%9A%E4%B9%89)
+        - [项目 Package](#%E9%A1%B9%E7%9B%AE-package)
+      - [模块 Module](#%E6%A8%A1%E5%9D%97-module)
+        - [创建嵌套模块](#%E5%88%9B%E5%BB%BA%E5%B5%8C%E5%A5%97%E6%A8%A1%E5%9D%97)
+        - [用路径引用模块](#%E7%94%A8%E8%B7%AF%E5%BE%84%E5%BC%95%E7%94%A8%E6%A8%A1%E5%9D%97)
+        - [代码可见性](#%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%A7%81%E6%80%A7)
+        - [使用 super 引用模块](#%E4%BD%BF%E7%94%A8-super-%E5%BC%95%E7%94%A8%E6%A8%A1%E5%9D%97)
+        - [使用 self 引用模块](#%E4%BD%BF%E7%94%A8-self-%E5%BC%95%E7%94%A8%E6%A8%A1%E5%9D%97)
+        - [结构体和枚举的可见性](#%E7%BB%93%E6%9E%84%E4%BD%93%E5%92%8C%E6%9E%9A%E4%B8%BE%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7)
+      - [使用 use 及受限可见性](#%E4%BD%BF%E7%94%A8-use-%E5%8F%8A%E5%8F%97%E9%99%90%E5%8F%AF%E8%A7%81%E6%80%A7)
+        - [基本引入方式](#%E5%9F%BA%E6%9C%AC%E5%BC%95%E5%85%A5%E6%96%B9%E5%BC%8F)
+        - [使用 {} 简化引入方式](#%E4%BD%BF%E7%94%A8--%E7%AE%80%E5%8C%96%E5%BC%95%E5%85%A5%E6%96%B9%E5%BC%8F)
+        - [使用 * 引入模块下的所有项](#%E4%BD%BF%E7%94%A8--%E5%BC%95%E5%85%A5%E6%A8%A1%E5%9D%97%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E9%A1%B9)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -3643,7 +3663,237 @@ fn main() {
 }
 ```
 
+### 包和模块
 
+跟其它语言一样，Rust 也提供了包和模块用于代码的组织管理：
+
+- 项目(`Packages`)：一个 `Cargo` 提供的 `feature`，可以用来构建、测试和分享包
+- 包(`Crate`)：一个由多个模块组成的树形结构，可以作为三方库进行分发，也可以生成可执行文件进行运行
+- 模块(`Module`)：可以一个文件多个模块，也可以一个文件一个模块，模块可以被认为是真实项目中的代码组织单元
+
+#### 包和 Package
+
+`Rust` 为我们提供了强大的包管理工具：
+
+- 项目(`Package`)：可以用来构建、测试和分享包
+- 工作空间(`WorkSpace`)：对于大型项目，可以进一步将多个包联合在一起，组织成工作空间
+- 包(`Crate`)：一个由多个模块组成的树形结构，可以作为三方库进行分发，也可以生成可执行文件进行运行
+- 模块(`Module`)：可以一个文件多个模块，也可以一个文件一个模块，模块可以被认为是真实项目中的代码组织单元
+
+##### 定义
+
+对于 `Rust` 而言，包是一个独立的可编译单元，它编译后会生成一个可执行文件或者一个库。例如标准库中没有提供但是在三方库中提供的 `rand` 包，它提供了随机数生成的功能。
+
+同一个包中不能有同名的类型，但是在不同包中就可以
+
+##### 项目 Package
+
+由于 `Package` 就是一个项目，因此它包含有独立的 `Cargo.toml` 文件，以及因为功能性被组织在一起的一个或多个包。一个 `Package` 只能包含一个库(`library`)类型的包，但是可以包含多个二进制可执行类型的包。
+
+#### 模块 Module
+
+使用模块可以将包中的代码按照功能性进行重组，最终实现更好的可读性及易用性。
+
+##### 创建嵌套模块
+
+使用 `cargo new --lib restaurant` 创建一个库类型的 `Package`
+
+```rs
+mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+
+        fn seat_at_table() {}
+    }
+
+    mod serving {
+        fn take_order() {}
+
+        fn serve_order() {}
+
+        fn take_payment() {}
+    }
+}
+```
+
+以上的代码创建了三个模块，有几点需要注意的：
+
+- 使用 `mod` 关键字来创建新模块，后面紧跟着模块名称
+- 模块可以嵌套
+- 模块中可以定义各种 `Rust` 类型，例如函数、结构体、枚举、特征等
+- 所有模块均定义在同一个文件中
+
+##### 用路径引用模块
+
+想要调用一个函数，就需要知道它的路径，在 `Rust` 中，这种路径有两种形式：
+
+- 绝对路径，从 `crate root` 开始，路径名以包名或者 `crate` 作为开头
+- 相对路径，从当前模块开始，以 `self`，`super` 或当前模块的标识符作为开头
+
+```rs
+mod front_of_house {
+    mod hosting {
+        fn add_to_waitlist() {}
+    }
+}
+
+pub fn eat_at_restaurant() {
+    // 绝对路径
+    crate::front_of_house::hosting::add_to_waitlist();
+
+    // 相对路径
+    front_of_house::hosting::add_to_waitlist();
+}
+```
+
+##### 代码可见性
+
+模块不仅仅对于组织代码很有用，它还能定义代码的私有化边界：在这个边界内，什么内容能让外界看到，什么内容不能，都有很明确的定义。因此，如果希望让函数或者结构体等类型变成私有化的，可以使用模块。
+
+`Rust` 出于安全的考虑，默认情况下，所有的类型都是私有化的，包括函数、方法、结构体、枚举、常量，是的，就连模块本身也是私有化的。父模块完全无法访问子模块中的私有项，但是子模块却可以访问父模块、父父..模块的私有项。
+
+`Rust` 提供了 `pub` 关键字，通过它你可以控制模块和模块中指定项的可见性。
+
+```rs
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+```
+
+##### 使用 super 引用模块
+
+`super` 代表的是父模块为开始的引用方式
+
+```rs
+fn serve_order() {}
+
+// 厨房模块
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        super::serve_order();
+    }
+
+    fn cook_order() {}
+}
+```
+
+上面的代码中，使用 `super::serve_order` 语法，调用了父模块(`crate root`)中的 `serve_order` 函数。
+
+##### 使用 self 引用模块
+
+`self` 其实就是引用自身模块中的项，看上去是多此一举，但却有大用处。
+
+```rs
+fn serve_order() {
+    self::back_of_house::cook_order()
+}
+
+mod back_of_house {
+    fn fix_incorrect_order() {
+        cook_order();
+        crate::serve_order();
+    }
+
+    pub fn cook_order() {}
+}
+```
+
+##### 结构体和枚举的可见性
+
+- 将结构体设置为 `pub`，但它的所有字段依然是私有的
+- 将枚举设置为 `pub`，它的所有字段也将对外可见
+
+#### 使用 use 及受限可见性
+
+在 `Rust` 中，可以使用 `use` 关键字把路径提前引入到当前作用域中，随后的调用就可以省略该路径，极大地简化了代码
+
+##### 基本引入方式
+
+在 `Rust` 中，引入模块中的项有两种方式：绝对路径和相对路径
+
+```rs
+/// 绝对路径引入
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
+
+下面的代码我们直接引用了函数来使用：
+
+```rs
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+use front_of_house::hosting::add_to_waitlist;
+
+pub fn eat_at_restaurant() {
+    add_to_waitlist();
+    add_to_waitlist();
+    add_to_waitlist();
+}
+```
+
+某些时候，引入模块会比直接引入函数更好：
+
+- 需要引入同一个模块的多个函数
+- 作用域中存在同名函数
+
+对于同名冲突问题，还可以使用 `as` 关键字来解决，它可以赋予引入项一个全新的名称:
+
+```rs
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() -> Result {
+    // --snip--
+}
+
+fn function2() -> IoResult<()> {
+    // --snip--
+}
+```
+
+##### 使用 {} 简化引入方式
+
+```rs
+use std::collections::HashMap;
+use std::collections::BTreeMap;
+use std::collections::HashSet;
+
+use std::cmp::Ordering;
+use std::io;
+```
+
+对于上面的引用代码，可以使用 `{}` 来一起引入进来，在大型项目中，使用这种方式来引入，可以减少大量 use 的使用：
+
+```rs
+use std::collections::{HashMap,BTreeMap,HashSet};
+use std::{cmp::Ordering, io};
+```
+
+##### 使用 * 引入模块下的所有项
+
+对于之前一行一行引入 `std::collections` 的方式，我们还可以使用
+
+```rs
+use std::collections::*;
+```
 
 ## 高级进阶
 
