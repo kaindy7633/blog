@@ -171,6 +171,12 @@
       - [文档测试(Doc Test)](#%E6%96%87%E6%A1%A3%E6%B5%8B%E8%AF%95doc-test)
       - [文档注释中的代码跳转](#%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E8%B7%B3%E8%BD%AC)
       - [文档搜索别名](#%E6%96%87%E6%A1%A3%E6%90%9C%E7%B4%A2%E5%88%AB%E5%90%8D)
+    - [格式化输出](#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA)
+      - [print!，println!，format](#printprintlnformat)
+      - [{} 与 {:?}](#-%E4%B8%8E-)
+      - [位置参数](#%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0)
+      - [具名参数](#%E5%85%B7%E5%90%8D%E5%8F%82%E6%95%B0)
+      - [格式化参数](#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%8F%82%E6%95%B0)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
@@ -4118,6 +4124,121 @@ pub struct BigY;
 ```
 
 在 `Rust` 中，注释分为三个主要类型：代码注释、文档注释、包和模块注释，每个注释类型都拥有两种形式：行注释和块注释，熟练掌握包模块和注释的知识，非常有助于我们创建工程性更强的项目
+
+### 格式化输出
+
+格式化输出，`Rust` 提供 `println!` 宏接受的是可变参数，第一个参数是一个字符串常量，它表示最终输出字符串的格式，包含其中形如 `{}` 的符号是占位符，会被 `println!` 后面的参数依次替换
+
+#### print!，println!，format
+
+它们是 `Rust` 中用来格式化输出的三大金刚，用途如下：
+
+- `print!` 将格式化文本输出到标准输出，不带换行符
+- `println!` 同上，但是在行的末尾添加换行符
+- `format!` 将格式化文本输出到 `String` 字符串
+
+在实际项目中，最常用的是 `println!` 及 `format!`，前者常用来调试输出，后者常用来生成格式化的字符串：
+
+```rs
+fn main() {
+    let s = "hello";
+    println!("{}, world", s);
+    let s1 = format!("{}, world", s);
+    print!("{}", s1);
+    print!("{}\n", "!");
+}
+```
+
+除了上述三种输出方式外，Rust 还提供了 `eprint!`，`eprintln!`，它们输出到标准错误输出：
+
+```rs
+eprintln!("Error: Could not complete task")
+```
+
+#### {} 与 {:?}
+
+在 `Rust` 中，`{}` 作为格式化占位符，我们无需再为特定的类型选择特定的占位符，统一用 `{}` 来替代即可。
+
+与 `{}` 类似，`{:?}` 也是占位符：
+
+- `{}` 适用于实现了 `std::fmt::Display` 特征的类型，用于格式化文本
+- `{:?}` 适用于实现了 `std::fmt::Debug` 特征的类型，用于调试场景
+
+```rs
+#[derive(Debug)]
+struct Person {
+    name: String,
+    age: u8
+}
+
+fn main() {
+    let i = 3.1415926;
+    let s = String::from("hello");
+    let v = vec![1, 2, 3];
+    let p = Person{name: "sunface".to_string(), age: 18};
+    println!("{:?}, {:?}, {:?}, {:?}", i, s, v, p);
+}
+```
+
+对于数值、字符串、数组，可以直接使用 `{:?}` 进行输出，但是对于结构体，需要派生 `Debug` 特征后，才能进行输出
+
+`{:#?}` 与 `{:?}` 几乎一样，唯一的区别在于它能更优美地输出内容：
+
+```rs
+// {:?}
+[1, 2, 3], Person { name: "sunface", age: 18 }
+
+// {:#?}
+[
+    1,
+    2,
+    3,
+], Person {
+    name: "sunface",
+}
+```
+
+因此对于 `Display` 不支持的类型，可以考虑使用 `{:#?}` 进行格式化
+
+#### 位置参数
+
+除了按照依次顺序使用值去替换占位符之外，还能让指定位置的参数去替换某个占位符
+
+```rs
+fn main() {
+    println!("{}{}", 1, 2); // =>"12"
+    println!("{1}{0}", 1, 2); // =>"21"
+    // => Alice, this is Bob. Bob, this is Alice
+    println!("{0}, this is {1}. {1}, this is {0}", "Alice", "Bob");
+    println!("{1}{}{0}{}", 1, 2); // => 2112
+}
+```
+
+#### 具名参数
+
+除了像上面那样指定位置外，我们还可以为参数指定名称：
+
+```rs
+fn main() {
+    println!("{argument}", argument = "test"); // => "test"
+    println!("{name} {}", 1, name = 2); // => "2 1"
+    println!("{a} {c} {b}", a = "a", b = 'b', c = 3); // => "a 3 b"
+}
+```
+
+#### 格式化参数
+
+格式化输出，意味着对输出格式会有更多的要求，例如只输出浮点数的小数点后两位：
+
+```rs
+fn main() {
+    let v = 3.1415926;
+    // Display => 3.14
+    println!("{:.2}", v);
+    // Debug => 3.14
+    println!("{:.2?}", v);
+}
+```
 
 ## 高级进阶
 
