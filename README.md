@@ -6,6 +6,7 @@
 
 ### Rust
 
+- [使用Rust构建一个简单的命令行工具：文件搜索](https://github.com/kaindy7633/blog/blob/main/rust/%E4%BD%BF%E7%94%A8Rust%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%EF%BC%9A%E6%96%87%E4%BB%B6%E6%90%9C%E7%B4%A2.md)
 - [Rust语言圣经-读书笔记](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E8%AF%AD%E8%A8%80%E5%9C%A3%E7%BB%8F-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0.md)
 - [Rust 编程语言入门](https://github.com/kaindy7633/blog/blob/main/rust/Rust%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E5%85%A5%E9%97%A8.md)
 
