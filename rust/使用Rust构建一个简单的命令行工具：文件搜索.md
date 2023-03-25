@@ -140,6 +140,179 @@ fn main() {
 
 ## 增加模块化和错误处理
 
+### 分离 main 函数
+
+如果 `main` 函数过于庞大，我们需要做分离处理，`Rust` 社区给出了统一的指导方案: 将程序分割为 `main.rs` 和 `lib.rs`，并将程序的逻辑代码移动到后者内
+
+因此， `main` 函数应该包含的功能:
+
+- 解析命令行参数
+- 初始化其它配置
+- 调用 `lib.rs` 中的 `run` 函数，以启动逻辑代码的运行
+- 如果 `run` 返回一个错误，需要对该错误进行处理
+
+这种分离代码的方式叫：关注点分离(`Separation of Concerns`)。简而言之，`main.rs` 负责启动程序，`lib.rs` 负责逻辑代码的运行。
+
+这里我们暂时将这两部分都放在 `main.rs` 中，只是分离出不同的函数来执行，后续会将这部分逻辑移植到 `lib.rs` 中
+
+```rs
+// in main.rs
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let (query, file_path) = parse_config(&args);
+
+    // --省略--
+}
+
+fn parse_config(args: &[String]) -> (&str, &str) {
+    let query = &args[1];
+    let file_path = &args[2];
+
+    (query, file_path)
+}
+```
+
+配置变量并不适合分散的到处都是，因此使用一个结构体来统一存放是非常好的选择
+
+```rs
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let config = parse_config(&args);
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
+
+    // --snip--
+}
+
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+fn parse_config(args: &[String]) -> Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+
+    Config { query, file_path }
+}
+```
+
+上面的代码在初始化结构体时没有使用借用，而是直接使用 `clone` 方法创建新数据，这种方法很简单，但只是在性能上有一些微小的损失。
+
+下面我们来优化下，通过构造函数来初始化一个 `Config` 实例，而不是直接通过函数返回实例，典型的，标准库中的 `String::new` 函数就是一个范例。
+
+```rs
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let config = Config::new(&args);
+
+    // --snip--
+}
+
+// --snip--
+
+impl Config {
+    fn new(args: &[String]) -> Config {
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Config { query, file_path }
+    }
+}
+```
+
+### 错误处理
+
+在上面实现的代码中，如果执行时不输入任何参数，会因为数组访问越界而发生 `panic`，进而退出程序。 `panic` 可以主动或被动触发，显然这是被动触发的，我们可以先试试主动触发：
+
+```rs
+
+// in main.rs
+ // --snip--
+    fn new(args: &[String]) -> Config {
+        if args.len() < 3 {
+            panic!("not enough arguments");
+        }
+        // --snip--
+```
+
+主动触发后还是会有大量的 `Debug` 信息抛出，那么我们可以进一步使用 `Result` 来替代 `panic`，下面的代码将之前的 `new` 修改为了 `build`
+
+```rs
+impl Config {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
+
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Ok(Config { query, file_path })
+    }
+}
+```
+
+这里的 `Result` 可能包含一个 `Config` 实例，也可能包含一条错误信息 `&static str`，代码中的字符串字面量都是该类型，且拥有 `'static` 生命周期。
+
+下面是这个阶段的完整代码：
+
+```rs
+use std::env;
+use std::fs;
+use std::process;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    // 对 build 返回的 `Result` 进行处理
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
+
+    println!("With text:\n{contents}");
+}
+
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+impl Config {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
+
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        Ok(Config { query, file_path })
+    }
+}
+```
+
+`unwrap_or_else` 是定义在 `Result<T,E>` 上的常用方法，如果 `Result` 是 `Ok`，那该方法就类似 `unwrap`：返回 `Ok` 内部的值；如果是 `Err`，就调用闭包中的自定义代码对错误进行进一步处理
+
+### 分离主体逻辑
+
+
+
 ## 测试驱动开发
 
 ## 使用环境变量
