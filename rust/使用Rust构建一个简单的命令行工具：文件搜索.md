@@ -8,6 +8,10 @@
     - [存储读取到的参数](#%E5%AD%98%E5%82%A8%E8%AF%BB%E5%8F%96%E5%88%B0%E7%9A%84%E5%8F%82%E6%95%B0)
     - [文件读取](#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96)
   - [增加模块化和错误处理](#%E5%A2%9E%E5%8A%A0%E6%A8%A1%E5%9D%97%E5%8C%96%E5%92%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
+    - [分离 main 函数](#%E5%88%86%E7%A6%BB-main-%E5%87%BD%E6%95%B0)
+    - [错误处理](#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86)
+    - [分离主体逻辑](#%E5%88%86%E7%A6%BB%E4%B8%BB%E4%BD%93%E9%80%BB%E8%BE%91)
+    - [分离逻辑代码到库包中](#%E5%88%86%E7%A6%BB%E9%80%BB%E8%BE%91%E4%BB%A3%E7%A0%81%E5%88%B0%E5%BA%93%E5%8C%85%E4%B8%AD)
   - [测试驱动开发](#%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91)
   - [使用环境变量](#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
   - [重定向错误信息的输出](#%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E7%9A%84%E8%BE%93%E5%87%BA)
@@ -311,7 +315,94 @@ impl Config {
 
 ### 分离主体逻辑
 
+接下来我们将 main 函数中的主体逻辑分离出去，创建 run 函数，来执行读取的任务
 
+```rs
+// in main.rs
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    run(config);
+}
+
+fn run(config: Config) {
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
+
+    println!("With text:\n{contents}");
+}
+
+// --snip--
+```
+
+上面的 `run` 函数缺少错误处理，我们可以使用 `?` 和特征对象来返回错误。
+
+```rs
+//in main.rs
+use std::error::Error;
+
+// --snip--
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    println!("With text:\n{contents}");
+
+    Ok(())
+}
+```
+
+`run` 函数本身不需要返回任何值，所以需要 `ok(())` 来返回个单元类型 `()`。
+
+`Box<dyn Error>` 返回一个 `Error` 的特征对象，它表示返回一个类型，该类型实现了 `Error` 特征。
+
+接下来我们需要在执行 run 函数时指定返回的错误，使用 `if let`
+
+```rs
+    // --snip--
+
+    println!("Searching for {}", config.query);
+    println!("In file {}", config.file_path);
+
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1);
+    }
+}
+```
+
+### 分离逻辑代码到库包中
+
+首先，创建一个 `src/lib.rs` 文件，然后将所有的非 `main` 函数都移动到其中。
+
+```rs
+// lib.rs
+use std::error::Error;
+use std::fs;
+
+pub struct Config {
+    pub query: String,
+    pub file_path: String,
+}
+
+impl Config {
+    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+        // --snip--
+    }
+}
+
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    // --snip--
+}
+```
 
 ## 测试驱动开发
 
