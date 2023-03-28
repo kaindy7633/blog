@@ -13,6 +13,8 @@
     - [分离主体逻辑](#%E5%88%86%E7%A6%BB%E4%B8%BB%E4%BD%93%E9%80%BB%E8%BE%91)
     - [分离逻辑代码到库包中](#%E5%88%86%E7%A6%BB%E9%80%BB%E8%BE%91%E4%BB%A3%E7%A0%81%E5%88%B0%E5%BA%93%E5%8C%85%E4%B8%AD)
   - [测试驱动开发](#%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91)
+    - [注定失败的测试用例](#%E6%B3%A8%E5%AE%9A%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B)
+    - [务必成功的测试用例](#%E5%8A%A1%E5%BF%85%E6%88%90%E5%8A%9F%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B)
   - [使用环境变量](#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
   - [重定向错误信息的输出](#%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E7%9A%84%E8%BE%93%E5%87%BA)
   - [使用迭代器来优化](#%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%9D%A5%E4%BC%98%E5%8C%96)
@@ -405,6 +407,101 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 ```
 
 ## 测试驱动开发
+
+在进入逻辑代码编程的环节之前，我们需要先编写一些测试代码，也就是测试驱动开发模式(TDD, Test Driven Development)：
+
+- 编写一个注定失败的测试，并且失败的原因和你指定的一样
+- 编写一个成功的测试
+- 编写你的逻辑代码，直到通过测试
+
+### 注定失败的测试用例
+
+我们先在 `lib.rs` 文件中，添加 `tests` 模块和 `test` 函数:
+
+```rs
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.";
+
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+    }
+}
+```
+
+### 务必成功的测试用例
+
+第二步：编写注定成功的测试, 实现上面的 `search` 函数。它包含以下步骤：
+
+- 遍历迭代 `contents` 的每一行
+- 检查该行内容是否包含我们的目标字符串
+- 若包含，则放入返回值列表中，否则忽略
+- 返回匹配到的返回值列表
+
+`Rust` 提供了一个很便利的 `lines` 方法将目标字符串进行按行分割:
+
+```rs
+// in lib.rs
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    for line in contents.lines() {
+        // do something with line
+    }
+}
+```
+
+在每一行中查询目标字符串
+
+```rs
+// in lib.rs
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    for line in contents.lines() {
+        if line.contains(query) {
+            // do something with line
+        }
+    }
+}
+```
+
+`Rust` 的字符串还提供了 `contains` 方法，用于检查 `line` 是否包含待查询的 `query`。
+
+接下来存储匹配到的结果，创建一个 `Vec` 动态数组，然后将查询到的每一个 `line` 推进数组中即可：
+
+```rs
+// in lib.rs
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+```
+
+最后，我们在 `run` 函数中使用 `search` 函数来替代之前的 `println!`
+
+```rs
+// in src/lib.rs
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    for line in search(&config.query, &contents) {
+        println!("{line}");
+    }
+
+    Ok(())
+}
+```
 
 ## 使用环境变量
 
