@@ -505,6 +505,132 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
 ## 使用环境变量
 
+我们可以使用环境变量来控制大小写敏感，例如:
+
+```bash
+IGNORE_CASE=1 cargo run -- to poem.txt
+```
+
+### 编写大小写不敏感的测试用例
+
+我们来创建一个新的大小写不敏感函数进行测试 `search_case_insensitive`, 首先编写一个注定失败的用例:
+
+```rs
+// in src/lib.rs
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn case_sensitive() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.";
+
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+    }
+
+    #[test]
+    fn case_insensitive() {
+        let query = "rUsT";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
+
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            search_case_insensitive(query, contents)
+        );
+    }
+}
+```
+
+接着来实现这个大小写不敏感的搜索函数:
+
+```rs
+pub fn search_case_insensitive<'a>(
+    query: &str,
+    contents: &'a str,
+) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+```
+
+上面的代码中引入了一个新的方法 `to_lowercase`，它会将 `line` 转换成全小写的字符串
+
+接下来就是最后一步，在 `run` 中调用新的搜索函数。但是在此之前，要新增一个配置项，用于控制是否开启大小写敏感。
+
+```rs
+// in lib.rs
+pub struct Config {
+    pub query: String,
+    pub file_path: String,
+    pub ignore_case: bool,
+}
+```
+
+检查该字段，来判断是否启动大小写敏感：
+
+```rs
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.file_path)?;
+
+    let results = if config.ignore_case {
+        search_case_insensitive(&config.query, &contents)
+    } else {
+        search(&config.query, &contents)
+    };
+
+    for line in results {
+        println!("{line}");
+    }
+
+    Ok(())
+}
+```
+
+我们可以借助 Rust 提供的 env 包提供的方法来控制这个环境变量
+
+```rs
+use std::env;
+// --snip--
+
+impl Config {
+    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
+
+        let query = args[1].clone();
+        let file_path = args[2].clone();
+
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
+    }
+}
+```
+
+上面的 `is_ok` 方法是 `Result` 提供的，用于检查是否有值，有就返回 `true`，没有则返回 `false`
+
 ## 重定向错误信息的输出
 
 ## 使用迭代器来优化
