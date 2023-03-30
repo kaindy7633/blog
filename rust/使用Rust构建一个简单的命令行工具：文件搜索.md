@@ -16,6 +16,7 @@
     - [注定失败的测试用例](#%E6%B3%A8%E5%AE%9A%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B)
     - [务必成功的测试用例](#%E5%8A%A1%E5%BF%85%E6%88%90%E5%8A%9F%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B)
   - [使用环境变量](#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+    - [编写大小写不敏感的测试用例](#%E7%BC%96%E5%86%99%E5%A4%A7%E5%B0%8F%E5%86%99%E4%B8%8D%E6%95%8F%E6%84%9F%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B)
   - [重定向错误信息的输出](#%E9%87%8D%E5%AE%9A%E5%90%91%E9%94%99%E8%AF%AF%E4%BF%A1%E6%81%AF%E7%9A%84%E8%BE%93%E5%87%BA)
   - [使用迭代器来优化](#%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%9D%A5%E4%BC%98%E5%8C%96)
 
@@ -633,4 +634,91 @@ impl Config {
 
 ## 重定向错误信息的输出
 
+到目前为止，无论 `debug` 还是 `error` 类型信息，都是通过 `println!` 宏输出到终端的标准输出( `stdout` )，但是对于程序来说，错误信息更适合输出到标准错误输出(`stderr`)
+
+将错误信息重定向到 `stderr` 很简单，只需在打印错误的地方，将 `println!` 宏替换为 `eprintln!`即可。
+
+```rs
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+
+    if let Err(e) = minigrep::run(config) {
+        eprintln!("Application error: {e}");
+        process::exit(1);
+    }
+}
+```
+
 ## 使用迭代器来优化
+
+在 `build` 方法中，我们使用了 `clone`，其实这里我们可以直接获取迭代器的所有权，而不是去借用一个数组
+
+```rs
+fn main() {
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
+
+    // --snip--
+}
+```
+
+`env::args` 可以直接返回一个迭代器，再作为 `Config::build` 的参数传入，下面再来改写 `build` 方法。
+
+```rs
+impl Config {
+    pub fn build(
+        mut args: impl Iterator<Item = String>,
+    ) -> Result<Config, &'static str> {
+        // --snip--
+```
+
+`args` 类型并没有使用本身的 `std::env::Args` ，而是使用了特征约束的方式来描述 `impl Iterator<Item = String>`，这样意味着 `arg` 可以是任何实现了 `String` 迭代器的类型。
+
+数组索引会越界，为了安全性和简洁性，使用 `Iterator` 特征自带的 `next` 方法是一个更好的选择:
+
+```rs
+impl Config {
+    pub fn build(
+        mut args: impl Iterator<Item = String>,
+    ) -> Result<Config, &'static str> {
+        // 第一个参数是程序名，由于无需使用，因此这里直接空调用一次
+        args.next();
+
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file path"),
+        };
+
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
+    }
+}
+```
+
+最后，使用迭代器来改造 `search` 函数
+
+```rs
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    contents
+        .lines()
+        .filter(|line| line.contains(query))
+        .collect()
+}
+```
