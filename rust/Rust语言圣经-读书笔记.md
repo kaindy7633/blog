@@ -181,6 +181,8 @@
       - [在格式化字符串时捕获环境中的值](#%E5%9C%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%97%B6%E6%8D%95%E8%8E%B7%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E5%80%BC)
   - [高级进阶](#%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6)
     - [声明周期：&'static 和 T: 'static](#%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9Fstatic-%E5%92%8C-t-static)
+    - [函数式：闭包和迭代器](#%E5%87%BD%E6%95%B0%E5%BC%8F%E9%97%AD%E5%8C%85%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8)
+      - [闭包 Closure](#%E9%97%AD%E5%8C%85-closure)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
   - [自动化测试](#%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95)
@@ -4530,6 +4532,96 @@ fn static_bound<T: Display + 'static>(t: &T) {
   println!("{}", t);
 }
 ```
+
+### 函数式：闭包和迭代器
+
+在 `Rust` 中我们关注的函数式特性主要是闭包（`Closure`）和迭代器（`Iterator`），些函数式特性可以让代码的可读性和易写性大幅提升
+
+#### 闭包 Closure
+
+闭包是一种匿名函数，它可以赋值给变量也可以作为参数传递给其它函数，不同于函数的是，它允许捕获调用者作用域中的值
+
+```rs
+fn main() {
+   let x = 1;
+   let sum = |y| x + y;
+
+    assert_eq!(3, sum(2));
+}
+```
+
+上面代码中的 `sum` 就是一个闭包，它有一个入参 `y`，同时，它捕获了作用域中的 `x`，最后返回两者相加的结果
+
+我们用闭包来实现一个关于健身的函数
+
+```rs
+use std::thread;
+use std::time::Duration;
+
+fn workout(intensity: u32, random_number: u32) {
+    let action = || {
+        println!("muuuu.....");
+        thread::sleep(Duration::from_secs(2));
+        intensity
+    };
+
+    if intensity < 25 {
+        println!(
+            "今天活力满满，先做 {} 个俯卧撑!",
+            action()
+        );
+        println!(
+            "旁边有妹子在看，俯卧撑太low，再来 {} 组卧推!",
+            action()
+        );
+    } else if random_number == 3 {
+        println!("昨天练过度了，今天还是休息下吧！");
+    } else {
+        println!(
+            "昨天练过度了，今天干干有氧，跑步 {} 分钟!",
+            action()
+        );
+    }
+}
+
+fn main() {
+    // 动作次数
+    let intensity = 10;
+    // 随机值用来决定某个选择
+    let random_number = 7;
+
+    // 开始健身
+    workout(intensity, random_number);
+}
+```
+
+Rust 闭包与函数最大的不同就是它的参数是通过 `|parm1|` 的形式进行声明，如果是多个参数就 `|param1, param2,...|`， 下面给出闭包的形式定义：
+
+```rs
+|param1, param2,...| {
+    语句1;
+    语句2;
+    返回表达式
+}
+```
+
+如果只有一个返回表达式的话，定义可以简化为：
+
+```rs
+|param1| 返回表达式
+```
+
+Rust 是静态语言，大部分时候编译器都是自动推导类型，而无需显式的声明，而函数则不行，必须手动为函数的所有参数和返回值指定类型。与函数相反，闭包并不会作为 `API` 对外提供，因此它可以享受编译器的类型推导能力，无需标注参数和返回值的类型。
+
+为了增加代码可读性，有时候我们会显式地给类型进行标注，出于同样的目的，也可以给闭包标注类型：
+
+```rs
+let sum = |x: i32, y: i32| -> i32 {
+    x + y
+}
+```
+
+
 
 ## 异步编程
 
