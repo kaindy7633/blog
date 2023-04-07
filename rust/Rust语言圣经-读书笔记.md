@@ -183,6 +183,7 @@
     - [声明周期：&'static 和 T: 'static](#%E5%A3%B0%E6%98%8E%E5%91%A8%E6%9C%9Fstatic-%E5%92%8C-t-static)
     - [函数式：闭包和迭代器](#%E5%87%BD%E6%95%B0%E5%BC%8F%E9%97%AD%E5%8C%85%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8)
       - [闭包 Closure](#%E9%97%AD%E5%8C%85-closure)
+      - [迭代器 Iterator](#%E8%BF%AD%E4%BB%A3%E5%99%A8-iterator)
   - [异步编程](#%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B)
   - [疑难点](#%E7%96%91%E9%9A%BE%E7%82%B9)
   - [自动化测试](#%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95)
@@ -4621,7 +4622,170 @@ let sum = |x: i32, y: i32| -> i32 {
 }
 ```
 
+结构体中的闭包
 
+如果我们想要设计一个缓存，用结构体来标识缓存对象
+
+```rs
+struct Cacher<T>
+where
+    T: Fn(u32) -> u32,
+{
+    query: T,
+    value: Option<u32>,
+}
+```
+
+`query` 是一个闭包，`Fn(u32) -> u32` 是一个特征，用来表示 `T` 是一个闭包类型
+
+接着，为缓存实现方法：
+
+```rs
+impl<T> Cacher<T>
+where
+    T: Fn(u32) -> u32,
+{
+    fn new(query: T) -> Cacher<T> {
+        Cacher {
+            query,
+            value: None,
+        }
+    }
+
+    // 先查询缓存值 `self.value`，若不存在，则调用 `query` 加载
+    fn value(&mut self, arg: u32) -> u32 {
+        match self.value {
+            Some(v) => v,
+            None => {
+                let v = (self.query)(arg);
+                self.value = Some(v);
+                v
+            }
+        }
+    }
+}
+```
+
+捕获作用域中的值
+
+闭包可以捕获作用域中的值，而函数是不可以的
+
+```rs
+fn main() {
+    let x = 4;
+
+    let equal_to_x = |z| z == x;
+
+    let y = 4;
+
+    assert!(equal_to_x(y));
+}
+```
+
+上面代码中，`x` 并不是闭包 `equal_to_x` 的参数，但是它依然可以去使用 `x`，因为 `equal_to_x` 在 `x` 的作用域范围内。
+
+#### 迭代器 Iterator
+
+迭代器允许我们迭代一个连续的集合，例如数组、动态数组 `Vec`、`HashMap` 等
+
+迭代器与 for 循环很相似，它们的区别在于是否通过索引来访问集合
+
+```rs
+let arr = [1, 2, 3];
+for v in arr {
+    println!("{}",v);
+}
+```
+
+`Rust` 中没有使用索引，它把 `arr` 数组当成一个迭代器，直接去遍历其中的元素，从哪里开始，从哪里结束，都无需操心。因此严格来说，`Rust` 中的 `for` 循环是编译器提供的语法糖，最终还是对迭代器中的元素进行遍历。
+
+`Rust` 中的数组实现了 `IntoIterator` 特征，`Rust` 通过 `for` 语法糖，自动把实现了该特征的数组类型转换为迭代器
+
+`IntoIterator` 特征拥有一个 `into_iter` 方法，因此我们还可以显式的把数组转换成迭代器：
+
+```rs
+let arr = [1, 2, 3];
+for v in arr.into_iter() {
+    println!("{}", v);
+}
+```
+
+在 `Rust` 中，迭代器是惰性的，意味着如果你不使用它，那么它将不会发生任何事：
+
+```rs
+let v1 = vec![1, 2, 3];
+
+let v1_iter = v1.iter();
+
+for val in v1_iter {
+    println!("{}", val);
+}
+```
+
+迭代器实现了 `Iterator` 特征，要实现该特征，最主要的就是实现其中的 `next` 方法，该方法控制如何从集合中取值，最终返回值的类型是关联类型 `Item`。
+
+```rs
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item>;
+
+    // 省略其余有默认实现的方法
+}
+```
+
+`for` 循环通过不停调用迭代器上的 `next` 方法，来获取迭代器中的元素。
+
+```rs
+fn main() {
+    let arr = [1, 2, 3];
+    let mut arr_iter = arr.into_iter();
+
+    assert_eq!(arr_iter.next(), Some(1));
+    assert_eq!(arr_iter.next(), Some(2));
+    assert_eq!(arr_iter.next(), Some(3));
+    assert_eq!(arr_iter.next(), None);
+}
+```
+
+前面我们使用了 `into_iter` 的方式将数组转化为迭代器，除此之外，还有 `iter` 和 `iter_mut`
+
+- `into_iter` 会夺走所有权
+- `iter` 是借用
+- `iter_mut` 是可变借用
+
+```rs
+fn main() {
+    let values = vec![1, 2, 3];
+
+    for v in values.into_iter() {
+        println!("{}", v)
+    }
+
+    // 下面的代码将报错，因为 values 的所有权在上面 `for` 循环中已经被转移走
+    // println!("{:?}",values);
+
+    let values = vec![1, 2, 3];
+    let _values_iter = values.iter();
+
+    // 不会报错，因为 values_iter 只是借用了 values 中的元素
+    println!("{:?}", values);
+
+    let mut values = vec![1, 2, 3];
+    // 对 values 中的元素进行可变借用
+    let mut values_iter_mut = values.iter_mut();
+
+    // 取出第一个元素，并修改为0
+    if let Some(v) = values_iter_mut.next() {
+        *v = 0;
+    }
+
+    // 输出[0, 2, 3]
+    println!("{:?}", values);
+}
+```
+
+`Iterator` 和 `IntoIterator` 有什么区别呢？ `Iterator` 就是迭代器特征，只有实现了它才能称为迭代器，才能调用 `next`。而 `IntoIterator` 强调的是某一个类型如果实现了该特征，它可以通过 `into_iter`，`iter` 等方法变成一个迭代器。
 
 ## 异步编程
 
