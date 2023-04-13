@@ -12,7 +12,7 @@
 
 ### Golang
 
-- [Go 经典入门](https://github.com/)
+- [Go 经典入门](https://github.com/kaindy7633/blog/blob/main/golang/golang%E7%BB%8F%E5%85%B8%E5%85%A5%E9%97%A8.md)
 - [使用 vscode 运行 golang 测试的小技巧](https://github.com/kaindy7633/blog/blob/main/golang/%E4%BD%BF%E7%94%A8%20vscode%20%E8%BF%90%E8%A1%8C%20golang%20%E6%B5%8B%E8%AF%95%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7.md)
 - [在 AWS 中部署 Golang 应用程序](https://github.com/kaindy7633/blog/blob/main/golang/%E5%9C%A8AWS%E4%B8%AD%E9%83%A8%E7%BD%B2Golang%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F.md)
 - [Go 语言里的空接口](https://github.com/kaindy7633/blog/blob/main/golang/Go%E8%AF%AD%E8%A8%80%E9%87%8C%E7%9A%84%E7%A9%BA%E6%8E%A5%E5%8F%A3.md)
